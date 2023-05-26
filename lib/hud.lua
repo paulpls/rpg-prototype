@@ -73,14 +73,16 @@ P.draw = function (self)
 
     --  Money
     if self.content.money then
-        local ix  = self.x + 16
+        local ix  = self.x + 24
         local iy  = self.y + math.floor(self.height / 2) - 8
         local mx  = ix + 24
         local my  = self.y + math.floor(self.height / 2)
+        local mc  = {1, 1, 1}
         local qty = self.content.money
         love.graphics.setColor({1, 1, 1})
         love.graphics.draw(self.icons, self.quads.money, ix, iy)
-        self.font:print(qty, mx, my)
+        if qty <= 0 then mc = {1, 0, 0} end
+        self.font:print(qty, mx, my, mc)
     end
 end
 
