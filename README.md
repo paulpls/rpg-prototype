@@ -4,7 +4,7 @@
 
 # RPG
 Author: [paulpls](https://github.com/paulpls)  
-License: [GPL 3.0](LICENSE.md) (Third-party modules may not fall under this license; see [license info](#license-information))
+License: [GPL 3.0](LICENSE.md)
 
 
 
