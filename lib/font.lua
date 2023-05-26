@@ -10,7 +10,7 @@ Font._k      = 2    --  Kerning
 
 
 
-function Font:init(path, glyphs, w, h, k)
+Font.init = function (self, path, glyphs, w, h, k)
     --
     --  Initialize font
     --
@@ -25,11 +25,23 @@ end
 
 
 
-function Font:set()
+Font.set = function (self)
     --
     --  Set the font
     --
     love.graphics.setFont(self.face)
+end
+
+
+
+Font.print = function (self, text, x, y, color)
+    --
+    --  Print text and center vertically
+    --
+    local color = color or {1, 1, 1}
+    local y     = y - math.floor(self.h / 2)
+    love.graphics.setColor(color)
+    love.graphics.print(text, x, y)
 end
 
 

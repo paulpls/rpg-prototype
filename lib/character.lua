@@ -164,8 +164,6 @@ P.getItem = function (self, data)
     local name = data.name
     local qty  = data.qty or 1
     self.inventory[name] = self.inventory[name] + qty
-    print("You received "..name.." x"..tostring(qty))
-    print("You now have "..tostring(self.inventory[name]).." "..name..".")
 end
 
 
