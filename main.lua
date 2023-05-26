@@ -11,6 +11,7 @@ require("lib/class")
 local Character = require("lib/character")
 local Chest     = require("lib/chest")
 local HUD       = require("lib/hud")
+local Font      = require("lib/font")
 --  Third-party stuff
 local Map       = require("lib/sti")
 local Camera    = require("lib/hump/camera")
@@ -25,6 +26,10 @@ love.load = function ()
 
     --  Graphics defaults
     love.graphics.setDefaultFilter("nearest", "nearest")
+
+    --  Font
+    font = Font:new()
+    font:set()
 
     --  World setup
     world = Windfield.newWorld(0, 0)
