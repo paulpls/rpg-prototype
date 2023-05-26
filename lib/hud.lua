@@ -68,11 +68,17 @@ P.update = function (self, dt)
     --
     --  Update the HUD
     --
+
+    --  Responsive width
     self.width = love.graphics.getWidth() - (self.x * 2)
+
+    --  Healthbar
     self.healthbar:set(
         self.parent.health,
         self.parent.maxHealth
     )
+    
+    --  DEBUG Player coordinates
     self.playerCoords = {
         ["x"] = math.floor(self.parent.collider:getX() / 32),
         ["y"] = math.floor(self.parent.collider:getY() / 32)
@@ -140,3 +146,6 @@ end
 
 
 return P
+
+
+
