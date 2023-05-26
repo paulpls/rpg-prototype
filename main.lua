@@ -10,6 +10,7 @@
 require("lib/class")
 local Character = require("lib/character")
 local Chest     = require("lib/chest")
+local HUD       = require("lib/hud")
 --  Third-party stuff
 local Map       = require("lib/sti")
 local Camera    = require("lib/hump/camera")
@@ -48,6 +49,9 @@ love.load = function ()
         math.floor(love.graphics.getHeight() / 2),
         2
     )
+
+    --  Heads-Up Display
+    hud = HUD:new()
 
     --  Load the map
     map = Map("data/map/map.lua")
@@ -139,6 +143,9 @@ love.update = function (dt)
         player.collider:getY()
     )
 
+    --  Update HUD
+    hud:update(dt)
+
 end
 
 
@@ -147,8 +154,11 @@ love.draw = function ()
     --
     --  Draw stuff
     --
+    love.graphics.setColor({1, 1, 1})
 
+    --
     --  Set the camera
+    --
     camera:attach()
 
     --  Draw map layers below characters
@@ -169,8 +179,14 @@ love.draw = function ()
     --  DEBUG Draw collision hitboxes
     --world:draw()
 
+    --
     --  Unset the camera
+    --
     camera:detach()
+
+    --  Draw the HUD
+    hud:draw()
+
 
 end
 
