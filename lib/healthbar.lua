@@ -53,6 +53,7 @@ P.init = function (self, parent, value, max, color)
     self.value  = value
     self.max    = max
     --  Animations
+    self.blink  = false
     self.grid   = Animation.newGrid(
         self.size,
         self.size,
@@ -65,6 +66,7 @@ P.init = function (self, parent, value, max, color)
         ["empty"] = Animation.newAnimation(self.grid("5-6", 2), 0.15)
     }
     for _,s in pairs(self.states) do s:pauseAtStart() end
+    self:resetTimer()
 end
 
 
@@ -73,8 +75,25 @@ P.set = function (self, value, max)
     --
     --  Set the healthbar value and maximum value
     --
+    if value < self.value then
+        self:resetTimer()
+        self.blink = true
+    elseif value > self.value then
+        self.blink = false
+    end
+    --  Blink repeatedly when at low health
+    if value <= 1 then self.blink = true end
     self.value = value or self.value
     self.max   = max   or self.max
+end
+
+
+
+P.resetTimer = function (self, t)
+    --
+    --  Reset the timer to the provided time
+    --
+    self.timer = t or 0.6
 end
 
 
@@ -83,6 +102,17 @@ P.update = function (self, dt)
     --
     --  Update the healthbar
     --
+    if self.blink and self.timer > 0 then
+        for _,s in pairs(self.states) do
+            s:resume()
+            s:update(dt)
+        end
+        self.timer = self.timer - dt
+    else
+        for _,s in pairs(self.states) do s:pauseAtStart() end
+        self:resetTimer()
+        if self.value > 1 then self.blink = false end
+    end
 end
 
 

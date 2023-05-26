@@ -54,8 +54,8 @@ P.init = function (self, parent)
     --  Healthbar
     self.healthbar = Healthbar:new(
         self,   -- Pass the HUD as the parent object
-        3,
-        3
+        parent.health,
+        parent.maxHealth
     )
 
     --  Set the font
@@ -77,6 +77,7 @@ P.update = function (self, dt)
         self.parent.health,
         self.parent.maxHealth
     )
+    self.healthbar:update(dt)
     
     --  DEBUG Player coordinates
     self.playerCoords = {
