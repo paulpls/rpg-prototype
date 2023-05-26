@@ -51,7 +51,7 @@ Use the arrow keys to explore the world around you and collect loot.
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-**NOTE:** Some third-party libraries used in this project include their own license that may not be congruent with GPLv3. Please review the individual license information included in each library's directory for more information.
+**NOTE:** Third-party libraries used in this project may include their own license that may not be congruent with GPLv3. All third-party libraries included in this project are subject to their own copyright and restrictions, as defined in either the README or LICENSE files. Please review each library's license for more information. 
 
 
 
