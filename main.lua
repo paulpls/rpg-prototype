@@ -1,0 +1,195 @@
+--
+--  XXX Basic Game Template
+--
+
+
+
+--
+--  Dependencies
+--
+require("lib/class")
+local Character = require("lib/character")
+--  Third-party stuff
+local Map       = require("lib/sti")
+local Camera    = require("lib/hump/camera")
+local Windfield = require("lib/windfield")
+
+
+
+love.load = function ()
+    --
+    --  Load stuff and configure defaults
+    --
+
+    --  Graphics defaults
+    love.graphics.setDefaultFilter("nearest", "nearest")
+
+    --  World setup
+    world = Windfield.newWorld(0, 0)
+    world:addCollisionClass("wall")
+    world:addCollisionClass("player")
+    world:addCollisionClass("npc")
+    world:addCollisionClass("enemy")
+    world:addCollisionClass("item")
+    world:addCollisionClass("door")
+    world:addCollisionClass("interact")
+    world:addCollisionClass("entity")
+    --  DEBUG Draw queries
+    world:setQueryDebugDrawing(true)
+
+    --  Load player sprite into the world
+    player = Character:new("data/character/paul", world)
+    player.collider:setCollisionClass("player")
+
+    --  Camera setup
+    camera = Camera(
+        math.floor(love.graphics.getWidth()  / 2),
+        math.floor(love.graphics.getHeight() / 2),
+        2
+    )
+
+    --  Load the map
+    map = Map("data/map/map.lua")
+
+    --  Define wall hitboxes
+    walls = {}
+    if map.layers["walls"] then
+        for _,o in pairs(map.layers["walls"].objects) do
+            local wall = world:newRectangleCollider(
+                o.x,
+                o.y,
+                o.width,
+                o.height
+            )
+            wall:setType("static")
+            wall:setCollisionClass("wall")
+            table.insert(walls, wall)
+        end
+    end
+
+end
+
+
+
+love.update = function (dt)
+    --
+    --  Update stuff
+    --
+
+    --  Get movement from keyboard input
+    local pdx,pdy = 0, 0
+    local pvx,pvy = player.vx, player.vy
+    local pAction = "default"
+    local pFacing = player.dir
+    if love.keyboard.isDown("left") then
+        pdx,pdy   = -1, 0
+        pAction   = "walk"
+        pFacing   = "left"
+    elseif love.keyboard.isDown("right") then
+        pdx,pdy   = 1, 0
+        pAction   = "walk"
+        pFacing   = "right"
+    elseif love.keyboard.isDown("up") then
+        pdx,pdy   = 0, -1
+        pAction   = "walk"
+        pFacing   = "up"
+    elseif love.keyboard.isDown("down") then
+        pdx,pdy   = 0, 1
+        pAction   = "walk"
+        pFacing   = "down"
+    end
+
+    --  Move player hitbox
+    player.collider:setLinearVelocity(
+        pdx * pvx,
+        pdy * pvy
+    )
+
+    --  Update windfield
+    world:update(dt)
+
+    --  Move and update player animatons
+    local px,py   = player.collider:getX(), player.collider:getY()
+    player.dir    = pFacing
+    player.action = pAction
+    player:setState()
+    player:position(px, py)
+    player:update(dt)
+
+    --  Update camera
+    camera:lookAt(
+        player.collider:getX(),
+        player.collider:getY()
+    )
+
+end
+
+
+
+love.draw = function ()
+    --
+    --  Draw stuff
+    --
+
+    --  Set the camera
+    camera:attach()
+
+    --  Draw map layers below characters
+    map:drawLayer(map.layers["bg"])
+    map:drawLayer(map.layers["trees_bottom"])
+
+    --  Draw characters
+    player:draw()
+
+    --  Draw map layers above characters
+    map:drawLayer(map.layers["trees_top"])
+
+    --  DEBUG Draw collision hitboxes
+    world:draw()
+
+    --  Unset the camera
+    camera:detach()
+
+end
+
+
+
+love.keypressed = function (key)
+    --
+    --  Key bindings
+    --
+
+    --  Quit
+    if key == "escape" or key == "q" then
+        love.event.quit()
+
+    --  Query
+    elseif key == "space" then
+        local qx,qy = player.collider:getPosition()
+        local reach = player.reach
+        --  Offset the query area
+        if player.dir == "left" then
+            qx = qx - reach
+        elseif player.dir == "right" then
+            qx = qx + reach
+        elseif player.dir == "up" then
+            qy = qy - reach
+        elseif player.dir == "down" then
+            qy = qy + reach
+        end
+        local objs  = world:queryCircleArea(qx, qy, 12, {"wall", "interact", "door", "npc"})
+        if #objs > 0 then
+            --  DEBUG Print number of objects found
+            print("Found "..#objs.." objects")
+        end
+    end
+
+end
+
+
+
+love.quit = function ()
+end
+
+
+

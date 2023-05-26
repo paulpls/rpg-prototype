@@ -1,0 +1,15 @@
+# Green Is My Pepper
+*.xcf
+
+
+
+# Tiled
+tiled/
+*.tiled-project
+*.tiled-session
+*.tsx
+*.tmx
+
+
+
+
