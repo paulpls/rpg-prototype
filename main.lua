@@ -195,12 +195,14 @@ love.update = function (dt)
 
     --  Update HUD
     hud.content.money     = player.inventory.money
-    hud.content.health    = player.health
-    hud.content.maxHealth = player.maxHealth
     hud.content.coords    = {
         ["x"] = math.floor(player.collider:getX() / 32),
         ["y"] = math.floor(player.collider:getY() / 32)
     }
+    hud.healthbar:set(
+        player.health,
+        player.maxHealth
+    )
     hud:update(dt)
 
 end
