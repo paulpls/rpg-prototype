@@ -1,5 +1,5 @@
 --
---  Basic RPG Implementation
+--  RPG Prototype
 --
 --[[
 
