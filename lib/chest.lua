@@ -25,7 +25,7 @@ P.init = function (self, world, x, y, contents)
         24,
         20
     )
-    self.collider:setCollisionClass("interact")
+    self.collider:setCollisionClass("chest")
     self.collider:setType("static")
     self.collider.parent = self
 end
@@ -33,7 +33,13 @@ end
 
 
 P.interact = function (self)
-    self.open = true
+    --
+    --  Open the chest and return contents
+    --
+    if not self.open then
+        self.open = true
+        return self.contents
+    end
 end
 
 

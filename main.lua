@@ -33,10 +33,10 @@ love.load = function ()
     world:addCollisionClass("enemy")
     world:addCollisionClass("item")
     world:addCollisionClass("door")
-    world:addCollisionClass("interact")
+    world:addCollisionClass("chest")
     world:addCollisionClass("entity")
     --  DEBUG Draw queries
-    world:setQueryDebugDrawing(true)
+    --world:setQueryDebugDrawing(true)
 
     --  Load player sprite into the world
     player = Character:new("data/character/paul", world)
@@ -69,9 +69,14 @@ love.load = function ()
     end
 
     --  Add chests to the map
-    chests = {}
-    local chestx,chesty = 128, 128
-    local chest         = Chest:new(world, chestx, chesty, nil)
+    chests         = {}
+    local chestx   = 128
+    local chesty   = 128
+    local contents = {
+        ["name"] = "money",
+        ["qty"]  = 5
+    }
+    local chest    = Chest:new(world, chestx, chesty, contents)
     table.insert(chests, chest)
 
 end
@@ -162,7 +167,7 @@ love.draw = function ()
     map:drawLayer(map.layers["trees_top"])
 
     --  DEBUG Draw collision hitboxes
-    world:draw()
+    --world:draw()
 
     --  Unset the camera
     camera:detach()
@@ -194,10 +199,13 @@ love.keypressed = function (key)
         elseif player.dir == "down" then
             qy = qy + reach
         end
-        local objs  = world:queryCircleArea(qx, qy, 12, {"interact"})
+        local objs  = world:queryCircleArea(qx, qy, 12, {"chest"})
         if #objs > 0 then
             for i,obj in ipairs(objs) do
-                if obj.parent then obj.parent:interact() end
+                if obj.parent then
+                    local contents = obj.parent:interact()
+                    if contents then player:getItem(contents) end
+                end
             end
         end
     end

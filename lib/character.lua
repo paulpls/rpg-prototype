@@ -77,6 +77,11 @@ P.init = function (self, path, world, x, y)
     local reach = math.floor(((c.width + c.height) / 2) * (3/4))
     self.reach  = data.reach or reach
 
+    --  Inventory
+    self.inventory = {
+        ["money"] = 0,
+    }
+
 end
 
 
@@ -148,6 +153,19 @@ P.inspect = function (self, reach, radius)
     local reach  = reach  or 1
     local radius = radius or 10
 
+end
+
+
+
+P.getItem = function (self, data)
+    --
+    --  Add items to the player's inventory
+    --
+    local name = data.name
+    local qty  = data.qty or 1
+    self.inventory[name] = self.inventory[name] + qty
+    print("You received "..name.." x"..tostring(qty))
+    print("You now have "..tostring(self.inventory[name]).." "..name..".")
 end
 
 
