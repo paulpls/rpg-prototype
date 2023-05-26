@@ -9,6 +9,7 @@
 --
 require("lib/class")
 local Character = require("lib/character")
+local Chest     = require("lib/chest")
 --  Third-party stuff
 local Map       = require("lib/sti")
 local Camera    = require("lib/hump/camera")
@@ -67,6 +68,12 @@ love.load = function ()
         end
     end
 
+    --  Add chests to the map
+    chests = {}
+    local chestx,chesty = 128, 128
+    local chest         = Chest:new(world, chestx, chesty, nil)
+    table.insert(chests, chest)
+
 end
 
 
@@ -116,6 +123,11 @@ love.update = function (dt)
     player:position(px, py)
     player:update(dt)
 
+    --  Update chests
+    for _,ch in pairs(chests) do
+        ch:update(dt)
+    end
+
     --  Update camera
     camera:lookAt(
         player.collider:getX(),
@@ -137,6 +149,11 @@ love.draw = function ()
     --  Draw map layers below characters
     map:drawLayer(map.layers["bg"])
     map:drawLayer(map.layers["trees_bottom"])
+
+    --  Draw chests
+    for _,ch in pairs(chests) do
+        ch:draw()
+    end
 
     --  Draw characters
     player:draw()
@@ -177,10 +194,11 @@ love.keypressed = function (key)
         elseif player.dir == "down" then
             qy = qy + reach
         end
-        local objs  = world:queryCircleArea(qx, qy, 12, {"wall", "interact", "door", "npc"})
+        local objs  = world:queryCircleArea(qx, qy, 12, {"interact"})
         if #objs > 0 then
-            --  DEBUG Print number of objects found
-            print("Found "..#objs.." objects")
+            for i,obj in ipairs(objs) do
+                if obj.parent then obj.parent:interact() end
+            end
         end
     end
 
