@@ -73,15 +73,22 @@ love.load = function ()
     end
 
     --  Add chests to the map
+    --  TODO Make these more abstract eventually by loading from data files
     chests         = {}
-    local chestx   = 128
-    local chesty   = 128
-    local contents = {
-        ["name"] = "money",
-        ["qty"]  = 5
+    local _chests  = {
+        {
+            ["x"]        = 128,
+            ["y"]        = 128,
+            ["contents"] = {
+                ["name"] = "money",
+                ["qty"]  = 5
+            }
+        },
     }
-    local chest    = Chest:new(world, chestx, chesty, contents)
-    table.insert(chests, chest)
+    for _,ch in pairs(_chests) do
+        local chest = Chest:new(world, ch.x, ch.y, ch.contents)
+        table.insert(chests, chest)
+    end
 
 end
 
