@@ -1,5 +1,5 @@
 --
---  XXX Basic Game Template
+--  Basic RPG Implementation
 --
 
 
@@ -82,6 +82,30 @@ love.load = function ()
             ["contents"] = {
                 ["name"] = "money",
                 ["qty"]  = 5
+            }
+        },
+        {
+            ["x"]        = 448,
+            ["y"]        = 736,
+            ["contents"] = {
+                ["name"] = "money",
+                ["qty"]  = 10
+            }
+        },
+        {
+            ["x"]        = 256,
+            ["y"]        = 448,
+            ["contents"] = {
+                ["name"] = "money",
+                ["qty"]  = 5
+            }
+        },
+        {
+            ["x"]        = 704,
+            ["y"]        = 160,
+            ["contents"] = {
+                ["name"] = "money",
+                ["qty"]  = 30
             }
         },
     }
