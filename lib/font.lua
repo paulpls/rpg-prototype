@@ -34,12 +34,16 @@ end
 
 
 
-Font.print = function (self, text, x, y, color)
+Font.print = function (self, text, x, y, color, center)
     --
-    --  Print text and center vertically
+    --  Print text and center vertically (and optionally, horizontally)
     --
-    local color = color or {1, 1, 1}
-    local y     = y - math.floor(self.h / 2)
+    local text   = tostring(text)
+    local x      = x
+    local y      = y - math.floor(self.h / 2)
+    local color  = color  or {1, 1, 1}
+    --  Center text horizontally if specified
+    if center then x = x - math.floor(((self.w + self.k) * #text) / 2) end
     love.graphics.setColor(color)
     love.graphics.print(text, x, y)
 end

@@ -73,16 +73,26 @@ P.draw = function (self)
 
     --  Money
     if self.content.money then
-        local ix  = self.x + 24
-        local iy  = self.y + math.floor(self.height / 2) - 8
-        local mx  = ix + 24
+        local x   = self.x + 24
+        local y   = self.y + math.floor(self.height / 2) - 8
+        local mx  = x + 24
         local my  = self.y + math.floor(self.height / 2)
         local mc  = {1, 1, 1}
         local qty = self.content.money
         love.graphics.setColor({1, 1, 1})
-        love.graphics.draw(self.icons, self.quads.money, ix, iy)
+        love.graphics.draw(self.icons, self.quads.money, x, y)
         if qty <= 0 then mc = {1, 0, 0} end
         self.font:print(qty, mx, my, mc)
+    end
+
+    --  DEBUG Player coords
+    if self.content.coords then
+        local x  = self.x + math.floor(self.width  / 2)
+        local y  = self.y + math.floor(self.height / 2)
+        local cc = {1, 0.75, 0}
+        local cx = "X "..self.content.coords.x
+        local cy = "Y "..self.content.coords.y
+        self.font:print(cx.."   "..cy, x, y, cc, true)
     end
 end
 

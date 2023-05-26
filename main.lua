@@ -151,7 +151,11 @@ love.update = function (dt)
     )
 
     --  Update HUD
-    hud.content.money = player.inventory.money
+    hud.content.money  = player.inventory.money
+    hud.content.coords = {
+        ["x"] = math.floor(player.collider:getX() / 32),
+        ["y"] = math.floor(player.collider:getY() / 32)
+    }
     hud:update(dt)
 
 end
