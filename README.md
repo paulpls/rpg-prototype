@@ -31,6 +31,7 @@ Use the arrow keys to explore the world around you and collect loot.
 | Arrow keys | Move player  |
 | Spacebar   | Interact     |
 | q, ESC     | Quit         |
+| j, k       | Health -/+   |
 
 
 

@@ -193,8 +193,10 @@ love.update = function (dt)
     )
 
     --  Update HUD
-    hud.content.money  = player.inventory.money
-    hud.content.coords = {
+    hud.content.money     = player.inventory.money
+    hud.content.health    = player.health
+    hud.content.maxHealth = player.maxHealth
+    hud.content.coords    = {
         ["x"] = math.floor(player.collider:getX() / 32),
         ["y"] = math.floor(player.collider:getY() / 32)
     }
@@ -278,6 +280,12 @@ love.keypressed = function (key)
                 end
             end
         end
+
+    --  DEBUG Heal/damage the player
+    elseif key == "k" then
+        player:heal(0.5)
+    elseif key == "j" then
+        player:damage(0.5)
     end
 
 end

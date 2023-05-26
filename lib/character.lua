@@ -61,7 +61,6 @@ P.init = function (self, path, world, x, y)
     self.ox = data.ox or 0
     self.oy = data.oy or 0
 
-
     -- Speed
     self.vx = data.vx or 50
     self.vy = data.vy or 50
@@ -97,6 +96,10 @@ P.init = function (self, path, world, x, y)
     --  Reach distance, defaults to average of collider dimensions
     local reach = math.floor(((c.width + c.height) / 2) * (3/4))
     self.reach  = data.reach or reach
+
+    --  Health
+    self.health    = data.health    or 3
+    self.maxHealth = data.maxHealth or 3
 
     --  Inventory
     self.inventory = {
@@ -185,6 +188,30 @@ P.getItem = function (self, data)
     local name = data.name
     local qty  = data.qty or 1
     self.inventory[name] = self.inventory[name] + qty
+end
+
+
+
+P.heal = function (self, n)
+    --
+    --  Heal the player by `n` points; fully heals if no value given
+    --
+    if n then
+        local health = self.health + n
+        self.health  = math.min(health, self.maxHealth)
+    else
+        self.health  = self.maxHealth
+    end
+end
+
+
+
+P.damage = function (self, n)
+    --
+    --  Damage the player by `n` points
+    --
+    local health = self.health - n
+    self.health  = math.max(health, 0)
 end
 
 

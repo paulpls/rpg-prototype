@@ -29,15 +29,17 @@ local P = {}
 --
 --  Properties
 --
-P.path   = "assets/img/character/paul.png"
-P.x      = 128
-P.y      = 128
-P.width  = 48
-P.height = 48
-P.ox     = -24
-P.oy     = -42
-P.vx     = 75
-P.vy     = 75
+P.path      = "assets/img/character/paul.png"
+P.x         = 128
+P.y         = 128
+P.width     = 48
+P.height    = 48
+P.ox        = -24
+P.oy        = -42
+P.vx        = 75
+P.vy        = 75
+P.health    = 2.5
+P.maxHealth = 3
 
 
 
