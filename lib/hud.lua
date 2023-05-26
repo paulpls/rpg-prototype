@@ -34,17 +34,17 @@ local Healthbar = require("lib/healthbar")
 
 
 
-P.init = function (self)
+P.init = function (self, parent)
     --
     --  Initialize the HUD
     --
+    self.parent  = parent
     self.x       = 32
     self.y       = 32
     self.width   = love.graphics.getWidth() - (self.x * 2)
     self.height  = 64
     self.bgcolor = {0, 0, 0, 0.5}
     self.outline = {1, 1, 1, 0.5}
-    self.content = {}
     self.icons   = love.graphics.newImage("assets/img/sprite/icons.png")
     self.quads   = {
         --  Money
@@ -69,6 +69,14 @@ P.update = function (self, dt)
     --  Update the HUD
     --
     self.width = love.graphics.getWidth() - (self.x * 2)
+    self.healthbar:set(
+        self.parent.health,
+        self.parent.maxHealth
+    )
+    self.playerCoords = {
+        ["x"] = math.floor(self.parent.collider:getX() / 32),
+        ["y"] = math.floor(self.parent.collider:getY() / 32)
+    }
 end
 
 
@@ -102,13 +110,13 @@ P.draw = function (self)
     )
 
     --  Money
-    if self.content.money then
+    if self.parent.inventory.money then
         local x   = self.x + 24
         local y   = self.y + math.floor(self.height / 2) - 8
         local mx  = x + 24
         local my  = self.y + math.floor(self.height / 2)
         local mc  = {1, 1, 1}
-        local qty = self.content.money
+        local qty = self.parent.inventory.money
         love.graphics.setColor({1, 1, 1})
         love.graphics.draw(self.icons, self.quads.money, x, y)
         if qty <= 0 then mc = {1, 0, 0} end
@@ -119,12 +127,12 @@ P.draw = function (self)
     self.healthbar:draw()
 
     --  DEBUG Player coords
-    if self.content.coords then
+    if self.playerCoords then
         local x  = self.x + math.floor(self.width  / 2)
         local y  = self.y + math.floor(self.height / 2)
         local cc = {1, 0.75, 0}
-        local cx = "X "..self.content.coords.x
-        local cy = "Y "..self.content.coords.y
+        local cx = "X "..self.playerCoords.x
+        local cy = "Y "..self.playerCoords.y
         self.font:print(cx.."   "..cy, x, y, cc, true)
     end
 end

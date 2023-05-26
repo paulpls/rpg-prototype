@@ -70,7 +70,7 @@ love.load = function ()
     )
 
     --  Heads-Up Display
-    hud = HUD:new()
+    hud = HUD:new(player)
 
     --  Load the map
     map = Map("data/map/map.lua")
@@ -183,9 +183,7 @@ love.update = function (dt)
     player:update(dt)
 
     --  Update chests
-    for _,ch in pairs(chests) do
-        ch:update(dt)
-    end
+    for _,ch in pairs(chests) do ch:update(dt) end
 
     --  Update camera
     camera:lookAt(
@@ -194,15 +192,6 @@ love.update = function (dt)
     )
 
     --  Update HUD
-    hud.content.money     = player.inventory.money
-    hud.content.coords    = {
-        ["x"] = math.floor(player.collider:getX() / 32),
-        ["y"] = math.floor(player.collider:getY() / 32)
-    }
-    hud.healthbar:set(
-        player.health,
-        player.maxHealth
-    )
     hud:update(dt)
 
 end
