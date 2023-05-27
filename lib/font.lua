@@ -22,31 +22,33 @@
 
 
 
-local Font = Class:new()
-Font._path   = "assets/font/pixel.png"
-Font._glyphs = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-Font._w      = 16   --  Character width
-Font._h      = 20   --  Character height
-Font._k      = 2    --  Kerning
+local Class = require("lib/30log/30log")
+local P     = Class("Font")
+
+P._path     = "assets/font/pixel.png"
+P._glyphs   = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+P._w        = 16   --  Character width
+P._h        = 20   --  Character height
+P._k        = 2    --  Kerning
 
 
 
-Font.init = function (self, path, glyphs, w, h, k)
+P.init = function (self, path, glyphs, w, h, k)
     --
     --  Initialize font
     --
-    self.path   = path   or Font._path
-    self.glyphs = glyphs or Font._glyphs
-    self.w      = w      or Font._w
-    self.h      = h      or Font._h
-    self.k      = k      or Font._k
+    self.path   = path   or P._path
+    self.glyphs = glyphs or P._glyphs
+    self.w      = w      or P._w
+    self.h      = h      or P._h
+    self.k      = k      or P._k
     --  Configure font face
     self.face   = love.graphics.newImageFont(self.path, self.glyphs)
 end
 
 
 
-Font.set = function (self)
+P.set = function (self)
     --
     --  Set the font
     --
@@ -55,7 +57,7 @@ end
 
 
 
-Font.print = function (self, text, x, y, color, center)
+P.print = function (self, text, x, y, color, center)
     --
     --  Print text and center vertically (and optionally, horizontally)
     --
@@ -71,7 +73,7 @@ end
 
 
 
-return Font
+return P
 
 
 

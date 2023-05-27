@@ -25,7 +25,6 @@
 --
 --  Dependencies
 --
-require("lib/class")
 local Character = require("lib/character")
 local Chest     = require("lib/chest")
 local HUD       = require("lib/hud")

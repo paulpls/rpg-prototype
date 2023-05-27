@@ -22,9 +22,11 @@
 
 
 
-local P = Class:new()
-P.img  = love.graphics.newImage("assets/img/sprite/chest.png")
-P.quads = {
+local Class = require("lib/30log/30log")
+local P     = Class("Chest")
+
+P.img       = love.graphics.newImage("assets/img/sprite/chest.png")
+P.quads     = {
     ["closed"] = love.graphics.newQuad(0,  0, 32, 32, P.img),
     ["open"]   = love.graphics.newQuad(32, 0, 32, 32, P.img)
 }
