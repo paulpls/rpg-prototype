@@ -28,13 +28,35 @@ local P         = Character:extend("Player")
 
 
 
-P.inspect = function (self, reach, radius)
+P.inspect = function (self, world, reach, radius)
     --
     --  Inspect the area in front of the player
     --
-    local reach  = reach  or 1
-    local radius = radius or 10
-
+    local reach = reach  or self.reach
+    local qr    = radius or 12
+    local qx,qy = self.collider:getPosition()
+    local types = {
+        "chest",
+    }
+    --  Offset the query area
+    if player.dir == "left" then
+        qx = qx - reach
+    elseif player.dir == "right" then
+        qx = qx + reach
+    elseif player.dir == "up" then
+        qy = qy - reach
+    elseif player.dir == "down" then
+        qy = qy + reach
+    end
+    local objs  = world:queryCircleArea(qx, qy, qr, types)
+    if #objs > 0 then
+        for i,obj in ipairs(objs) do
+            if obj.parent then
+                local contents = obj.parent:interact()
+                if contents then self:getItem(contents) end
+            end
+        end
+    end
 end
 
 
@@ -43,12 +65,12 @@ P.getItem = function (self, data)
     --
     --  Add items to the player's inventory
     --
-    local name = data.name
+    local item = data.item
     local qty  = data.qty or 1
-    if self.inventory[name] then
-        self.inventory[name] = self.inventory[name] + qty
+    if self.inventory[item] then
+        self.inventory[item] = self.inventory[item] + qty
     else
-        self.inventory[name] = qty
+        self.inventory[item] = qty
     end
 end
 

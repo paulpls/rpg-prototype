@@ -28,6 +28,7 @@
 local Player    = require("lib/player")
 local Chest     = require("lib/chest")
 local HUD       = require("lib/hud")
+local Dialog    = require("lib/dialog")
 --  Third-party stuff
 local Map       = require("lib/sti")
 local Camera    = require("lib/hump/camera")
@@ -98,7 +99,8 @@ love.load = function ()
             ["x"]        = 128,
             ["y"]        = 128,
             ["contents"] = {
-                ["name"] = "money",
+                ["item"] = "money",
+                ["name"] = "coins",
                 ["qty"]  = 5
             }
         },
@@ -106,7 +108,8 @@ love.load = function ()
             ["x"]        = 448,
             ["y"]        = 736,
             ["contents"] = {
-                ["name"] = "money",
+                ["item"] = "money",
+                ["name"] = "coins",
                 ["qty"]  = 10
             }
         },
@@ -114,7 +117,8 @@ love.load = function ()
             ["x"]        = 256,
             ["y"]        = 448,
             ["contents"] = {
-                ["name"] = "money",
+                ["item"] = "money",
+                ["name"] = "coins",
                 ["qty"]  = 5
             }
         },
@@ -122,7 +126,8 @@ love.load = function ()
             ["x"]        = 704,
             ["y"]        = 160,
             ["contents"] = {
-                ["name"] = "money",
+                ["item"] = "money",
+                ["name"] = "coins",
                 ["qty"]  = 30
             }
         },
@@ -141,57 +146,67 @@ love.update = function (dt)
     --  Update stuff
     --
 
-    --  Get movement from keyboard input
-    local pdx,pdy = 0, 0
-    local pvx,pvy = player.vx, player.vy
-    local pAction = "default"
-    local pFacing = player.dir
-    if love.keyboard.isDown("left") then
-        pdx,pdy   = -1, 0
-        pAction   = "walk"
-        pFacing   = "left"
-    elseif love.keyboard.isDown("right") then
-        pdx,pdy   = 1, 0
-        pAction   = "walk"
-        pFacing   = "right"
-    elseif love.keyboard.isDown("up") then
-        pdx,pdy   = 0, -1
-        pAction   = "walk"
-        pFacing   = "up"
-    elseif love.keyboard.isDown("down") then
-        pdx,pdy   = 0, 1
-        pAction   = "walk"
-        pFacing   = "down"
+    --  TODO Better pause functionality
+    if not dialogActive then
+
+        --  Get movement from keyboard input
+        local pdx,pdy = 0, 0
+        local pvx,pvy = player.vx, player.vy
+        local pAction = "default"
+        local pFacing = player.dir
+        if love.keyboard.isDown("left") then
+            pdx,pdy   = -1, 0
+            pAction   = "walk"
+            pFacing   = "left"
+        elseif love.keyboard.isDown("right") then
+            pdx,pdy   = 1, 0
+            pAction   = "walk"
+            pFacing   = "right"
+        elseif love.keyboard.isDown("up") then
+            pdx,pdy   = 0, -1
+            pAction   = "walk"
+            pFacing   = "up"
+        elseif love.keyboard.isDown("down") then
+            pdx,pdy   = 0, 1
+            pAction   = "walk"
+            pFacing   = "down"
+        end
+
+        --  Move player hitbox
+        player.collider:setLinearVelocity(
+            pdx * pvx,
+            pdy * pvy
+        )
+
+        --  Update windfield
+        world:update(dt)
+
+        --  Move and update player animatons
+        local px,py   = player.collider:getX(), player.collider:getY()
+        player.dir    = pFacing
+        player.action = pAction
+        player:setState()
+        player:position(px, py)
+        player:update(dt)
+
+        --  Update chests
+        for _,ch in pairs(chests) do ch:update(dt) end
+
+        --  Update camera
+        camera:lookAt(
+            player.collider:getX(),
+            player.collider:getY()
+        )
+
+        --  Update HUD
+        hud:update(dt)
+
+        --  Fetch dialogs
+        if not currentDialog then
+            if #dialogs > 0 then currentDialog = Dialog:pop() end
+        end
+
     end
-
-    --  Move player hitbox
-    player.collider:setLinearVelocity(
-        pdx * pvx,
-        pdy * pvy
-    )
-
-    --  Update windfield
-    world:update(dt)
-
-    --  Move and update player animatons
-    local px,py   = player.collider:getX(), player.collider:getY()
-    player.dir    = pFacing
-    player.action = pAction
-    player:setState()
-    player:position(px, py)
-    player:update(dt)
-
-    --  Update chests
-    for _,ch in pairs(chests) do ch:update(dt) end
-
-    --  Update camera
-    camera:lookAt(
-        player.collider:getX(),
-        player.collider:getY()
-    )
-
-    --  Update HUD
-    hud:update(dt)
 
 end
 
@@ -234,6 +249,12 @@ love.draw = function ()
     --  Draw the HUD
     hud:draw()
 
+    --  Draw current dialog popup
+    if currentDialog then
+        currentDialog:draw()
+        dialogActive = true
+    end
+
 
 end
 
@@ -248,30 +269,13 @@ love.keypressed = function (key)
     if key == "escape" or key == "q" then
         love.event.quit()
 
-    --  Query
+    --  Action (Inspect, interact, etc)
     elseif key == "space" then
-        local qx,qy = player.collider:getPosition()
-        local reach = player.reach
-        --  Offset the query area
-        if player.dir == "left" then
-            qx = qx - reach
-        elseif player.dir == "right" then
-            qx = qx + reach
-        elseif player.dir == "up" then
-            qy = qy - reach
-        elseif player.dir == "down" then
-            qy = qy + reach
+        if not dialogActive then
+            player:inspect(world)
+        else
+            currentDialog:kill()
         end
-        local objs  = world:queryCircleArea(qx, qy, 12, {"chest"})
-        if #objs > 0 then
-            for i,obj in ipairs(objs) do
-                if obj.parent then
-                    local contents = obj.parent:interact()
-                    if contents then player:getItem(contents) end
-                end
-            end
-        end
-
     --  DEBUG Heal/damage the player
     elseif key == "k" then
         player:heal(0.5)

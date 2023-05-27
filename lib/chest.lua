@@ -33,6 +33,13 @@ P.quads     = {
 
 
 
+--
+--  Dependencies
+--
+local Dialog = require("lib/dialog")
+
+
+
 P.init = function (self, world, x, y, contents)
     --
     --  Initialize a new chest
@@ -60,7 +67,16 @@ P.interact = function (self)
     --  Open the chest and return contents
     --
     if not self.open then
-        self.open = true
+        self.open  = true
+        local name = self.contents.name
+        local qty  = self.contents.qty
+        local msg  = "You found "..qty.." "..name.."!"
+        --  Create a new dialog and push it to the global stack
+        Dialog.push(
+            Dialog:new(
+                string.upper(msg)
+            )
+        )
         return self.contents
     end
 end

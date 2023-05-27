@@ -171,28 +171,6 @@ end
 
 
 
-P.inspect = function (self, reach, radius)
-    --
-    --  Inspect the area in front of the player
-    --
-    local reach  = reach  or 1
-    local radius = radius or 10
-
-end
-
-
-
-P.getItem = function (self, data)
-    --
-    --  Add items to the player's inventory
-    --
-    local name = data.name
-    local qty  = data.qty or 1
-    self.inventory[name] = self.inventory[name] + qty
-end
-
-
-
 P.heal = function (self, n)
     --
     --  Heal the player by `n` points; fully heals if no value given
