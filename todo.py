@@ -34,12 +34,6 @@
 
 
 
-from os import path
-import subprocess
-from sys import stdout
-
-
-
 #
 #   NOTE Edit these variables to customize the program's output --------------------
 #
@@ -56,6 +50,12 @@ outpath = "./TODO.md"
 #
 #   --------------------------------------------------------------------------------
 #
+
+
+
+from os import path
+import subprocess
+from sys import stdout
 
 
 
