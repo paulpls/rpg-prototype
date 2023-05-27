@@ -63,7 +63,7 @@ if __name__ == "__main__":
 
     subhead = "### {}\n"
     outfmt = "* [{}]({}#L{}):{}\n"
-    note = "_NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/todo)_  \n\n\n\n"
+    note = "_NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/todo)_\n\n\n\n"
     cmd = "grep -n {} {}"
     out = [header, note]
     success = False
