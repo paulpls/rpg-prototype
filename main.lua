@@ -26,6 +26,7 @@
 --  Dependencies
 --
 local Player    = require("lib/player")
+local NPC       = require("lib/npc")
 local Chest     = require("lib/chest")
 local HUD       = require("lib/hud")
 local Dialog    = require("lib/dialog")
@@ -33,6 +34,16 @@ local Dialog    = require("lib/dialog")
 local Map       = require("lib/sti")
 local Camera    = require("lib/hump/camera")
 local Windfield = require("lib/windfield")
+
+
+
+--
+--  RNG
+--
+math.randomseed(os.time())
+math.random()
+math.random()
+math.random()
 
 
 
@@ -61,6 +72,12 @@ love.load = function ()
     --  Load player sprite into the world
     player = Player:new("data/character/paul", world)
     player.collider:setCollisionClass("player")
+
+    --  Load NPCs into the world
+    npcs = {}
+    local npc = NPC:new("data/character/npc", world)
+    npc.collider:setCollisionClass("npc")
+    table.insert(npcs, npc)
 
     --  Camera setup
     camera = Camera(
@@ -155,19 +172,19 @@ love.update = function (dt)
         local pAction = "default"
         local pFacing = player.dir
         if love.keyboard.isDown("left") then
-            pdx,pdy   = -1, 0
+            pdx       = -1
             pAction   = "walk"
             pFacing   = "left"
         elseif love.keyboard.isDown("right") then
-            pdx,pdy   = 1, 0
+            pdx       = 1
             pAction   = "walk"
             pFacing   = "right"
         elseif love.keyboard.isDown("up") then
-            pdx,pdy   = 0, -1
+            pdy       = -1
             pAction   = "walk"
             pFacing   = "up"
         elseif love.keyboard.isDown("down") then
-            pdx,pdy   = 0, 1
+            pdy       = 1
             pAction   = "walk"
             pFacing   = "down"
         end
@@ -188,6 +205,12 @@ love.update = function (dt)
         player:setState()
         player:position(px, py)
         player:update(dt)
+
+        --  Iterate and update NPCs
+        for _,npc in pairs(npcs) do
+            npc:randomize(dt)
+            npc:update(dt)
+        end
 
         --  Update chests
         for _,ch in pairs(chests) do ch:update(dt) end
@@ -234,6 +257,9 @@ love.draw = function ()
 
     --  Draw characters
     player:draw()
+
+    --  Draw NPCs
+    for _,npc in pairs(npcs) do npc:draw() end
 
     --  Draw map layers above characters
     map:drawLayer(map.layers["trees_top"])
