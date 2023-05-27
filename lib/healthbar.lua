@@ -110,7 +110,13 @@ P.update = function (self, dt)
         end
         self.timer = self.timer - dt
     else
-        for _,s in pairs(self.states) do s:pauseAtStart() end
+        if self.value == self.max then
+            --  Highlighted icons if at max health
+            for _,s in pairs(self.states) do s:pauseAtEnd() end
+        else
+            --  Non-highlighted icons otherwise
+            for _,s in pairs(self.states) do s:pauseAtStart() end
+        end
         self:resetTimer()
         if self.value > 1 then self.blink = false end
     end
