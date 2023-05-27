@@ -53,6 +53,7 @@ P.inspect = function (self, world, reach, radius)
         for i,obj in ipairs(objs) do
             if obj.parent then
                 local contents = obj.parent:interact()
+                --  TODO Create an inventory buffer to indirectly add items
                 if contents then self:getItem(contents) end
             end
         end
