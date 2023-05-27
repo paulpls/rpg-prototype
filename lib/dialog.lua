@@ -62,8 +62,8 @@ P.init = function (self, text, choices, color)
     self.text    = text
     self.choices = choices
     self.color   = color or {1, 1, 1}
-    self.bgcolor = {0, 0, 0, 0.5}
-    self.outline = {1, 1, 1, 0.5}
+    self.bgcolor = {0, 0, 0, 0.75}
+    self.outline = {1, 1, 1, 0.75}
 
     --  Set the font
     self.font = Font:new()

@@ -44,8 +44,8 @@ P.init = function (self, parent)
     self.y       = 32
     self.width   = love.graphics.getWidth() - (self.x * 2)
     self.height  = 64
-    self.bgcolor = {0, 0, 0, 0.5}
-    self.outline = {1, 1, 1, 0.5}
+    self.bgcolor = {0, 0, 0, 0.75}
+    self.outline = {1, 1, 1, 0.75}
     self.icons   = love.graphics.newImage("assets/img/sprite/icons.png")
     self.quads   = {
         --  Money
