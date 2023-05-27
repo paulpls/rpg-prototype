@@ -25,7 +25,7 @@
 --
 --  Dependencies
 --
-local Character = require("lib/character")
+local Player    = require("lib/player")
 local Chest     = require("lib/chest")
 local HUD       = require("lib/hud")
 --  Third-party stuff
@@ -58,7 +58,7 @@ love.load = function ()
     --world:setQueryDebugDrawing(true)
 
     --  Load player sprite into the world
-    player = Character:new("data/character/paul", world)
+    player = Player:new("data/character/paul", world)
     player.collider:setCollisionClass("player")
 
     --  Camera setup
