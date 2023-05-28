@@ -95,6 +95,7 @@ P.init = function (self, path, world, x, y)
     self.collider:setFixedRotation(true)
 
     --  Reach distance, defaults to average of collider dimensions
+    --  TODO Move this to player module as it is not common to all chars
     local reach = math.floor(((c.width + c.height) / 2) * (3/4))
     self.reach  = data.reach or reach
 
@@ -139,6 +140,7 @@ P.update = function (self, dt)
     --
     --  Update the character sprite and animation
     --
+    if not self:getState() then self:setState() end
     self:getState():update(dt)
     --  Reset some animations if not moving
     if self.action ~= "walk" then

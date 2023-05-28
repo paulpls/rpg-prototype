@@ -47,6 +47,16 @@ math.random()
 
 
 
+--
+--  Global tables
+--
+characters = {}
+chests     = {}
+dialogs    = {}
+walls      = {}
+
+
+
 love.load = function ()
     --
     --  Load stuff and configure defaults
@@ -72,12 +82,12 @@ love.load = function ()
     --  Load player sprite into the world
     player = Player:new("data/character/paul", world)
     player.collider:setCollisionClass("player")
+    table.insert(characters, player)
 
     --  Load NPCs into the world
-    npcs = {}
     local npc = NPC:new("data/character/npc", world)
     npc.collider:setCollisionClass("npc")
-    table.insert(npcs, npc)
+    table.insert(characters, npc)
 
     --  Camera setup
     camera = Camera(
@@ -93,7 +103,6 @@ love.load = function ()
     map = Map("data/map/map.lua")
 
     --  Define wall hitboxes
-    walls = {}
     if map.layers["walls"] then
         for _,o in pairs(map.layers["walls"].objects) do
             local wall = world:newRectangleCollider(
@@ -110,7 +119,6 @@ love.load = function ()
 
     --  Add chests to the map
     --  TODO Make these more abstract eventually by loading from data files
-    chests         = {}
     local _chests  = {
         {
             ["x"]        = 128,
@@ -204,13 +212,9 @@ love.update = function (dt)
         player.action = pAction
         player:setState()
         player:position(px, py)
-        player:update(dt)
 
-        --  Iterate and update NPCs
-        for _,npc in pairs(npcs) do
-            npc:randomize(dt)
-            npc:update(dt)
-        end
+        --  Update all characters
+        for _,c in pairs(characters) do c:update(dt) end
 
         --  Update chests
         for _,ch in pairs(chests) do ch:update(dt) end
@@ -256,10 +260,8 @@ love.draw = function ()
     end
 
     --  Draw characters
-    player:draw()
-
-    --  Draw NPCs
-    for _,npc in pairs(npcs) do npc:draw() end
+    --  TODO Draw order: sort by Y coords
+    for _,c in pairs(characters) do c:draw() end
 
     --  Draw map layers above characters
     map:drawLayer(map.layers["trees_top"])

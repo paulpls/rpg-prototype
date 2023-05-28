@@ -37,7 +37,6 @@ local Font = require("lib/font")
 --
 --  Global stack operations
 --
-dialogs = {}
 P.push  = function (dialog)  table.insert(dialogs, dialog) end 
 P.pop   = function () return table.remove(dialogs, 1)      end
 
