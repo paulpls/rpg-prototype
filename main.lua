@@ -239,6 +239,33 @@ end
 
 
 
+love.keypressed = function (key)
+    --
+    --  Key bindings
+    --
+
+    --  Quit
+    if key == "escape" or key == "q" then
+        love.event.quit()
+
+    --  Action (Inspect, interact, etc)
+    elseif key == "space" then
+        if not dialogActive then
+            player:inspect(world)
+        else
+            currentDialog:kill()
+        end
+    --  DEBUG Heal/damage the player
+    elseif key == "k" then
+        player:heal(0.5)
+    elseif key == "j" then
+        player:damage(0.5)
+    end
+
+end
+
+
+
 love.draw = function ()
     --
     --  Draw stuff
@@ -283,33 +310,6 @@ love.draw = function ()
         dialogActive = true
     end
 
-
-end
-
-
-
-love.keypressed = function (key)
-    --
-    --  Key bindings
-    --
-
-    --  Quit
-    if key == "escape" or key == "q" then
-        love.event.quit()
-
-    --  Action (Inspect, interact, etc)
-    elseif key == "space" then
-        if not dialogActive then
-            player:inspect(world)
-        else
-            currentDialog:kill()
-        end
-    --  DEBUG Heal/damage the player
-    elseif key == "k" then
-        player:heal(0.5)
-    elseif key == "j" then
-        player:damage(0.5)
-    end
 
 end
 
