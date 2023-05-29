@@ -174,7 +174,7 @@ end
 
 P.inspect = function (self)
     --
-    --  Inspect the area in front of the character and halt movement
+    --  Inspect the area in front of the character and return true if collisions are found
     --
     local classes = {
         "Wall",
@@ -182,10 +182,17 @@ P.inspect = function (self)
         "Player",
         "NPC",
     }
-    if self.collider:enter("Wall") then
-        local objs = self:query(classes)
-        if #objs > 0 then self.action = "default" end
+    local collision = false
+    for _,class in pairs(classes) do
+        if self.collider:enter(class) then
+            collision = true
+        end
     end
+    --  Return true if facing a collidable object
+    if collision then
+        if #self:query(classes) > 0 then return true end
+    end
+    return false
 end
 
 
@@ -246,7 +253,12 @@ P.randomize = function (self, dt)
     self:position(x, y)
 
     --  Stop walking if collisions are detected
-    self:inspect()
+    if self.action == "walk" then
+        local collision = self:inspect()
+        if collision then
+            self.action = "default"
+        end
+    end
 
 end
 
