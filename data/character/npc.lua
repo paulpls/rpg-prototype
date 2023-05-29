@@ -29,6 +29,7 @@ local P = {}
 --
 --  Properties
 --
+P.class     = "NPC"
 P.path      = "assets/img/character/npc.png"
 P.x         = 480
 P.y         = 704
@@ -44,39 +45,41 @@ P.vy        = 50
 --
 --  Collider info
 --
-P.colliderInfo = {
-    ["x"]      = P.x + math.floor(math.abs(P.ox) / 2),
-    ["y"]      = P.y - math.abs(P.oy),
-    ["width"]  = 24,
-    ["height"] = 24,
-    ["cutoff"] = 10
-}
+local pWidth   = 24
+local pHeight  = 24
+local pCutoff  = 10
+P.colliderInfo = {}
+P.colliderInfo.x      = P.x
+P.colliderInfo.y      = P.y
+P.colliderInfo.width  = cWidth
+P.colliderInfo.height = cHeight
+P.colliderInfo.cutoff = cCutoff
 
 
 --
 --  Directions (ie spritesheet row)
 --
-P.facing = {
-    ["down"]  = 1,
-    ["up"]    = 2,
-    ["left"]  = 3,
-    ["right"] = 4
-}
+P.facing = {}
+P.facing.down  = 1
+P.facing.up    = 2
+P.facing.left  = 3
+P.facing.right = 4
 
 
 
 --
 --  Actions
 --
-P.actions = {
-    ["default"] = {
-        ["frames"] = "1-1",
-        ["delay"]  = 1
-    },
-    ["walk"] = {
-        ["frames"] = "2-5",
-        ["delay"]  = 0.25
-    }
+P.actions = {}
+--  Default
+P.actions.default = {
+    ["frames"] = "1-1",
+    ["delay"]  = 1
+}
+--  Walk
+P.actions.walk = {
+    ["frames"] = "2-5",
+    ["delay"]  = 0.25
 }
 
 
