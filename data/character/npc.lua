@@ -57,6 +57,12 @@ P.colliderInfo.cutoff = cCutoff
 
 
 --
+--  Collider-dependent properties
+--
+P.reach = math.floor((pWidth + pHeight) / 2)
+
+
+--
 --  Directions (ie spritesheet row)
 --
 P.facing = {}
