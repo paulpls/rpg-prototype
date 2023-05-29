@@ -64,7 +64,7 @@ love.load = function ()
 
     --  Graphics defaults
     love.graphics.setDefaultFilter("nearest", "nearest")
-    --love.window.setFullscreen(true)
+    love.window.setFullscreen(true)
 
     --  World setup
     world = Windfield.newWorld(0, 0)
@@ -77,7 +77,7 @@ love.load = function ()
     world:addCollisionClass("Chest")
     world:addCollisionClass("Entity")
     --  DEBUG Draw queries
-    world:setQueryDebugDrawing(true)
+    --world:setQueryDebugDrawing(true)
 
     --  Load player sprite into the world
     player = Player:new("data/character/paul", world)
@@ -299,7 +299,7 @@ love.draw = function ()
     map:drawLayer(map.layers["trees_top"])
 
     --  DEBUG Draw collision hitboxes
-    world:draw()
+    --world:draw()
 
     --
     --  Unset the camera
