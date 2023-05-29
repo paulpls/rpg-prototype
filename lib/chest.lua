@@ -55,7 +55,7 @@ P.init = function (self, world, x, y, contents)
         24,
         20
     )
-    self.collider:setCollisionClass("chest")
+    self.collider:setCollisionClass("Chest")
     self.collider:setType("static")
     self.collider.parent = self
 end

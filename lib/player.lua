@@ -28,27 +28,14 @@ local P         = Character:extend("Player")
 
 
 
-P.inspect = function (self, world, reach, radius)
+P.inspect = function (self, reach, radius)
     --
-    --  Inspect the area in front of the player
+    --  Inspect the area in front of the character
     --
-    local reach = reach  or self.reach
-    local qr    = radius or 12
-    local qx,qy = self.collider:getPosition()
-    local types = {
-        "chest",
+    local classes = {
+        "Chest",
     }
-    --  Offset the query area
-    if player.dir == "left" then
-        qx = qx - reach
-    elseif player.dir == "right" then
-        qx = qx + reach
-    elseif player.dir == "up" then
-        qy = qy - reach
-    elseif player.dir == "down" then
-        qy = qy + reach
-    end
-    local objs  = world:queryCircleArea(qx, qy, qr, types)
+    local objs  = self:query(classes, reach, radius)
     if #objs > 0 then
         for i,obj in ipairs(objs) do
             if obj.parent then
@@ -58,45 +45,6 @@ P.inspect = function (self, world, reach, radius)
             end
         end
     end
-end
-
-
-
-P.getItem = function (self, data)
-    --
-    --  Add items to the player's inventory
-    --
-    local item = data.item
-    local qty  = data.qty or 1
-    if self.inventory[item] then
-        self.inventory[item] = self.inventory[item] + qty
-    else
-        self.inventory[item] = qty
-    end
-end
-
-
-
-P.heal = function (self, n)
-    --
-    --  Heal the player by `n` points; fully heals if no value given
-    --
-    if n then
-        local health = self.health + n
-        self.health  = math.min(health, self.maxHealth)
-    else
-        self.health  = self.maxHealth
-    end
-end
-
-
-
-P.damage = function (self, n)
-    --
-    --  Damage the player by `n` points
-    --
-    local health = self.health - n
-    self.health  = math.max(health, 0)
 end
 
 

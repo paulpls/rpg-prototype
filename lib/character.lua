@@ -34,7 +34,18 @@ local Animation = require("lib/anim8/anim8")
 
 
 
-P.init = function (self, path, world, x, y)
+--
+--  Random animation timer
+--
+math.randomseed(os.time())
+for _=1,5 do math.random() end
+local delay      = 1
+local timer      = delay
+local resetTimer = function (n) timer = n or delay end
+
+
+
+P.init = function (self, path, world, x, y, class)
     --
     --  Initialize the character
     --
@@ -44,6 +55,9 @@ P.init = function (self, path, world, x, y)
         require(path),
         "Unable to load character data: "..tostring(path)
     )
+
+    --  Entity class
+    self.class = class or data.class
 
     --  Configure image and grid properties
     self.img  = love.graphics.newImage(data.path)
@@ -84,8 +98,9 @@ P.init = function (self, path, world, x, y)
     end
 
     --  Define collider
-    local c = data.colliderInfo
-    self.collider = world:newBSGRectangleCollider(
+    self.world = world
+    local c    = data.colliderInfo
+    self.collider = self.world:newBSGRectangleCollider(
         c.x,
         c.y,
         c.width,
@@ -94,19 +109,15 @@ P.init = function (self, path, world, x, y)
     )
     self.collider:setFixedRotation(true)
 
-    --  Reach distance, defaults to average of collider dimensions
-    --  TODO Move this to player module as it is not common to all chars
-    local reach = math.floor(((c.width + c.height) / 2) * (3/4))
-    self.reach  = data.reach or reach
-
     --  Health
     self.health    = data.health    or 3
     self.maxHealth = data.maxHealth or 3
 
+    --  Reach distance, defaults to average of collider dimensions
+    if data.reach then self.reach = data.reach end
+
     --  Inventory
-    self.inventory = {
-        ["money"] = 0,
-    }
+    if data.inventory then self.inventory = data.inventory end
 
 end
 
@@ -136,18 +147,107 @@ end
 
 
 
-P.update = function (self, dt)
+P.query = function (self, classes, reach, radius)
     --
-    --  Update the character sprite and animation
+    --  Inspect the area in front of the character
     --
-    if not self:getState() then self:setState() end
-    self:getState():update(dt)
-    --  Reset some animations if not moving
-    if self.action ~= "walk" then
-        for f,_ in pairs(self.facing) do
-            self.states["walk_"..f]:gotoFrame(1)
+    local reach = 0
+    if self.reach then reach = self.reach else reach = reach end
+    local qr    = radius or 12
+    local qx,qy = self.collider:getPosition()
+    local classes = classes
+    --  Offset the query area
+    if player.dir == "left" then
+        qx = qx - reach
+    elseif player.dir == "right" then
+        qx = qx + reach
+    elseif player.dir == "up" then
+        qy = qy - reach
+    elseif player.dir == "down" then
+        qy = qy + reach
+    end
+    --  Return matching objects
+    return self.world:queryCircleArea(qx, qy, qr, classes)
+end
+
+
+
+P.inspect = function (self)
+    --
+    --  Inspect the area in front of the character and halt movement
+    --
+    local classes = {
+        "Wall",
+        "Chest",
+        "Player",
+        "NPC",
+    }
+    if self.collider:enter("Wall") then
+        local objs = self:query(classes)
+        if #objs > 0 then self.action = "default" end
+    end
+end
+
+
+
+P.randomize = function (self, dt)
+    --
+    --  Randomize movement
+    --
+    local dirs    = {"down", "up", "left", "right"}
+    local actions = {"default", "walk"}
+    local rChance = math.random(1, 100)
+    local rDir    = math.random(1, #dirs)
+    local dx,dy   = 0, 0
+    local vx,vy   = self.vx, self.vy
+    local nAction = self.action
+    local nFacing = self.dir
+
+    --  Change direction occasionally
+    if rChance == 1 then nFacing = dirs[rDir] end
+    --  Timed animation
+    timer = timer - dt
+    if timer <= 0 then
+        if nAction == "walk" then
+            if math.random(1, 20) == 1 then
+                nAction = "default"
+            end
+            resetTimer(5)
+        elseif nAction == "default" then
+            if math.random(1, 3) == 1 then
+                nAction = "walk"
+            end
+            resetTimer(1)
         end
     end
+    --  Walk it out
+    if nAction == "walk" then
+        if nFacing == "left" then
+            dx = -1
+        elseif nFacing == "right" then
+            dx = 1
+        elseif nFacing == "up" then
+            dy = -1
+        elseif nFacing == "down" then
+            dy = 1
+        end
+    end
+    --  Move hitbox
+    self.collider:setLinearVelocity(
+        dx * vx,
+        dy * vy
+    )
+
+    --  Move and update animatons
+    local x,y   = self.collider:getX(), self.collider:getY()
+    self.dir    = nFacing
+    self.action = nAction
+    self:setState()
+    self:position(x, y)
+
+    --  Stop walking if collisions are detected
+    self:inspect()
+
 end
 
 
@@ -193,6 +293,55 @@ P.damage = function (self, n)
     --
     local health = self.health - n
     self.health  = math.max(health, 0)
+end
+
+
+
+P.getItem = function (self, data)
+    --
+    --  Add items to inventory
+    --
+    local item = data.item
+    local qty  = data.qty or 1
+    if self.inventory[item] then
+        self.inventory[item] = self.inventory[item] + qty
+    else
+        self.inventory[item] = qty
+    end
+end
+
+
+
+P.delItem = function (self, data)
+    --
+    --  Delete items from inventory; returns true if successful
+    --
+    local item    = data.item
+    local qty     = data.qty or 1
+    local success = false
+    if self.inventory[item] then
+        if self.inventory[item] >= qty then
+            self.inventory[item] = self.inventory[item] - qty
+            success = true
+        end
+    end
+    return success
+end
+
+
+
+P.update = function (self, dt)
+    --
+    --  Update the character sprite and animation
+    --
+    if not self:getState() then self:setState() end
+    self:getState():update(dt)
+    --  Reset some animations if not moving
+    if self.action ~= "walk" then
+        for f,_ in pairs(self.facing) do
+            self.states["walk_"..f]:gotoFrame(1)
+        end
+    end
 end
 
 

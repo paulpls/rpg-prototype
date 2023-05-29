@@ -68,25 +68,26 @@ love.load = function ()
 
     --  World setup
     world = Windfield.newWorld(0, 0)
-    world:addCollisionClass("wall")
-    world:addCollisionClass("player")
-    world:addCollisionClass("npc")
-    world:addCollisionClass("enemy")
-    world:addCollisionClass("item")
-    world:addCollisionClass("door")
-    world:addCollisionClass("chest")
-    world:addCollisionClass("entity")
+    world:addCollisionClass("Wall")
+    world:addCollisionClass("Player")
+    world:addCollisionClass("NPC")
+    world:addCollisionClass("Enemy")
+    world:addCollisionClass("Item")
+    world:addCollisionClass("Door")
+    world:addCollisionClass("Chest")
+    world:addCollisionClass("Entity")
     --  DEBUG Draw queries
-    --world:setQueryDebugDrawing(true)
+    world:setQueryDebugDrawing(true)
 
     --  Load player sprite into the world
     player = Player:new("data/character/paul", world)
-    player.collider:setCollisionClass("player")
+    player.collider:setCollisionClass("Player")
     table.insert(characters, player)
 
     --  Load NPCs into the world
     local npc = NPC:new("data/character/npc", world)
-    npc.collider:setCollisionClass("npc")
+    npc.collider:setCollisionClass("NPC")
+    -- TODO  Passthrough or nudge npcs
     table.insert(characters, npc)
 
     --  Camera setup
@@ -112,7 +113,7 @@ love.load = function ()
                 o.height
             )
             wall:setType("static")
-            wall:setCollisionClass("wall")
+            wall:setCollisionClass("Wall")
             table.insert(walls, wall)
         end
     end
@@ -214,7 +215,12 @@ love.update = function (dt)
         player:position(px, py)
 
         --  Update all characters
-        for _,c in pairs(characters) do c:update(dt) end
+        local sort = function(c1, c2) return c1.collider:getY() < c2.collider:getY() end
+        table.sort(characters, sort)
+        for _,c in pairs(characters) do 
+            if c.class == "NPC" then c:randomize(dt) end
+            c:update(dt)
+        end
 
         --  Update chests
         for _,ch in pairs(chests) do ch:update(dt) end
@@ -287,14 +293,13 @@ love.draw = function ()
     end
 
     --  Draw characters
-    --  TODO Draw order: sort by Y coords
     for _,c in pairs(characters) do c:draw() end
 
     --  Draw map layers above characters
     map:drawLayer(map.layers["trees_top"])
 
     --  DEBUG Draw collision hitboxes
-    --world:draw()
+    world:draw()
 
     --
     --  Unset the camera
