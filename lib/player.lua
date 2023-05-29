@@ -34,14 +34,13 @@ P.inspect = function (self, reach, radius)
     --
     local classes = {
         "Chest",
+        "NPC",
     }
     local objs  = self:query(classes, reach, radius)
     if #objs > 0 then
         for i,obj in ipairs(objs) do
             if obj.parent then
-                local contents = obj.parent:interact()
-                --  TODO Create an inventory buffer to indirectly add items
-                if contents then self:getItem(contents) end
+                obj.parent:interact(self)
             end
         end
     end

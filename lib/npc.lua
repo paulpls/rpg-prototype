@@ -28,10 +28,37 @@ local P         = Character:extend("NPC")
 
 
 
-P.talk = function (self)
+--
+--  Dependencies
+--
+local Dialog = require("lib/dialog")
+
+
+
+P.interact = function (self, char)
     --
-    --  TODO Add some dialogs for player interaction
+    --  Interact with the NPC
     --
+    self:talk(char)
+end
+
+
+
+P.talk = function (self, char, context)
+    --
+    --  Add some dialogs for player interaction
+    --
+    self:face(char, true)
+    local context = context or "hello"
+    if not self.dialog[context] then context = "hello" end
+    local random  = math.random(1, #self.dialog[context])
+    local msg     = self.dialog[context][random]
+    --  Create a new dialog and push it to the global stack
+    Dialog.push(
+        Dialog:new(
+            string.upper(msg)
+        )
+    )
 end
 
 

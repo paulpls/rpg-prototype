@@ -108,6 +108,7 @@ P.init = function (self, path, world, x, y, class)
         c.cutoff
     )
     self.collider:setFixedRotation(true)
+    self.collider.parent = self
 
     --  Health
     self.health    = data.health    or 3
@@ -118,6 +119,9 @@ P.init = function (self, path, world, x, y, class)
 
     --  Inventory
     if data.inventory then self.inventory = data.inventory end
+
+    --  Dialog
+    if data.dialog then self.dialog = data.dialog end
 
 end
 
@@ -260,6 +264,24 @@ P.randomize = function (self, dt)
         end
     end
 
+end
+
+
+
+P.face = function (self, char, halt)
+    --
+    --  Face the character toward another character and optionally halt movement
+    --
+    local dir   = char.dir
+    --  Set direction to opposite that of player
+    local opposite = {}
+    opposite.down  = "up"
+    opposite.up    = "down"
+    opposite.left  = "right"
+    opposite.right = "left"
+    self.dir       = opposite[dir]
+    --  Halt movement
+    if halt then self.action = "default" end
 end
 
 

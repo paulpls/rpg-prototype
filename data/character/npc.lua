@@ -90,6 +90,22 @@ P.actions.walk = {
 
 
 
+--
+--  Dialog
+--
+P.dialog = {}
+--  Hello (default)
+P.dialog.hello = {
+    "Hello",
+    "Hi",
+    "Hey",
+    "Sup",
+    "Hey there",
+    "How goes it",
+}
+
+
+
 return P
 
 

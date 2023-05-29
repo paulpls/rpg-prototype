@@ -64,7 +64,7 @@ love.load = function ()
 
     --  Graphics defaults
     love.graphics.setDefaultFilter("nearest", "nearest")
-    love.window.setFullscreen(true)
+    --love.window.setFullscreen(true)
 
     --  World setup
     world = Windfield.newWorld(0, 0)
