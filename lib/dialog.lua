@@ -64,8 +64,10 @@ P.init = function (self, text, choices, color)
     self.bgcolor = {0, 0, 0, 0.75}
     self.outline = {1, 1, 1, 0.75}
 
-    --  Set the font
-    self.font = Font:new()
+    --  Configure font and recalculate width
+    self.font  = Font:new()
+    self.minW  = self.font:getWidth(text)
+    self.width = math.max(self.width, self.minW)
 end
 
 
