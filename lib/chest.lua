@@ -62,7 +62,7 @@ end
 
 
 
-P.interact = function (self)
+P.interact = function (self, char)
     --
     --  Open the chest and return contents
     --
@@ -77,7 +77,7 @@ P.interact = function (self)
                 string.upper(msg)
             )
         )
-        return self.contents
+        char:getItem(self.contents)
     end
 end
 
