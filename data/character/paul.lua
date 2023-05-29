@@ -55,9 +55,9 @@ P.inventory.money = 0
 --
 --  Collider info
 --
-local pWidth   = 24
-local pHeight  = 24
-local pCutoff  = 10
+local cWidth   = 24
+local cHeight  = 24
+local cCutoff  = 10
 P.colliderInfo = {}
 P.colliderInfo.x      = P.x
 P.colliderInfo.y      = P.y
@@ -69,7 +69,7 @@ P.colliderInfo.cutoff = cCutoff
 --
 --  Collider-dependent properties
 --
-P.reach = math.floor((pWidth + pHeight) / 2)
+P.reach = math.floor((cWidth + cHeight) / 2)
 
 
 --
