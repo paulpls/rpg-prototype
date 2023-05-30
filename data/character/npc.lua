@@ -91,18 +91,126 @@ P.actions.walk = {
 
 
 --
---  Dialog
+--  Conversations
 --
-P.dialog = {}
+--  C = {}      Conversations table
+--  C.id        Conversation id string
+--  C.id.msgs   Conversation messages tables
+--      {
+--          [1] = {"msg1", "msg2", "msg3"},   Random options for message 1
+--          [2] = {"msg"},                    Single message for message 2
+--      }
+--  C.nextid    Next conversation set
+--  C.previd    Prev conversation set (eg "Did you catch all that?" -> "No" -> repeat)
+--  C.options   Options tables
+--      {
+--          ["id"] = {
+--              ["text"]   = "name"    Name of option, `id` if omitted
+--              ["nextid"] = id        ID of next conversation set upon selection
+--          },
+--      }
+--  C.actions   TODO Actions to take, such as give item, take money, heal player, etc
+--  C.stop      If true, signifies that the conversation will forcibly stop after this point
+--
+C = {}
+
 --  Hello (default)
-P.dialog.hello = {
-    "Hello",
-    "Hi",
-    "Hey",
-    "Sup",
-    "Hey there",
-    "How goes it",
+C.hello      = {}
+C.hello.msgs = {}
+table.insert(
+    C.hello.msgs,
+    {
+        "Hello",
+        "Hi",
+        "Hey",
+        "Sup",
+        "Hey there",
+        "How goes it",
+    }
+)
+C.hello.stop = true
+
+--  Buy items intro
+C.buy        = {}
+C.buy.msgs   = {}
+table.insert(
+    C.buy.msgs,
+    {
+        "Buy something will ya",
+        "Khajit has wares if you have coin",
+    }
+)
+table.insert(
+    C.buy.msgs,
+    {
+        "Today I will give you a special deal",
+        "I promise it is worth your while",
+    }
+)
+C.buy.nextid = "buyYN"
+
+--  Buy items Y/N
+C.buyYN             = {}
+C.buyYN.msgs        = {}
+table.insert(
+    C.buyYN.msgs,
+    {
+        "I will sell you this mysterious key for 50 coins"
+    }
+)
+C.buyYN.options     = {}
+C.buyYN.options.yes = {
+    ["text"]   = "yes",
+    ["nextid"] = "buyThanks",
 }
+C.buyYN.options.no  = {
+    ["text"]   = "no",
+    ["nextid"] = "bye",
+}
+
+--  Buy items thank you
+C.buyThanks        = {}
+C.buyThanks.msgs   = {}
+table.insert(
+    C.buyThanks.msgs,
+    {
+        "Thanks",
+        "Thank you",
+        "Sweet thanks",
+        "Thank you so much",
+        "Pleasure doing business with you",
+        "Fanks m8",
+    }
+)
+C.buyThanks.actions = {}
+table.insert(
+    C.buyThanks.actions,
+    {
+        ["action"] = "buy",
+        ["item"]   = "mysterious_key",
+        ["cost"]   = 50,
+    }
+)
+C.buyThanks.stop   = true
+
+--  Goodbye
+C.bye             = {}
+C.bye.msgs        = {}
+table.insert(
+    C.bye.msgs,
+    {
+        "Bye Felicia",
+        "Seeya later then",
+        "You do you boo",
+    }
+)
+C.bye.stop        = true
+
+
+--
+--  Add conversations to NPC
+--
+P.conversation = C
 
 
 

@@ -31,34 +31,42 @@ local P         = Character:extend("NPC")
 --
 --  Dependencies
 --
-local Dialog = require("lib/dialog")
+local Dialog       = require("lib/dialog")
+local Conversation = require("lib/conversation")
 
 
 
 P.interact = function (self, char)
     --
     --  Interact with the NPC
+    --  TODO Buy an item for 50c; add actions to convo behavior
     --
-    self:talk(char)
+    local id = "hello"
+    if char.inventory.money >= 50 then id = "buy" end
+    self:talk(char, id)
 end
 
 
 
-P.talk = function (self, char, context)
+P.talk = function (self, char, id)
     --
     --  Add some dialogs for player interaction
     --
+
+    --  Face the player
     self:face(char, true)
-    local context = context or "hello"
-    if not self.dialog[context] then context = "hello" end
-    local random  = math.random(1, #self.dialog[context])
-    local msg     = self.dialog[context][random]
+
+    --  Setup conversation
+    local id    = id or "hello"
+    local convo = Conversation:new(id, self, char)
+    local msgs  = convo:getMsgs()
+
     --  Create a new dialog and push it to the global stack
-    Dialog.push(
-        Dialog:new(
-            string.upper(msg)
-        )
-    )
+    for _,m in ipairs(msgs) do
+        local d = Dialog:new(string.upper(m))
+        Dialog.push(d)
+    end
+
 end
 
 

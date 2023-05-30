@@ -120,8 +120,8 @@ P.init = function (self, path, world, x, y, class)
     --  Inventory
     if data.inventory then self.inventory = data.inventory end
 
-    --  Dialog
-    if data.dialog then self.dialog = data.dialog end
+    --  Conversation
+    if data.conversation then self.conversation = data.conversation end
 
 end
 

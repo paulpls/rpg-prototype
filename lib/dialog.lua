@@ -37,8 +37,8 @@ local Font = require("lib/font")
 --
 --  Global stack operations
 --
-P.push  = function (dialog)  table.insert(dialogs, dialog) end 
-P.pop   = function () return table.remove(dialogs, 1)      end
+P.push = function (dialog)  table.insert(dialogs, dialog) end 
+P.pop  = function () return table.remove(dialogs, 1)      end
 
 
 
@@ -50,7 +50,7 @@ dialogActive  = false
 
 
 
-P.init = function (self, text, choices, color)
+P.init = function (self, text, options, color)
     --
     --  Initialize the dialog
     --
@@ -59,7 +59,7 @@ P.init = function (self, text, choices, color)
     self.x       = math.floor(love.graphics.getWidth()  / 2) - math.floor(self.width  / 2)
     self.y       = math.floor(love.graphics.getHeight() / 2) + math.floor(self.height / 2)
     self.text    = text
-    self.choices = choices
+    self.options = options
     self.color   = color or {1, 1, 1}
     self.bgcolor = {0, 0, 0, 0.75}
     self.outline = {1, 1, 1, 0.75}
@@ -119,6 +119,7 @@ P.draw = function (self)
     )
     
     --  Text
+    --  TODO Animate text per character
     local margin  = 16
     local tx      = self.x + margin
     local ty      = self.y + margin
@@ -126,6 +127,13 @@ P.draw = function (self)
     local tHeight = self.height - (2 * margin)
     love.graphics.setColor(self.color)
     love.graphics.print(self.text, tx, ty)
+
+    --  TODO Picture
+    --  TODO Title
+    --  TODO Name
+    --  TODO Options
+
+
 
 end
 
