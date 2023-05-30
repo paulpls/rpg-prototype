@@ -29,6 +29,7 @@ local P = {}
 --
 --  Properties
 --
+P.name      = "Paul"
 P.class     = "Player"
 P.path      = "assets/img/character/paul.png"
 P.x         = 448
@@ -48,7 +49,7 @@ P.maxHealth = 3
 -- Inventory
 --
 P.inventory = {}
-P.inventory.money = 50
+P.inventory.money = 40
 
 
 

@@ -85,7 +85,7 @@ love.load = function ()
     table.insert(characters, player)
 
     --  Load NPCs into the world
-    local npc = NPC:new("data/character/npc", world)
+    local npc = NPC:new("data/npc/punit", world)
     npc.collider:setCollisionClass("NPC")
     -- TODO  Passthrough or nudge npcs
     table.insert(characters, npc)

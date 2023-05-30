@@ -29,8 +29,9 @@ local P = {}
 --
 --  Properties
 --
+P.name      = "Punit"
 P.class     = "NPC"
-P.path      = "assets/img/character/npc.png"
+P.path      = "assets/img/npc/punit.png"
 P.x         = 480
 P.y         = 704
 P.width     = 48

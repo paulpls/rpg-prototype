@@ -56,7 +56,10 @@ P.init = function (self, path, world, x, y, class)
         "Unable to load character data: "..tostring(path)
     )
 
-    --  Entity class
+    --  Character name
+    self.name = data.name or "Stranger"
+
+    --  Character class
     self.class = class or data.class
 
     --  Configure image and grid properties

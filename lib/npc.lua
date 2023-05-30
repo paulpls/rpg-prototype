@@ -63,7 +63,12 @@ P.talk = function (self, char, id)
 
     --  Create a new dialog and push it to the global stack
     for _,m in ipairs(msgs) do
-        local d = Dialog:new(string.upper(m))
+        local d = Dialog:new(
+            string.upper(m),
+            {
+                ["text"] = string.upper(self.name),
+            }
+        )
         Dialog.push(d)
     end
 

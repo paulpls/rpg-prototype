@@ -50,7 +50,7 @@ dialogActive  = false
 
 
 
-P.init = function (self, text, options, color)
+P.init = function (self, text, header, options, color)
     --
     --  Initialize the dialog
     --
@@ -58,6 +58,7 @@ P.init = function (self, text, options, color)
     self.height  = math.floor(love.graphics.getHeight() / 4)
     self.x       = math.floor(love.graphics.getWidth()  / 2) - math.floor(self.width  / 2)
     self.y       = math.floor(love.graphics.getHeight() / 2) + math.floor(self.height / 2)
+    self.header  = header
     self.text    = text
     self.options = options
     self.color   = color or {1, 1, 1}
@@ -67,6 +68,7 @@ P.init = function (self, text, options, color)
     --  Configure font and recalculate width
     self.font  = Font:new()
     self.minW  = self.font:getWidth(text)
+    self.minH  = self.font.h
     self.width = math.max(self.width, self.minW)
 end
 
@@ -98,6 +100,50 @@ P.draw = function (self)
     --  Set font
     self.font:set()
 
+    --  Header
+    --  TODO Place image to left of title
+    if self.header then
+        local margin = 16
+        local w,h    = self.width, self.minH + (margin * 2)
+        local x,y    = self.x, self.y - h - margin
+        if self.header.img then
+            w = w - h - margin
+        end
+        --  Outlines
+        love.graphics.setColor(self.outline)
+        love.graphics.rectangle(
+            "line",        
+            x - 1,
+            y - 1,
+            w + 1,
+            h + 1
+        )
+        if self.header.img then
+            love.graphics.rectangle(
+                "line",
+                w - h - 1,
+                y - 1,
+                h + 1,
+                h + 1
+            )
+        end
+        --  Backgrounds
+        love.graphics.setColor(self.bgcolor)
+        love.graphics.rectangle("fill", x, y, w, h)
+        if self.header.img then
+            love.graphics.rectangle( "fill", w-h, y, h, h)
+        end
+
+        --  Header text
+        local tx = x + margin
+        local ty = y + math.floor(h / 2) - math.floor(self.font.h / 2)
+        love.graphics.setColor(self.color)
+        love.graphics.print(self.header.text, tx, ty)
+
+        --  TODO Header image
+
+    end
+
     --  Outline
     love.graphics.setColor(self.outline)
     love.graphics.rectangle(
@@ -128,9 +174,6 @@ P.draw = function (self)
     love.graphics.setColor(self.color)
     love.graphics.print(self.text, tx, ty)
 
-    --  TODO Picture
-    --  TODO Title
-    --  TODO Name
     --  TODO Options
 
 
