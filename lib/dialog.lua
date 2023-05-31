@@ -137,22 +137,19 @@ P.draw = function (self)
     --
     --  Draw the dialog
     --
+    local x,y = self.x, self.y
+    local scale   = 3
+    local margin  = 6
+    local padding = 16
 
-    --  Header
-    if self.texts.header then
-        local text    = self.texts.header
-        local scale   = 2
-        local margin  = 6
-        local padding = 8
-        local w,h     = text:getWidth() + (margin * 2), scale * (text:getHeight() + (margin * 2))
-        local x,y     = self.x, self.y - h - margin
+    --  Header Portrait
+    if self.header then
         if self.header.img then
-            local imgX,imgY = x, y
+            --  Get scale and portrait dimensions
             local imgW,imgH = self.header.img:getDimensions()
             imgW,imgH       = scale * imgW, scale * imgH
-            --  Move text x coord to right of image
-            x = x + imgW + margin
-            --  Outlines
+            local imgX,imgY = x - imgW - margin, y
+            --  Portrait outline
             love.graphics.setColor(self.outline)
             love.graphics.rectangle(
                 "line",        
@@ -161,7 +158,7 @@ P.draw = function (self)
                 imgW + 2,
                 imgH + 2
             )
-            --  Backgrounds
+            --  Portrait background
             love.graphics.setColor(self.bgcolor)
             love.graphics.rectangle(
                 "fill",
@@ -181,25 +178,6 @@ P.draw = function (self)
                 scale
             )
         end
-        --  Outlines
-        love.graphics.setColor(self.outline)
-        love.graphics.rectangle(
-            "line",        
-            x - 1,
-            y - 1,
-            w + 2,
-            h + 2
-        )
-        --  Backgrounds
-        love.graphics.setColor(self.bgcolor)
-        love.graphics.rectangle("fill", x, y, w, h)
-
-        --  Header text
-        text.x     = x + padding
-        text.y     = y + math.floor(h / 2) - math.floor(text.h / 2)
-        text.color = self.header.color or self.color
-        text:draw()
-
     end
 
     --  Outline
@@ -221,12 +199,27 @@ P.draw = function (self)
         self.width,
         self.height
     )
-    
-    --  Text
+
+    --  Set up body text
     local text    = self.texts.body
-    local margin  = 16
-    text.x        = self.x + margin
-    text.y        = self.y + margin
+    text.x        = self.x + padding
+    text.y        = self.y + padding
+
+    --  Set up and draw header text
+    if self.header then
+        if self.texts.header then
+            local head    = self.texts.header
+            local w,h     = head:getWidth() + (padding * 2), scale * (head:getHeight() + (padding * 2))
+            head.x        = self.x + padding
+            head.y        = self.y + padding --+math.floor(h / 2) - math.floor(text.h / 2)
+            head.color    = self.header.color or self.color
+            head:draw()
+            --  Increase body y coord to render below header text
+            text.y = text.y + head:getHeight() + padding
+        end
+    end
+    
+    --  Draw body text
     text:draw()
 
     --  Options
@@ -247,7 +240,7 @@ P.draw = function (self)
             local h = (pad * 2) + label.h
             --  Determine origins for option container
             local x = text.x + (w * (i - 1))
-            local y = self.y + self.height - h - margin
+            local y = self.y + self.height - h - padding
             --  Set up option background and outline
             local optionbg    = {0, 0, 0, 0.5}
             local optionol    = {1, 1, 1, 0.5}
