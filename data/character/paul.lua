@@ -31,7 +31,7 @@ local P = {}
 --
 P.name      = "Paul"
 P.class     = "Player"
-P.path      = "assets/img/character/paul.png"
+P.img       = "assets/img/character/paul.png"
 P.x         = 448
 P.y         = 800
 P.width     = 48

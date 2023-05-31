@@ -65,6 +65,7 @@ P.talk = function (self, convo, player)
     local msgs    = convo:getMsgs()
     local header  = {
          ["text"] = string.upper(self.name),
+         ["img" ] = self.portrait
     }
 
     --  Load options

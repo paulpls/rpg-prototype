@@ -60,11 +60,15 @@ P.init = function (self, path, physics, x, y, class)
     --  Character name
     self.name = data.name or "Stranger"
 
+    --  Character portrait
+    local portrait = data.portrait or "assets/img/npc/default_portrait.png"
+    self.portrait  = love.graphics.newImage(portrait)
+
     --  Character class
     self.class = class or data.class
 
     --  Configure image and grid properties
-    self.img  = love.graphics.newImage(data.path)
+    self.img  = love.graphics.newImage(data.img)
     self.grid = Animation.newGrid(
         data.width,
         data.height,

@@ -120,13 +120,34 @@ P.draw = function (self)
     self.font:set()
 
     --  Header
-    --  TODO Place image to left of title
     if self.header then
-        local margin = 16
-        local w,h    = self.width, self.minH + (margin * 2)
+        local margin = 6
+        local w,h    = self.font:getWidth(self.header.text) + (margin * 2), self.minH + (margin * 2)
         local x,y    = self.x, self.y - h - margin
         if self.header.img then
-            w = w - h - margin
+            local imgX,imgY = x, y
+            local imgW,imgH = self.header.img:getDimensions()
+            --  Move text x coord to right of image
+            x = x + imgW + margin
+            --  Outlines
+            love.graphics.setColor(self.outline)
+            love.graphics.rectangle(
+                "line",        
+                imgX - 1,
+                imgY - 1,
+                imgW + 1,
+                imgH + 1
+            )
+            --  Backgrounds
+            love.graphics.setColor(self.bgcolor)
+            love.graphics.rectangle("fill", imgX, imgY, imgW, imgH)
+            --  Portrait
+            love.graphics.setColor({1, 1, 1})
+            love.graphics.draw(
+                self.header.img,
+                imgX,
+                imgY
+            )
         end
         --  Outlines
         love.graphics.setColor(self.outline)
@@ -137,29 +158,15 @@ P.draw = function (self)
             w + 1,
             h + 1
         )
-        if self.header.img then
-            love.graphics.rectangle(
-                "line",
-                w - h - 1,
-                y - 1,
-                h + 1,
-                h + 1
-            )
-        end
         --  Backgrounds
         love.graphics.setColor(self.bgcolor)
         love.graphics.rectangle("fill", x, y, w, h)
-        if self.header.img then
-            love.graphics.rectangle( "fill", w-h, y, h, h)
-        end
 
         --  Header text
         local tx = x + margin
         local ty = y + math.floor(h / 2) - math.floor(self.font.h / 2)
         love.graphics.setColor(self.color)
         love.graphics.print(self.header.text, tx, ty)
-
-        --  TODO Header image
 
     end
 

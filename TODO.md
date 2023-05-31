@@ -5,9 +5,7 @@ _NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/to
 
 ### TODO
 * [main.lua](main.lua#L94): Perform actions based on option selection
-* [lib/dialog.lua](lib/dialog.lua#L123): Place image to left of title
-* [lib/dialog.lua](lib/dialog.lua#L162): Header image
-* [lib/dialog.lua](lib/dialog.lua#L187): Animate text per character
+* [lib/dialog.lua](lib/dialog.lua#L194): Animate text per character
 * [lib/npc.lua](lib/npc.lua#L43): Buy an item for 50c; add actions to convo behavior
 * [lib/world.lua](lib/world.lua#L136): Better pause functionality
 
