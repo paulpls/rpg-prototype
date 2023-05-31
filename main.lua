@@ -48,7 +48,7 @@ love.load = function ()
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.window.setFullscreen(true)
 
-    --  World (contains physics engine)
+    --  Load world from file
     world = World("data/world/test")
 
 end
@@ -81,6 +81,7 @@ love.keypressed = function (key)
         else
             currentDialog:kill()
         end
+
     --  DEBUG Heal/damage the player
     elseif key == "k" then
         player:heal(0.5)

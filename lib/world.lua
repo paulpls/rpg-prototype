@@ -52,9 +52,6 @@ P.init = function (self, path)
         "Unable to load world data: "..tostring(path)
     )
 
-    --  DEBUG Uncomment to draw queries
-    --self.physics:setQueryDebugDrawing(true)
-
     --  Camera
     self.camera = Camera(
         math.floor(love.graphics.getWidth()  / 2),
@@ -76,6 +73,9 @@ P.init = function (self, path)
         "Entity",
     }
     for _,class in pairs(classes) do self.physics:addCollisionClass(class) end
+
+    --  DEBUG Uncomment to draw queries
+    self.physics:setQueryDebugDrawing(true)
 
     --  Map, layers, and walls
     self.map         = Map(data.map.path)
@@ -245,7 +245,7 @@ P.draw = function (self)
     end
 
     --  DEBUG Draw collision hitboxes
-    --self.physics:draw()
+    self.physics:draw()
 
     --
     --  Unset the camera

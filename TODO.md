@@ -9,7 +9,7 @@ _NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/to
 * [lib/dialog.lua](lib/dialog.lua#L144): Header image
 * [lib/dialog.lua](lib/dialog.lua#L169): Animate text per character
 * [lib/npc.lua](lib/npc.lua#L42): Buy an item for 50c; add actions to convo behavior
-* [lib/world.lua](lib/world.lua#L132): Better pause functionality
+* [lib/world.lua](lib/world.lua#L136): Better pause functionality
 
 
 
