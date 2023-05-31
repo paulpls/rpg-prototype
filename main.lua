@@ -60,7 +60,11 @@ love.update = function (dt)
     --  Update stuff
     --
     world:update(dt)
-    if currentConvo  then  currentConvo:update(dt) end
+    if currentConvo then
+        currentConvo:update(dt)
+    elseif currentDialog then
+        currentDialog:update(dt)
+    end
 end
 
 

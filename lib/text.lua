@@ -38,7 +38,9 @@ P.init = function (self, body, options)
     --
     --  Instantiate a new text object
     --
-    self.body = body  or ""
+    self.body   = body or ""
+    self.ticker = self.body:sub(1,1)
+    self.buffer = ""
     --  Set options if present
     if options then
         self.font  = options.font
@@ -61,18 +63,10 @@ P.init = function (self, body, options)
     self.maxW   = self.maxW  or self.w
     self.maxH   = self.maxH  or self.h
     self.color  = self.color or {1, 1, 1}
-    self.delay  = self.delay or 0.05
+    self.delay  = self.delay or 0.025
     self.tick   = self.tick  or false
-    self.ticker = self.body:sub(1,1)
-    self.buffer = ""
     self.timer  = 0
-    self.done   = function (self) return self.ticker == self.body end
---    print("----")
---    print("body:   "..self.body)
---    print("ticker: "..self.ticker)
---    print("x,y:    "..self.x..","..self.y)
---    print("w,h:    "..self.w..","..self.h)
---    print("----")
+    self.done   = function (self) return not self.tick or self.ticker == self.body end
 end
 
 
@@ -82,7 +76,7 @@ P.getWidth = function (self)
     --  Get the current width of the text to be displayed
     --
     local text = self.body
-    if self.tick then text = ticker end
+    if self.tick then text = self.ticker end
     return self.font:getWidth(text)
 end
 
@@ -93,7 +87,7 @@ P.getHeight = function (self)
     --  Get the current height of the text to be displayed
     --
     local text = self.body
-    if self.tick then text = ticker end
+    if self.tick then text = self.ticker end
     return self.font.h
 end
 
@@ -108,7 +102,7 @@ P.update = function (self, dt)
         self.timer = self.timer - dt
         if self.timer <= 0 then
             --  Increase ticker length by 1
-            local len = #self.ticker + 1
+            local len   = #self.ticker + 1
             self.ticker = self.ticker .. self.body:sub(len, len)
             --  Offset the timer
             self.timer = self.timer + self.delay
@@ -124,12 +118,13 @@ end
 P.draw = function (self)
     --
     --  Draw the text (or ticker value)
+    --  FIXME Text is not contained by box; use a buffer instead of the whole string
     --
-    --  Print the text
     local body = self.body
     if self.tick then body = self.ticker end
-    love.graphics.setColor(self.color)
+    --  Print the text
     self.font:set()
+    love.graphics.setColor(self.color)
     love.graphics.print(body:upper(), self.x, self.y)
 end
 

@@ -51,47 +51,48 @@ dialogActive  = false
 
 
 
-P.init = function (self, text, header, options, color)
+P.init = function (self, body, header, options, color)
     --
     --  Initialize the dialog
     --
-    self.width   = math.floor(love.graphics.getWidth()  / 3)
-    self.height  = math.floor(love.graphics.getHeight() / 4)
-    self.x       = math.floor(love.graphics.getWidth()  / 2) - math.floor(self.width  / 2)
-    self.y       = math.floor(love.graphics.getHeight() / 2) + math.floor(self.height / 2)
-    self.header  = header
-    self.text    = text
-    self.options = options
-    self.color   = color or {1, 1, 1}
-    self.bgcolor = {0, 0, 0, 0.75}
-    self.outline = {1, 1, 1, 0.75}
-    --  Buffer and delay for option select
-    self.delay        = 0
-    self.resetDelay   = function (self, t) self.delay = t or 0.33 end
+    self.width      = math.floor(love.graphics.getWidth()  / 3)
+    self.height     = math.floor(love.graphics.getHeight() / 4)
+    self.x          = math.floor(love.graphics.getWidth()  / 2) - math.floor(self.width  / 2)
+    self.y          = math.floor(love.graphics.getHeight() / 2) + math.floor(self.height / 2)
+    self.header     = header
+    self.body       = body
+    self.options    = options
+    self.color      = color or {1, 1, 1}
+    self.bgcolor    = {0, 0, 0, 0.75}
+    self.outline    = {1, 1, 1, 0.75}
+    --  Delay for option selection
+    self.delay      = 0
+    self.resetDelay = function (self, t) self.delay = t or 0.33 end
     
     --  Keep track of selection, default to first option
     if self.options then self.selection = 1 end
 
     --  Text wrappers
     self.texts = {}
+    --  Header
     if self.header then
-        local options = {}
-        options.color = self.color
-        self.texts.header = Text:new(
+        local headerOptions = {}
+        headerOptions.color = self.color
+        self.texts.header   = Text:new(
             self.header.text,
-            options
+            headerOptions
         )
     end
-    if self.text then
-        local options = {}
-        options.maxW  = self.width
-        options.maxH  = self.height
-        options.color = self.color
-        self.texts.text = Text:new(
-            self.text,
-            options
-        )
-    end
+    --  Body
+    local bodyOptions = {}
+    bodyOptions.maxW  = self.width
+    bodyOptions.maxH  = self.height
+    bodyOptions.color = self.color
+    if self.header then bodyOptions.tick = true end
+    self.texts.body   = Text:new(
+        self.body,
+        bodyOptions
+    )
 
 end
 
@@ -111,6 +112,11 @@ P.update = function (self, dt)
     --
     --  Update the dialog
     --
+
+    --  Update text wrappers
+    for _,t in pairs(self.texts) do t:update(dt) end
+
+    --  Get input after a short delay
     self.delay = self.delay - dt
     if self.delay <= 0 then
         if self.options then
@@ -123,8 +129,6 @@ P.update = function (self, dt)
             self:resetDelay()
         end
     end
-    --  Update text wrappers
-    for _,t in pairs(self.texts) do t:update(dt) end
 end
 
 
@@ -142,7 +146,6 @@ P.draw = function (self)
         local padding = 8
         local w,h     = text:getWidth() + (margin * 2), scale * (text:getHeight() + (margin * 2))
         local x,y     = self.x, self.y - h - margin
-        local color   = self.header.color or self.color
         if self.header.img then
             local imgX,imgY = x, y
             local imgW,imgH = self.header.img:getDimensions()
@@ -192,8 +195,9 @@ P.draw = function (self)
         love.graphics.rectangle("fill", x, y, w, h)
 
         --  Header text
-        text.x = x + padding
-        text.y = y + math.floor(h / 2) - math.floor(text.h / 2)
+        text.x     = x + padding
+        text.y     = y + math.floor(h / 2) - math.floor(text.h / 2)
+        text.color = self.header.color or self.color
         text:draw()
 
     end
@@ -219,7 +223,7 @@ P.draw = function (self)
     )
     
     --  Text
-    local text    = self.texts.text
+    local text    = self.texts.body
     local margin  = 16
     text.x        = self.x + margin
     text.y        = self.y + margin
