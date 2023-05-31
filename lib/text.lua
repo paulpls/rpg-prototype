@@ -34,22 +34,38 @@ local Font = require("lib/font")
 
 
 
-P.init = function (self, body, font, x, y, w, h, color, tick)
+P.init = function (self, body, options)
     --
     --  Instantiate a new text object
     --
-    self.body   = body  or ""
-    self.body   = string.upper(self.body)
-    self.font   = font  or Font:new()
-    self.x      = x     or 0
-    self.y      = y     or 0
-    self.w      = w     or self:getWidth()
-    self.h      = h     or self:getHeight()
-    self.color  = color or {1, 1, 1}
-    self.tick   = tick  or false
-    self.ticker = ""
+    self.body = body  or ""
+    --  Set options if present
+    if options then
+        self.font  = options.font
+        self.x     = options.x
+        self.y     = options.y
+        self.w     = options.w
+        self.h     = options.h
+        self.maxW  = options.maxW
+        self.maxH  = options.maxH
+        self.color = options.color
+        self.tick  = options.tick
+        self.delay = options.delay
+    end
+    --  Set defaults
+    self.font   = self.font  or Font:new()
+    self.x      = self.x     or 0
+    self.y      = self.y     or 0
+    self.w      = self.w     or self:getWidth()
+    self.h      = self.h     or self:getHeight()
+    self.maxW   = self.maxW  or self.w
+    self.maxH   = self.maxH  or self.h
+    self.color  = self.color or {1, 1, 1}
+    self.delay  = self.delay or 0.05
+    self.tick   = self.tick  or false
+    self.ticker = self.body:sub(1,1)
+    self.buffer = ""
     self.timer  = 0
-    self.delay  = 0.25  
     self.done   = function (self) return self.ticker == self.body end
 --    print("----")
 --    print("body:   "..self.body)
@@ -108,15 +124,13 @@ end
 P.draw = function (self)
     --
     --  Draw the text (or ticker value)
-    --  TODO Animate text per character
-    --  TODO Keep track of buffer height/width and clamp as necessary
     --
+    --  Print the text
     local body = self.body
     if self.tick then body = self.ticker end
-    --  Print the text
     love.graphics.setColor(self.color)
     self.font:set()
-    love.graphics.print(body, self.x, self.y)
+    love.graphics.print(body:upper(), self.x, self.y)
 end
 
 

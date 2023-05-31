@@ -64,15 +64,15 @@ P.talk = function (self, convo, player)
     --  Follow convo tree, create dialogs and push the global stack
     local msgs    = convo:getMsgs()
     local header  = {
-         ["text"] = string.upper(self.name),
+         ["text"] = self.name,
          ["img" ] = self.portrait
     }
 
     --  Load options
     local options = convo.options
-    for _,m in ipairs(msgs) do
+    for _,msg in ipairs(msgs) do
         local d = Dialog:new(
-            string.upper(m),
+            msg,
             header,
             options
         )

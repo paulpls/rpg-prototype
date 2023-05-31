@@ -74,8 +74,24 @@ P.init = function (self, text, header, options, color)
 
     --  Text wrappers
     self.texts = {}
-    if self.header then self.texts.header = Text:new(self.header.text) end
-    if self.text   then self.texts.text   = Text:new(self.text)        end
+    if self.header then
+        local options = {}
+        options.color = self.color
+        self.texts.header = Text:new(
+            self.header.text,
+            options
+        )
+    end
+    if self.text then
+        local options = {}
+        options.maxW  = self.width
+        options.maxH  = self.height
+        options.color = self.color
+        self.texts.text = Text:new(
+            self.text,
+            options
+        )
+    end
 
 end
 
@@ -176,9 +192,8 @@ P.draw = function (self)
         love.graphics.rectangle("fill", x, y, w, h)
 
         --  Header text
-        text.x     = x + padding
-        text.y     = y + math.floor(h / 2) - math.floor(text.h / 2)
-        text.color = color
+        text.x = x + padding
+        text.y = y + math.floor(h / 2) - math.floor(text.h / 2)
         text:draw()
 
     end
@@ -208,36 +223,39 @@ P.draw = function (self)
     local margin  = 16
     text.x        = self.x + margin
     text.y        = self.y + margin
-    text.color    = self.color
     text:draw()
 
     --  Options
     if self.options then
         for i,o in ipairs(self.options) do
-            --  Common parameters
+            --  Label parameters
             local pad         = 8
-            local t           = string.upper(o.text) or "OKAY"
-            local label       = Text:new(t)
-            local w           = (pad * 2) + label.w
-            local h           = (pad * 2) + label.h
-            --  Determine origins for option box and text (row)
-            local x  = text.x + (w * (i - 1))
-            local y  = self.y + self.height - h - margin
-            label.x = x + pad
-            label.y = y + pad
-            --  Options
-            local optionbg = {0, 0, 0, 0.5}
-            local optionol = {1, 1, 1, 0.5}
-            label.color    = {1, 1, 1, 0.5}
+            local labelText   = o.text or "Okay"
+            local labelColor  = {1, 1, 1, 0.5}
+            --  Create label
+            local options = {}
+            options.color = labelColor
+            local label   = Text:new(
+                labelText,
+                options
+            )
+            local w = (pad * 2) + label.w
+            local h = (pad * 2) + label.h
+            --  Determine origins for option container
+            local x = text.x + (w * (i - 1))
+            local y = self.y + self.height - h - margin
+            --  Set up option background and outline
+            local optionbg    = {0, 0, 0, 0.5}
+            local optionol    = {1, 1, 1, 0.5}
             if self.selection then
                 --  Highlight option if index matches selection
                 if i == self.selection then 
-                    optionol = {1, 1,   1   }
-                    optionbg = {0, 0.5, 0.75}
+                    optionol    = {1,   1,   1        }
+                    optionbg    = {0,   0.5, 0.75     }
                     label.color = self.color
                 end
             end
-            --  Options outlines
+            --  Draw option outline
             love.graphics.setColor(optionol)
             love.graphics.rectangle(
                 "line",
@@ -246,10 +264,16 @@ P.draw = function (self)
                 w + 2,
                 h + 2
             )
-            --  Options backgrounds
+            --  Draw option background
             love.graphics.setColor(optionbg)
             love.graphics.rectangle("fill", x, y, w, h)
             --  Draw option text
+            label.x    = x + pad
+            label.y    = y + pad
+            label.w    = w
+            label.h    = h
+            label.maxW = w
+            label.maxH = h
             label:draw()
         end
     end
