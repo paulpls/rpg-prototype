@@ -259,11 +259,6 @@ love.keypressed = function (key)
         if not dialogActive then
             player:inspect(world)
         else
-            if currentDialog.options then
-                if currentDialog.options.yes then
-                    Dialog.push(currentDialog.options.yes)
-                end
-            end
             currentDialog:kill()
         end
     --  DEBUG Heal/damage the player

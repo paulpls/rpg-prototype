@@ -31,7 +31,6 @@ P.init = function (self, id, npc, player)
     --
     --  Initialize a new conversation
     --
-    self.done   = false
     self.id     = id
     self.npc    = npc
     self.player = player

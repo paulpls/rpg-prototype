@@ -208,8 +208,6 @@ P.draw = function (self)
         end
     end
 
-
-
 end
 
 

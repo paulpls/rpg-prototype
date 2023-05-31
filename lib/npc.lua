@@ -53,7 +53,7 @@ P.talk = function (self, char, id)
     --  Add some dialogs for player interaction
     --
 
-    --  Face the player
+    --  FIXME Face towards the player (opposite dir to player for now)
     self:face(char, true)
 
     --  Follow convo tree, create dialogs and push the global stack
@@ -63,8 +63,9 @@ P.talk = function (self, char, id)
     local header  = {
          ["text"] = string.upper(self.name),
     }
-    local options = convo.options
+
     --  Load options
+    local options = convo.options
     for _,m in ipairs(msgs) do
         local d = Dialog:new(
             string.upper(m),
