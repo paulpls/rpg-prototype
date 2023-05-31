@@ -32,7 +32,7 @@ local P = {}
 P.name      = "Punit"
 P.class     = "NPC"
 P.img       = "assets/img/npc/punit.png"
---P.portrait  = "assets/img/npc/punit_portrait.png"
+P.portrait  = "assets/img/npc/punit_portrait.png"
 P.x         = 480
 P.y         = 704
 P.width     = 48
@@ -142,6 +142,10 @@ table.insert(
         "Bye Felicia",
         "Seeya later then",
         "You do you boo",
+        "K",
+        "Come find me if you change your mind",
+        "Alright then",
+        "Please reconsider",
     }
 )
 C.goodbye.stop    = true
@@ -152,6 +156,8 @@ C.buy.msgs   = {}
 table.insert(
     C.buy.msgs,
     {
+        "Today is your lucky day",
+        "Looks like you found some coins",
         "Buy something will ya",
         "Khajit has wares if you have coin",
     }
@@ -159,6 +165,7 @@ table.insert(
 table.insert(
     C.buy.msgs,
     {
+        "Please brother",
         "Today I will give you a special deal",
         "I promise it is worth your while",
     }
@@ -171,7 +178,9 @@ C.buyYN.msgs        = {}
 table.insert(
     C.buyYN.msgs,
     {
-        "I will sell you this mysterious key for 50 coins"
+        "I will sell you this mysterious key for 50 coins",
+        "I will sell you this key I found for 50c",
+        "I found this mysterious key and I am willing to part with it for 50c",
     }
 )
 C.buyYN.options     = {}
@@ -201,7 +210,9 @@ table.insert(
         "Sweet thanks",
         "Thank you so much",
         "Pleasure doing business with you",
-        "Fanks m8",
+        "Fanks bruv",
+        "Thanks lol",
+        "Thank you very much",
     }
 )
 C.buyThanks.actions = {}

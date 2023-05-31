@@ -121,12 +121,15 @@ P.draw = function (self)
 
     --  Header
     if self.header then
-        local margin = 6
-        local w,h    = self.font:getWidth(self.header.text) + (margin * 2), self.minH + (margin * 2)
-        local x,y    = self.x, self.y - h - margin
+        local scale   = 2
+        local margin  = 6
+        local padding = 8
+        local w,h     = self.font:getWidth(self.header.text) + (margin * 2), scale * (self.minH + (margin * 2))
+        local x,y     = self.x, self.y - h - margin
         if self.header.img then
             local imgX,imgY = x, y
             local imgW,imgH = self.header.img:getDimensions()
+            imgW,imgH       = scale * imgW, scale * imgH
             --  Move text x coord to right of image
             x = x + imgW + margin
             --  Outlines
@@ -135,18 +138,27 @@ P.draw = function (self)
                 "line",        
                 imgX - 1,
                 imgY - 1,
-                imgW + 1,
-                imgH + 1
+                imgW + 2,
+                imgH + 2
             )
             --  Backgrounds
             love.graphics.setColor(self.bgcolor)
-            love.graphics.rectangle("fill", imgX, imgY, imgW, imgH)
+            love.graphics.rectangle(
+                "fill",
+                imgX,
+                imgY,
+                imgW,
+                imgH
+            )
             --  Portrait
             love.graphics.setColor({1, 1, 1})
             love.graphics.draw(
                 self.header.img,
                 imgX,
-                imgY
+                imgY,
+                0,
+                scale,
+                scale
             )
         end
         --  Outlines
@@ -155,15 +167,15 @@ P.draw = function (self)
             "line",        
             x - 1,
             y - 1,
-            w + 1,
-            h + 1
+            w + 2,
+            h + 2
         )
         --  Backgrounds
         love.graphics.setColor(self.bgcolor)
         love.graphics.rectangle("fill", x, y, w, h)
 
         --  Header text
-        local tx = x + margin
+        local tx = x + padding
         local ty = y + math.floor(h / 2) - math.floor(self.font.h / 2)
         love.graphics.setColor(self.color)
         love.graphics.print(self.header.text, tx, ty)
@@ -176,8 +188,8 @@ P.draw = function (self)
         "line",        
         self.x - 1,
         self.y - 1,
-        self.width + 1,
-        self.height + 1
+        self.width + 2,
+        self.height + 2
     )
 
     --  Background
@@ -232,8 +244,8 @@ P.draw = function (self)
                 "line",
                 x - 1,
                 y - 1,
-                w + 1,
-                h + 1
+                w + 2,
+                h + 2
             )
             --  Options backgrounds
             love.graphics.setColor(optionbg)
