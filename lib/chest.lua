@@ -73,11 +73,7 @@ P.interact = function (self, char)
         local qty  = self.contents.qty
         local msg  = "You found "..qty.." "..name.."!"
         --  Create a new dialog and push it to the global stack
-        Dialog.push(
-            Dialog:new(
-                string.upper(msg)
-            )
-        )
+        Dialog.push(Dialog:new(msg))
         char:getItem(self.contents)
     end
 end

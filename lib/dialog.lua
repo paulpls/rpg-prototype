@@ -31,7 +31,7 @@ dialogs     = {}
 --
 --  Dependencies
 --
-local Font = require("lib/font")
+local Text = require("lib/text")
 
 
 
@@ -72,11 +72,11 @@ P.init = function (self, text, header, options, color)
     --  Keep track of selection, default to first option
     if self.options then self.selection = 1 end
 
-    --  Configure font and recalculate width
-    self.font  = Font:new()
-    self.minW  = self.font:getWidth(text)
-    self.minH  = self.font.h
-    self.width = math.max(self.width, self.minW)
+    --  Text wrappers
+    self.texts = {}
+    if self.header then self.texts.header = Text:new(self.header.text) end
+    if self.text   then self.texts.text   = Text:new(self.text)        end
+
 end
 
 
@@ -107,6 +107,8 @@ P.update = function (self, dt)
             self:resetDelay()
         end
     end
+    --  Update text wrappers
+    for _,t in pairs(self.texts) do t:update(dt) end
 end
 
 
@@ -116,16 +118,15 @@ P.draw = function (self)
     --  Draw the dialog
     --
 
-    --  Set font
-    self.font:set()
-
     --  Header
-    if self.header then
+    if self.texts.header then
+        local text    = self.texts.header
         local scale   = 2
         local margin  = 6
         local padding = 8
-        local w,h     = self.font:getWidth(self.header.text) + (margin * 2), scale * (self.minH + (margin * 2))
+        local w,h     = text:getWidth() + (margin * 2), scale * (text:getHeight() + (margin * 2))
         local x,y     = self.x, self.y - h - margin
+        local color   = self.header.color or self.color
         if self.header.img then
             local imgX,imgY = x, y
             local imgW,imgH = self.header.img:getDimensions()
@@ -175,10 +176,10 @@ P.draw = function (self)
         love.graphics.rectangle("fill", x, y, w, h)
 
         --  Header text
-        local tx = x + padding
-        local ty = y + math.floor(h / 2) - math.floor(self.font.h / 2)
-        love.graphics.setColor(self.color)
-        love.graphics.print(self.header.text, tx, ty)
+        text.x     = x + padding
+        text.y     = y + math.floor(h / 2) - math.floor(text.h / 2)
+        text.color = color
+        text:draw()
 
     end
 
@@ -204,38 +205,37 @@ P.draw = function (self)
     
     --  Text
     --  TODO Animate text per character
+    local text    = self.texts.text
     local margin  = 16
-    local tx      = self.x + margin
-    local ty      = self.y + margin
-    local tWidth  = self.width  - (2 * margin)
-    local tHeight = self.height - (2 * margin)
-    love.graphics.setColor(self.color)
-    love.graphics.print(self.text, tx, ty)
+    text.x        = self.x + margin
+    text.y        = self.y + margin
+    text.color    = self.color
+    text:draw()
 
     --  Options
     if self.options then
         for i,o in ipairs(self.options) do
             --  Common parameters
-            local pad  = 8
-            local text = string.upper(o.text) or "OKAY"
-            local w    = (pad * 2) + self.font:getWidth(text)
-            local h    = (pad * 2) + self.font.h
-            local tc   = self.color
+            local pad         = 8
+            local t           = string.upper(o.text) or "OKAY"
+            local label       = Text:new(t)
+            local w           = (pad * 2) + label.w
+            local h           = (pad * 2) + label.h
             --  Determine origins for option box and text (row)
-            local x  = tx + (w * (i - 1))
+            local x  = text.x + (w * (i - 1))
             local y  = self.y + self.height - h - margin
-            local tx = x + pad
-            local ty = y + pad
+            label.x = x + pad
+            label.y = y + pad
             --  Options
             local optionbg = {0, 0, 0, 0.5}
             local optionol = {1, 1, 1, 0.5}
-            tc             = {1, 1, 1, 0.5}
+            label.color    = {1, 1, 1, 0.5}
             if self.selection then
                 --  Highlight option if index matches selection
                 if i == self.selection then 
                     optionol = {1, 1,   1   }
                     optionbg = {0, 0.5, 0.75}
-                    tc       = self.color
+                    label.color = self.color
                 end
             end
             --  Options outlines
@@ -251,8 +251,7 @@ P.draw = function (self)
             love.graphics.setColor(optionbg)
             love.graphics.rectangle("fill", x, y, w, h)
             --  Draw option text
-            love.graphics.setColor(tc)
-            love.graphics.print(text, tx, ty)
+            label:draw()
         end
     end
 

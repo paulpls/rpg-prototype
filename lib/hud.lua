@@ -30,7 +30,7 @@ local P     = Class("HUD")
 --
 --  Dependencies
 --
-local Font      = require("lib/font")
+local Text      = require("lib/text")
 local Healthbar = require("lib/healthbar")
 
 
@@ -59,8 +59,6 @@ P.init = function (self, parent)
         parent.maxHealth
     )
 
-    --  Set the font
-    self.font = Font:new()
 end
 
 
@@ -81,9 +79,24 @@ P.update = function (self, dt)
     self.healthbar:update(dt)
     
     --  DEBUG Player coordinates
-    self.playerCoords = {
+    self.coords = {
         ["x"] = math.floor(self.parent.collider:getX() / 32),
         ["y"] = math.floor(self.parent.collider:getY() / 32)
+    }
+
+    --  Create text wrappers
+    local money = nil
+    if self.parent.inventory.money then
+        money = Text:new(
+            tostring(self.parent.inventory.money)
+        )
+    end
+    local coords = Text:new(
+        "X "..tostring(self.coords.x).."   ".."Y "..tostring(self.coords.y)
+    )
+    self.texts = {
+        ["money"]  = money,
+        ["coords"] = coords,
     }
 end
 
@@ -93,9 +106,6 @@ P.draw = function (self)
     --
     --  Draw the HUD
     --
-
-    --  Set font
-    self.font:set()
 
     --  Outline
     love.graphics.setColor(self.outline)
@@ -118,30 +128,31 @@ P.draw = function (self)
     )
 
     --  Money
-    if self.parent.inventory.money then
-        local x   = self.x + 24
-        local y   = self.y + math.floor(self.height / 2) - 8
-        local mx  = x + 24
-        local my  = self.y + math.floor(self.height / 2)
-        local mc  = {1, 1, 1}
-        local qty = self.parent.inventory.money
+    if self.texts.money then
+        local text = self.texts.money
+        local x    = self.x + 24
+        local y    = self.y + math.floor(self.height / 2) - 8
+        text.x     = x + 24
+        text.y     = self.y + math.floor(self.height / 2) - math.floor(text.h / 2)
+        text.color = {1, 1, 1}
+        --  Draw icon
         love.graphics.setColor({1, 1, 1})
         love.graphics.draw(self.icons, self.quads.money, x, y)
-        if qty <= 0 then mc = {1, 0, 0} end
-        self.font:print(qty, mx, my, mc)
+        --  Draw text label
+        if self.parent.inventory.money <= 0 then text.color = {1, 0, 0} end
+        text:draw()
     end
 
     --  Healthbar
     self.healthbar:draw()
 
     --  DEBUG Player coords
-    if self.playerCoords then
-        local x  = self.x + math.floor(self.width  / 2)
-        local y  = self.y + math.floor(self.height / 2)
-        local cc = {1, 0.75, 0}
-        local cx = "X "..self.playerCoords.x
-        local cy = "Y "..self.playerCoords.y
-        self.font:print(cx.."   "..cy, x, y, cc, true)
+    if self.texts.coords then
+        local text = self.texts.coords
+        text.x     = self.x + math.floor(self.width  / 2) - math.floor(text.w / 2)
+        text.y     = self.y + math.floor(self.height / 2) - math.floor(text.h / 2)
+        text.color = {1, 0.75, 0}
+        text:draw()
     end
 end
 
