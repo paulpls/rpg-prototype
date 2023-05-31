@@ -24,6 +24,7 @@
 
 local Class = require("lib/30log/30log")
 local P     = Class("Character")
+characters  = {}
 
 
 
@@ -45,7 +46,7 @@ local resetTimer = function (n) timer = n or delay end
 
 
 
-P.init = function (self, path, world, x, y, class)
+P.init = function (self, path, physics, x, y, class)
     --
     --  Initialize the character
     --
@@ -101,9 +102,9 @@ P.init = function (self, path, world, x, y, class)
     end
 
     --  Define collider
-    self.world = world
+    self.physics = physics
     local c    = data.colliderInfo
-    self.collider = self.world:newBSGRectangleCollider(
+    self.collider = self.physics:newBSGRectangleCollider(
         c.x,
         c.y,
         c.width,
@@ -164,17 +165,17 @@ P.query = function (self, classes, reach, radius)
     local qx,qy = self.collider:getPosition()
     local classes = classes
     --  Offset the query area
-    if player.dir == "left" then
+    if self.dir == "left" then
         qx = qx - reach
-    elseif player.dir == "right" then
+    elseif self.dir == "right" then
         qx = qx + reach
-    elseif player.dir == "up" then
+    elseif self.dir == "up" then
         qy = qy - reach
-    elseif player.dir == "down" then
+    elseif self.dir == "down" then
         qy = qy + reach
     end
     --  Return matching objects
-    return self.world:queryCircleArea(qx, qy, qr, classes)
+    return self.physics:queryCircleArea(qx, qy, qr, classes)
 end
 
 
@@ -276,7 +277,7 @@ P.face = function (self, char, halt)
     --  Face the character toward another character and optionally halt movement
     --
     local dir   = char.dir
-    --  Set direction to opposite that of player
+    --  Set direction to opposite that of other character
     local opposite = {}
     opposite.down  = "up"
     opposite.up    = "down"
@@ -302,7 +303,7 @@ end
 
 P.position = function (self, x, y)
     --
-    --  Position the player at the specified coordinates
+    --  Position the character at the specified coordinates
     --
     if x then self.x = x + self.ox end
     if y then self.y = y + self.oy end
@@ -312,7 +313,7 @@ end
 
 P.heal = function (self, n)
     --
-    --  Heal the player by `n` points; fully heals if no value given
+    --  Heal the character by `n` points; fully heals if no value given
     --
     if n then
         local health = self.health + n
@@ -326,7 +327,7 @@ end
 
 P.damage = function (self, n)
     --
-    --  Damage the player by `n` points
+    --  Damage the character by `n` points
     --
     local health = self.health - n
     self.health  = math.max(health, 0)

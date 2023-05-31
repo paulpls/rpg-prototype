@@ -24,6 +24,7 @@
 
 local Class = require("lib/30log/30log")
 local P     = Class("Chest")
+chests      = {}
 
 P.img       = love.graphics.newImage("assets/img/sprite/chest.png")
 P.quads     = {
@@ -40,7 +41,7 @@ local Dialog = require("lib/dialog")
 
 
 
-P.init = function (self, world, x, y, contents)
+P.init = function (self, physics, x, y, contents)
     --
     --  Initialize a new chest
     --
@@ -49,7 +50,7 @@ P.init = function (self, world, x, y, contents)
     self.contents = contents
     self.open     = false
     self.quad     = P.quads.closed
-    self.collider = world:newRectangleCollider(
+    self.collider = physics:newRectangleCollider(
         self.x + 4,
         self.y + 8,
         24,

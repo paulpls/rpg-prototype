@@ -27,6 +27,13 @@ local P     = Class("Conversation")
 
 
 
+--
+--  Dependencies
+--
+local Dialog = require("lib/dialog")
+
+
+
 P.init = function (self, id, npc, player)
     --
     --  Initialize a new conversation
@@ -83,6 +90,27 @@ P.getOptionsText = function (self)
     local options = {}
     for _,o in ipairs(self.options) do table.insert(options, o.text) end
     return options
+end
+
+
+
+P.update = function (self, dt)
+    --
+    --  Update the Conversation
+    --
+    --  Fetch dialogs
+    if not currentDialog then
+        if #dialogs > 0 then currentDialog = Dialog:pop() end
+    end
+end
+
+
+
+P.draw = function (self)
+    --
+    --  Draw the Conversation
+    --
+    if currentDialog then currentDialog:draw() end
 end
 
 

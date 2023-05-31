@@ -31,34 +31,33 @@ local P         = Character:extend("NPC")
 --
 --  Dependencies
 --
-local Dialog       = require("lib/dialog")
-local Conversation = require("lib/conversation")
+local Dialog = require("lib/dialog")
+local C10n   = require("lib/c10n")
 
 
 
-P.interact = function (self, char)
+P.interact = function (self, player)
     --
     --  Interact with the NPC
     --  TODO Buy an item for 50c; add actions to convo behavior
     --
     local id = "hello"
-    if char.inventory.money >= 50 then id = "buy" end
-    self:talk(char, id)
+    if player.inventory.money >= 50 then id = "buy" end
+    local convo = C10n:new(id, self, player)
+    self:talk(convo, player)
 end
 
 
 
-P.talk = function (self, char, id)
+P.talk = function (self, convo, player)
     --
     --  Add some dialogs for player interaction
     --
 
     --  FIXME Face towards the player (opposite dir to player for now)
-    self:face(char, true)
+    self:face(player, true)
 
     --  Follow convo tree, create dialogs and push the global stack
-    local id      = id or "hello"
-    local convo   = Conversation:new(id, self, char)
     local msgs    = convo:getMsgs()
     local header  = {
          ["text"] = string.upper(self.name),
@@ -79,9 +78,9 @@ P.talk = function (self, char, id)
     if convo.stop then
         return
     elseif convo.nextid then
-        self:talk(char, convo.nextid)
+        local convo = C10n:new(convo.nextid, self, player)
+        self:talk(convo, player)
     end
-
 end
 
 
