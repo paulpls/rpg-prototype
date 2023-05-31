@@ -60,6 +60,7 @@ love.update = function (dt)
     --  Update stuff
     --
     world:update(dt)
+    if currentConvo  then  currentConvo:update(dt) end
 end
 
 
@@ -76,10 +77,26 @@ love.keypressed = function (key)
 
     --  Action (Inspect, interact, etc)
     elseif key == "space" then
-        if not dialogActive then
+        if not dialogActive and not currentConvo then
             player:inspect(world.physics)
         else
-            currentDialog:kill()
+            if currentDialog then
+                if currentDialog.options then
+                    --  Select option and advance conversation
+                    if currentConvo then
+                        local npc    = currentConvo.npc
+                        local player = currentConvo.player
+                        local nextid = currentDialog.options[currentDialog.selection].nextid
+                        currentConvo:load(nextid)
+                        npc:talk(currentConvo, player)
+                        currentDialog.kill()
+                    else
+                        --  TODO Perform actions based on option selection
+                    end
+                else
+                    currentDialog.kill()
+                end
+            end
         end
 
     --  DEBUG Heal/damage the player

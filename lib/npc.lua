@@ -25,6 +25,7 @@
 local Class     = require("lib/30log/30log")
 local Character = require("lib/character")
 local P         = Character:extend("NPC")
+currentConvo    = nil
 
 
 
@@ -54,6 +55,9 @@ P.talk = function (self, convo, player)
     --  Add some dialogs for player interaction
     --
 
+    --  Update current conversation
+    currentConvo = convo
+
     --  FIXME Face towards the player (opposite dir to player for now)
     self:face(player, true)
 
@@ -76,7 +80,7 @@ P.talk = function (self, convo, player)
     
     --  Stop or load next conversation
     if convo.stop then
-        return
+        currentConvo.kill()
     elseif convo.nextid then
         local convo = C10n:new(convo.nextid, self, player)
         self:talk(convo, player)

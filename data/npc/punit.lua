@@ -98,17 +98,18 @@ P.actions.walk = {
 --  C.id        Conversation id string
 --  C.id.msgs   Conversation messages tables
 --      {
---          [1] = {"msg1", "msg2", "msg3"},   Random options for message 1
---          [2] = {"msg"},                    Single message for message 2
+--          {"msg1", "msg2", "msg3"},  Random options for message 1
+--          {"msg"},                   Single message for message 2
+--          ...
 --      }
 --  C.nextid    Next conversation set
---  C.previd    Prev conversation set (eg "Did you catch all that?" -> "No" -> repeat)
 --  C.options   Options tables
 --      {
---          ["id"] = {
---              ["text"]   = "name"    Name of option, `id` if omitted
+--          {
+--              ["text"]   = "name"    Name of option
 --              ["nextid"] = id        ID of next conversation set upon selection
 --          },
+--          ...
 --      }
 --  C.actions   TODO Actions to take, such as give item, take money, heal player, etc
 --  C.stop      If true, signifies that the conversation will forcibly stop after this point
@@ -178,7 +179,6 @@ table.insert(
     {
         ["text"]     = "no",
         ["nextid"]   = "goodbye",
-        ["selected"] = true
     }
 )
 table.insert(

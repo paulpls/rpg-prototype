@@ -50,16 +50,16 @@ P.load = function (self, id)
     --
     --  Load message from NPC conversation data
     --
-    local id = id or self.id
+    self.id = id or self.id
     assert(
-        self.npc.conversation[id],
-        "Invalid conversation id "..tostring(id)    -- TODO Character names -> error message
+        self.npc.conversation[self.id],
+        "Invalid conversation id "..self.npc.name.." > "..tostring(self.id)
     )
     --  Get data
-    data         = self.npc.conversation[id]
+    data         = self.npc.conversation[self.id]
     self.msgs    = data.msgs
     self.nextid  = data.nextid
-    self.previd  = data.previd or id
+    self.previd  = data.previd or self.id
     self.options = data.options
     self.actions = data.actions
     self.stop    = data.stop or false
@@ -83,13 +83,11 @@ end
 
 
 
-P.getOptionsText = function (self)
+P.kill = function ()
     --
-    --  Returns a list of options as text for buttons, etc
+    --  Kill the conversation immediately
     --
-    local options = {}
-    for _,o in ipairs(self.options) do table.insert(options, o.text) end
-    return options
+    currentConvo = nil
 end
 
 
@@ -101,6 +99,8 @@ P.update = function (self, dt)
     --  Fetch dialogs
     if not currentDialog then
         if #dialogs > 0 then currentDialog = Dialog:pop() end
+    else
+        currentDialog:update(dt)
     end
 end
 

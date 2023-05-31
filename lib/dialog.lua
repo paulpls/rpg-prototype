@@ -65,6 +65,12 @@ P.init = function (self, text, header, options, color)
     self.color   = color or {1, 1, 1}
     self.bgcolor = {0, 0, 0, 0.75}
     self.outline = {1, 1, 1, 0.75}
+    --  Buffer and delay for option select
+    self.delay        = 0
+    self.resetDelay   = function (self, t) self.delay = t or 0.33 end
+    
+    --  Keep track of selection, default to first option
+    if self.options then self.selection = 1 end
 
     --  Configure font and recalculate width
     self.font  = Font:new()
@@ -75,7 +81,7 @@ end
 
 
 
-P.kill = function (self)
+P.kill = function ()
     --
     --  Kill the dialog and set the global activity flag
     --
@@ -89,6 +95,18 @@ P.update = function (self, dt)
     --
     --  Update the dialog
     --
+    self.delay = self.delay - dt
+    if self.delay <= 0 then
+        if self.options then
+            local delta    = 0
+            if love.keyboard.isDown("left")  then delta = -1 end
+            if love.keyboard.isDown("right") then delta =  1 end
+            local new      = self.selection + delta
+            local max      = #self.options
+            self.selection = max - (new % max)
+            self:resetDelay()
+        end
+    end
 end
 
 
@@ -189,8 +207,20 @@ P.draw = function (self)
             local y  = self.y + self.height - h - margin
             local tx = x + pad
             local ty = y + pad
-            --  Outline options
-            love.graphics.setColor(self.color)
+            --  Options
+            local optionbg = {0, 0, 0, 0.5}
+            local optionol = {1, 1, 1, 0.5}
+            tc             = {1, 1, 1, 0.5}
+            if self.selection then
+                --  Highlight option if index matches selection
+                if i == self.selection then 
+                    optionol = {1, 1,   1   }
+                    optionbg = {0, 0.5, 0.75}
+                    tc       = self.color
+                end
+            end
+            --  Options outlines
+            love.graphics.setColor(optionol)
             love.graphics.rectangle(
                 "line",
                 x - 1,
@@ -198,11 +228,9 @@ P.draw = function (self)
                 w + 1,
                 h + 1
             )
-            --  Highlight selected option
-            if o.selected then
-                love.graphics.setColor({1, 1, 1, 0.25})
-                love.graphics.rectangle("fill", x, y, w, h)
-            end
+            --  Options backgrounds
+            love.graphics.setColor(optionbg)
+            love.graphics.rectangle("fill", x, y, w, h)
             --  Draw option text
             love.graphics.setColor(tc)
             love.graphics.print(text, tx, ty)

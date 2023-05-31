@@ -75,7 +75,7 @@ P.init = function (self, path)
     for _,class in pairs(classes) do self.physics:addCollisionClass(class) end
 
     --  DEBUG Uncomment to draw queries
-    self.physics:setQueryDebugDrawing(true)
+    --self.physics:setQueryDebugDrawing(true)
 
     --  Map, layers, and walls
     self.map         = Map(data.map.path)
@@ -245,7 +245,7 @@ P.draw = function (self)
     end
 
     --  DEBUG Draw collision hitboxes
-    self.physics:draw()
+    --self.physics:draw()
 
     --
     --  Unset the camera
