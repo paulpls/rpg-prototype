@@ -131,6 +131,19 @@ table.insert(
 )
 C.hello.stop = true
 
+--  Goodbye
+C.goodbye         = {}
+C.goodbye.msgs    = {}
+table.insert(
+    C.goodbye.msgs,
+    {
+        "Bye Felicia",
+        "Seeya later then",
+        "You do you boo",
+    }
+)
+C.goodbye.stop    = true
+
 --  Buy items intro
 C.buy        = {}
 C.buy.msgs   = {}
@@ -160,14 +173,21 @@ table.insert(
     }
 )
 C.buyYN.options     = {}
-C.buyYN.options.yes = {
-    ["text"]   = "yes",
-    ["nextid"] = "buyThanks",
-}
-C.buyYN.options.no  = {
-    ["text"]   = "no",
-    ["nextid"] = "bye",
-}
+table.insert(
+    C.buyYN.options,
+    {
+        ["text"]     = "no",
+        ["nextid"]   = "goodbye",
+        ["selected"] = true
+    }
+)
+table.insert(
+    C.buyYN.options,
+    {
+        ["text"]     = "yes",
+        ["nextid"]   = "buyThanks",
+    }
+)
 
 --  Buy items thank you
 C.buyThanks        = {}
@@ -193,19 +213,6 @@ table.insert(
     }
 )
 C.buyThanks.stop   = true
-
---  Goodbye
-C.bye             = {}
-C.bye.msgs        = {}
-table.insert(
-    C.bye.msgs,
-    {
-        "Bye Felicia",
-        "Seeya later then",
-        "You do you boo",
-    }
-)
-C.bye.stop        = true
 
 
 --

@@ -11,7 +11,6 @@ _NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/to
 * [lib/dialog.lua](lib/dialog.lua#L104): Place image to left of title
 * [lib/dialog.lua](lib/dialog.lua#L143): Header image
 * [lib/dialog.lua](lib/dialog.lua#L168): Animate text per character
-* [lib/dialog.lua](lib/dialog.lua#L177): Options
 * [lib/npc.lua](lib/npc.lua#L42): Buy an item for 50c; add actions to convo behavior
 
 

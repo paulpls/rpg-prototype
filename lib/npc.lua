@@ -56,20 +56,29 @@ P.talk = function (self, char, id)
     --  Face the player
     self:face(char, true)
 
-    --  Setup conversation
-    local id    = id or "hello"
-    local convo = Conversation:new(id, self, char)
-    local msgs  = convo:getMsgs()
-
-    --  Create a new dialog and push it to the global stack
+    --  Follow convo tree, create dialogs and push the global stack
+    local id      = id or "hello"
+    local convo   = Conversation:new(id, self, char)
+    local msgs    = convo:getMsgs()
+    local header  = {
+         ["text"] = string.upper(self.name),
+    }
+    local options = convo.options
+    --  Load options
     for _,m in ipairs(msgs) do
         local d = Dialog:new(
             string.upper(m),
-            {
-                ["text"] = string.upper(self.name),
-            }
+            header,
+            options
         )
         Dialog.push(d)
+    end
+    
+    --  Stop or load next conversation
+    if convo.stop then
+        return
+    elseif convo.nextid then
+        self:talk(char, convo.nextid)
     end
 
 end

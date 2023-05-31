@@ -77,26 +77,6 @@ end
 
 
 
-P.next = function (self)
-    --
-    --  Load next convo
-    --
-    local id = self.nextid
-    if id then self:load(id) end
-end
-
-
-
-P.prev = function (self)
-    --
-    --  Load prev convo
-    --
-    local id = self.previd
-    if id then self:load(id) end
-end
-
-
-
 P.getOptionsText = function (self)
     --
     --  Returns a list of options as text for buttons, etc

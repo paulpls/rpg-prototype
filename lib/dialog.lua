@@ -174,7 +174,39 @@ P.draw = function (self)
     love.graphics.setColor(self.color)
     love.graphics.print(self.text, tx, ty)
 
-    --  TODO Options
+    --  Options
+    if self.options then
+        for i,o in ipairs(self.options) do
+            --  Common parameters
+            local pad  = 8
+            local text = string.upper(o.text) or "OKAY"
+            local w    = (pad * 2) + self.font:getWidth(text)
+            local h    = (pad * 2) + self.font.h
+            local tc   = self.color
+            --  Determine origins for option box and text (row)
+            local x  = tx + (w * (i - 1))
+            local y  = self.y + self.height - h - margin
+            local tx = x + pad
+            local ty = y + pad
+            --  Outline options
+            love.graphics.setColor(self.color)
+            love.graphics.rectangle(
+                "line",
+                x - 1,
+                y - 1,
+                w + 1,
+                h + 1
+            )
+            --  Highlight selected option
+            if o.selected then
+                love.graphics.setColor({1, 1, 1, 0.25})
+                love.graphics.rectangle("fill", x, y, w, h)
+            end
+            --  Draw option text
+            love.graphics.setColor(tc)
+            love.graphics.print(text, tx, ty)
+        end
+    end
 
 
 
