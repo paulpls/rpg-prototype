@@ -204,7 +204,6 @@ P.draw = function (self)
     )
     
     --  Text
-    --  TODO Animate text per character
     local text    = self.texts.text
     local margin  = 16
     text.x        = self.x + margin

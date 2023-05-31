@@ -108,6 +108,8 @@ end
 P.draw = function (self)
     --
     --  Draw the text (or ticker value)
+    --  TODO Animate text per character
+    --  TODO Keep track of buffer height/width and clamp as necessary
     --
     local body = self.body
     if self.tick then body = self.ticker end
