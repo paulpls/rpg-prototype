@@ -122,6 +122,10 @@ P.init = function (self, path)
     end
 
 
+    --  HUD
+    if data.hud then self.hud = HUD:new(self.player) end
+
+
 end
 
 
