@@ -138,7 +138,7 @@ P.draw = function (self)
     --  Draw the dialog
     --
     local x,y = self.x, self.y
-    local scale   = 3
+    local scale   = 4
     local margin  = 6
     local padding = 16
 
