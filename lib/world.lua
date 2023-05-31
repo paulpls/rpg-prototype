@@ -30,8 +30,14 @@ local P     = Class("World")
 --
 --  Dependencies
 --
-local Dialog    = require("lib/dialog")
+local Windfield = require("lib/windfield")
+local Map       = require("lib/sti")
 local Camera    = require("lib/hump/camera")
+local Player    = require("lib/player")
+local NPC       = require("lib/npc")
+local HUD       = require("lib/hud")
+local Dialog    = require("lib/dialog")
+local Chest     = require("lib/chest")
 
 
 
@@ -45,12 +51,6 @@ P.init = function (self, path)
         require(path),
         "Unable to load world data: "..tostring(path)
     )
-    self.physics    = data.physics
-    self.map        = data.map
-    self.player     = data.player
-    self.characters = data.characters
-    if data.hud    then self.hud    = data.hud    end
-    if data.chests then self.chests = data.chests end
 
     --  DEBUG Uncomment to draw queries
     --self.physics:setQueryDebugDrawing(true)
@@ -61,6 +61,66 @@ P.init = function (self, path)
         math.floor(love.graphics.getHeight() / 2),
         2
     )
+
+    -- World physics and collision classes
+    local physics = data.physics
+    self.physics  = Windfield.newWorld(physics.gx, physics.gy)
+    local classes = {
+        "Wall",
+        "Player",
+        "NPC",
+        "Enemy",
+        "Item",
+        "Door",
+        "Chest",
+        "Entity",
+    }
+    for _,class in pairs(classes) do self.physics:addCollisionClass(class) end
+
+    --  Map, layers, and walls
+    self.map         = Map(data.map.path)
+    self.underLayers = data.map.underLayers or {}
+    self.overLayers  = data.map.overLayers  or {}
+    self.walls       = {}
+    --  Define wall hitboxes
+    if self.map.layers["walls"] then
+        for _,o in pairs(self.map.layers["walls"].objects) do
+            local wall = self.physics:newRectangleCollider(
+                o.x,
+                o.y,
+                o.width,
+                o.height
+            )
+            wall:setType("static")
+            wall:setCollisionClass("Wall")
+            table.insert(self.walls, wall)
+        end
+    end
+
+    --  Characters
+    self.characters = {}
+    --  Player
+    local name  = data.player
+    self.player = Player:new("data/character/"..name, self.physics)
+    self.player.collider:setCollisionClass("Player")
+    table.insert(self.characters, self.player)
+    --  NPCs
+    local names = data.npcs
+    for _,name in pairs(names) do
+        local npc = NPC:new("data/npc/"..name, self.physics)
+        npc.collider:setCollisionClass("NPC")
+        table.insert(self.characters, npc)
+    end
+
+    --  Chests
+    self.chests = {}
+    if data.chests then
+        for _,ch in pairs(data.chests) do
+            local chest = Chest:new(self.physics, ch.x, ch.y, ch.contents)
+            table.insert(self.chests, chest)
+        end
+    end
+
 
 end
 
@@ -156,7 +216,13 @@ P.draw = function (self)
     --
     self.camera:attach()
 
-    --  Draw map layers below characters
+    --  Draw map layers under characters
+    if self.underLayers then
+        for _,l in ipairs(self.underLayers) do
+            local layer = self.map.layers[l]
+            self.map:drawLayer(layer)
+        end
+    end
     self.map:drawLayer(self.map.layers["bg"])
     self.map:drawLayer(self.map.layers["trees_bottom"])
 
@@ -166,8 +232,13 @@ P.draw = function (self)
     --  Draw characters
     for _,c in pairs(self.characters) do c:draw() end
 
-    --  Draw map layers above characters
-    self.map:drawLayer(self.map.layers["trees_top"])
+    --  Draw map layers over characters
+    if self.overLayers then
+        for _,l in ipairs(self.overLayers) do
+            local layer = self.map.layers[l]
+            self.map:drawLayer(layer)
+        end
+    end
 
     --  DEBUG Draw collision hitboxes
     --self.physics:draw()
@@ -178,7 +249,7 @@ P.draw = function (self)
     self.camera:detach()
 
     --  Draw the HUD
-    self.hud:draw()
+    if self.hud then self.hud:draw() end
 
     --  Draw current dialog popup
     if currentDialog then

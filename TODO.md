@@ -4,19 +4,17 @@ _NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/to
 
 
 ### TODO
-* [main.lua](main.lua#L90):  Passthrough or nudge npcs
-* [main.lua](main.lua#L122): Make these more abstract eventually by loading from data files
-* [main.lua](main.lua#L175): Better pause functionality
-* [lib/conversation.lua](lib/conversation.lua#L49): Character names -> error message
-* [lib/dialog.lua](lib/dialog.lua#L104): Place image to left of title
-* [lib/dialog.lua](lib/dialog.lua#L143): Header image
-* [lib/dialog.lua](lib/dialog.lua#L168): Animate text per character
+* [lib/c10n.lua](lib/c10n.lua#L56): Character names -> error message
+* [lib/dialog.lua](lib/dialog.lua#L105): Place image to left of title
+* [lib/dialog.lua](lib/dialog.lua#L144): Header image
+* [lib/dialog.lua](lib/dialog.lua#L169): Animate text per character
 * [lib/npc.lua](lib/npc.lua#L42): Buy an item for 50c; add actions to convo behavior
+* [lib/world.lua](lib/world.lua#L132): Better pause functionality
 
 
 
 ### FIXME
-* [lib/npc.lua](lib/npc.lua#L56): Face towards the player (opposite dir to player for now)
+* [lib/npc.lua](lib/npc.lua#L57): Face towards the player (opposite dir to player for now)
 
 
 

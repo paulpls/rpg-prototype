@@ -39,13 +39,6 @@ math.random()
 
 
 
---
---  Global tables (non module-specific)
---
-walls = {}
-
-
-
 love.load = function ()
     --
     --  Load stuff and configure defaults

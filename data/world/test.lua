@@ -27,93 +27,43 @@ local P = {}
 
 
 --
---  Dependencies
+--  Physics
 --
-local Windfield = require("lib/windfield")
-local Player    = require("lib/player")
-local NPC       = require("lib/npc")
-local HUD       = require("lib/hud")
-local Map       = require("lib/sti")
-local Chest     = require("lib/chest")
-
-
-
-P.physics = Windfield.newWorld(0, 0)
-P.physics:addCollisionClass("Wall")
-P.physics:addCollisionClass("Player")
-P.physics:addCollisionClass("NPC")
-P.physics:addCollisionClass("Enemy")
-P.physics:addCollisionClass("Item")
-P.physics:addCollisionClass("Door")
-P.physics:addCollisionClass("Chest")
-P.physics:addCollisionClass("Entity")
-
-
-
---  Tables
-P.characters = {}
-P.chests     = {}
+P.physics = {}
+P.physics.gx = 0
+P.physics.gy = 0
 
 
 
 --
---  Player
+--  Characters
 --
-local pName = "paul"
-P.player    = Player:new("data/character/"..pName, P.physics)
-P.player.collider:setCollisionClass("Player")
-table.insert(P.characters, P.player)
-
-
-
---
---  NPCs
---
-local names = {
+P.player = "paul"
+P.npcs   = {
     "punit",
 }
-for _,name in pairs(names) do
-    local npc = NPC:new("data/npc/"..name, P.physics)
-    npc.collider:setCollisionClass("NPC")
-    table.insert(P.characters, npc)
-end
 
 
 
 --
---  Heads-Up Display
+--  Map and layers
 --
-
-P.hud = HUD:new(P.player)
-
-
-
---
---  Map
---
-P.map = Map("data/map/map.lua")
---  Define wall hitboxes
-if P.map.layers["walls"] then
-    for _,o in pairs(P.map.layers["walls"].objects) do
-        local wall = P.physics:newRectangleCollider(
-            o.x,
-            o.y,
-            o.width,
-            o.height
-        )
-        wall:setType("static")
-        wall:setCollisionClass("Wall")
-        table.insert(walls, wall)
-    end
-end
+P.map             = {}
+P.map.path        = "data/map/map.lua"
+P.map.underLayers = {
+    "bg",
+    "trees_bottom",
+}
+P.map.overLayers  = {
+    "trees_top",
+}
 
 
 
 --
 --  Add chests to the map
---  TODO Make these more abstract eventually by loading from data files
 --
-local _chests  = {
+P.chests = {
     {
         ["x"]        = 128,
         ["y"]        = 128,
@@ -151,10 +101,13 @@ local _chests  = {
         }
     },
 }
-for _,ch in pairs(_chests) do
-    local chest = Chest:new(P.physics, ch.x, ch.y, ch.contents)
-    table.insert(P.chests, chest)
-end
+
+
+
+--
+--  Enable Heads-Up Display
+--
+P.hud = true
 
 
 
