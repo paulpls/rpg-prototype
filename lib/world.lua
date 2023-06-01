@@ -195,15 +195,21 @@ P.update = function (self, dt)
                  self.player.collider:getY()
         )
 
-        --  Update HUD
-        if self.hud then self.hud:update(dt) end
-
         --  Fetch dialogs
         if not currentDialog then
             if #dialogs > 0 then currentDialog = Dialog:pop() end
         end
 
     end
+
+    --
+    --  NOTE The following blocks will update regardless of
+    --  whether or not the game is paused
+    --
+
+    --  Update HUD
+    if self.hud then self.hud:update(dt) end
+
 
 end
 
