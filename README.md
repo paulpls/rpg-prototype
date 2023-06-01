@@ -52,7 +52,7 @@ Use the arrow keys to explore the world around you and collect loot.
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-**NOTE:** This project includes some libraries that are licensed under the GPL-compatible MIT License, and are subject to their own copyright as defined therein. Please review each library's license for more details.
+**NOTE:** This project includes some libraries that are licensed under other GPL-compatible licenses, and are subject to their own copyright as defined therein. Please review each library's license for more details.
 
 
 
