@@ -27,7 +27,9 @@ Use the arrow keys to explore the world around you. Interact with NPCs and the s
 - Run `love .`
 ### Windows
 - Install [LÖVE](https://www.love2d.org)
-- Apparently you can just drop the repo onto the `love.exe` executable which is pretty neat
+- Clone the repo or download the repo .zip and extract it
+- Open `cmd.exe` and run `C:\path\to\love.exe C:\path\to\repo` or something like that
+- Or apparently you can just drag and drop the extracted folder onto the `love.exe` executable which is pretty cool
 
 
 
