@@ -9,7 +9,9 @@ License: [GPL 3.0](LICENSE.md)
 
 
 ## About
-A simple RPG prototype for the LÖVE framework, created as proof-of-concept.
+A simple RPG prototype for the LÖVE framework, created as proof-of-concept.  
+  
+Currently a work in progress.
 
 
 
