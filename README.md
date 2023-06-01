@@ -21,9 +21,13 @@ Use the arrow keys to explore the world around you. Interact with NPCs and the s
 
 
 ## Installation & Runtime
+### Linux (Mac too I guess)
 - Install [LÖVE](https://www.love2d.org)
 - Clone the repo and `cd` into it
 - Run `love .`
+### Windows
+- Install [LÖVE](https://www.love2d.org)
+- Apparently you can just drop the repo onto the `love.exe` executable which is pretty neat
 
 
 
