@@ -14,7 +14,7 @@ A simple RPG prototype for the LÖVE framework, created as proof-of-concept.
 
 
 ## How to Play
-Use the arrow keys to explore the world around you and collect loot.
+Use the arrow keys to explore the world around you. Interact with NPCs and the surrounding environment by pressing the spacebar.
 
 
 
