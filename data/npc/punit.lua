@@ -165,7 +165,7 @@ table.insert(
 table.insert(
     C.buy.msgs,
     {
-        "Please brother",
+        "Check this out",
         "Today I will give you a special deal",
         "I promise it is worth your while",
     }

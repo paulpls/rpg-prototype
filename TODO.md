@@ -12,7 +12,7 @@ _NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/to
 
 ### FIXME
 * [lib/npc.lua](lib/npc.lua#L61): Face towards the player (opposite dir to player for now)
-* [lib/text.lua](lib/text.lua#L121): Text is not contained by box; use a buffer instead of the whole string
+* [lib/text.lua](lib/text.lua#L87): Lines are not fully contained within the boundary box; word-wrap incorrect
 
 
 

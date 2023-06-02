@@ -61,7 +61,7 @@ P.getWidth = function (self, text)
     --
     --  Return the width of text in pixels
     --
-    return (self.w + self.k) * (#text - 1) + self.w
+    return (self.w + self.k) * #text
 end
 
 

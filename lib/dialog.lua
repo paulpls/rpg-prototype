@@ -65,6 +65,9 @@ P.init = function (self, body, header, options, color)
     self.color      = color or {1, 1, 1}
     self.bgcolor    = {0, 0, 0, 0.75}
     self.outline    = {1, 1, 1, 0.75}
+    self.margin     = 6
+    self.padding    = 16
+    self.imgScale   = 4
     --  Delay for option selection
     self.delay      = 0
     self.resetDelay = function (self, t) self.delay = t or 0.33 end
@@ -85,10 +88,13 @@ P.init = function (self, body, header, options, color)
     end
     --  Body
     local bodyOptions = {}
-    bodyOptions.maxW  = self.width
-    bodyOptions.maxH  = self.height
+    bodyOptions.maxW  = self.width  - (2 * self.padding) - (2 * self.margin)
+    bodyOptions.maxH  = self.height - (2 * self.padding) - (2 * self.margin)
     bodyOptions.color = self.color
-    if self.header then bodyOptions.tick = true end
+    if self.header then
+        bodyOptions.tick   = true
+        bodyOptions.scroll = true
+    end
     self.texts.body   = Text:new(
         self.body,
         bodyOptions
@@ -138,9 +144,9 @@ P.draw = function (self)
     --  Draw the dialog
     --
     local x,y = self.x, self.y
-    local scale   = 4
-    local margin  = 6
-    local padding = 16
+    local scale   = self.imgScale
+    local margin  = self.margin
+    local padding = self.padding
 
     --  Header Portrait
     if self.header then
