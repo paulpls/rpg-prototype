@@ -39,8 +39,8 @@ P.width     = 48
 P.height    = 48
 P.ox        = -24
 P.oy        = -42
-P.vx        = 50
-P.vy        = 50
+P.vx        = 33
+P.vy        = 33
 
 
 
