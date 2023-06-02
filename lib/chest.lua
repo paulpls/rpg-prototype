@@ -31,6 +31,7 @@ P.quads     = {
     ["closed"] = love.graphics.newQuad(0,  0, 32, 32, P.img),
     ["open"]   = love.graphics.newQuad(32, 0, 32, 32, P.img)
 }
+P.img:setFilter("nearest", "nearest")
 
 
 
