@@ -51,9 +51,9 @@ P.init = function (self, body, options)
     --
     --  Instantiate a new text object
     --
-    self.body   = body or ""
-    self.line   = 1
+    self.body = body or ""
     --  Readout buffer
+    self.line              = 1
     self.buffer            = {}
     self.buffer[self.line] = self.body:sub(1, 1)
     --  Set options if present
@@ -84,17 +84,19 @@ P.init = function (self, body, options)
     self.delay  = self.delay  or 0.025
     self.timer  = 0
     --  Set up line buffer for scrolling
-    --  FIXME Lines are not fully contained within the boundary box; word-wrap incorrect
     self.lines  = {}
     local line  = self.line
     local words = split(self.body)
     local x     = self:getWidth(words[1])
-    for _,word in ipairs(words) do
+    for i,word in ipairs(words) do
         local len = self:getWidth(word)
-        x = x + len
-        if x > self.maxW then 
-            x    = self:getWidth(word)
+        --  Add 1 char worth of space after the first word
+        if i > 1 then len = len + self.font.w end
+        if x + len > self.maxW then 
             line = line + 1 
+            x    = self:getWidth(word)
+        else
+            x = x + len
         end
         if not self.lines[line] then
             self.lines[line] = word
@@ -136,6 +138,7 @@ end
 P.update = function (self, dt)
     --
     --  Update and animate the text
+    --  FIXME Only display lines that fit and scroll appropriately so as to not overflow the box
     --
     local body = self.body
     if self.scroll then body = self.lines[self.line] end
@@ -171,21 +174,33 @@ P.draw = function (self)
     local body = self.body
     local gap  = 8
     if self.tick then body = self.ticker end
-    --  DEBUG Draw bounding box
+    --  DEBUG Draw bounding boxes
     --local ox,oy = self.x, self.y
     --local ow,oh = self.maxW, self.maxH
     --love.graphics.setColor({0,1,1})
     --love.graphics.rectangle("line", ox, oy, ow, oh)
+    --
     --  Print each line in the buffer
     if self.scroll then
         for line,text in pairs(self.buffer) do
+            local text = text:upper()
             local x,y = self.x, self.y + ((line - 1) * ((self:getHeight() + gap)))
-            love.graphics.setColor(self.color)
-            love.graphics.print(text:upper(), x, y)
+            --  DEBUG Draw bounding boxes for text
+            --local w,h = self:getWidth(text), self:getHeight()
+            --love.graphics.setColor({1,0,0})
+            --love.graphics.rectangle("line", x, y, w, h)
+            --
+            self.font:print(text, x, y, self.color)
         end
     else
-        love.graphics.setColor(self.color)
-        love.graphics.print(body:upper(), self.x, self.y)
+        local text = body:upper()
+        local x,y  = self.x, self.y
+         --  DEBUG Draw bounding boxes for text
+        --local w,h = self:getWidth(text), self:getHeight()
+        --love.graphics.setColor({1,0,0})
+        --love.graphics.rectangle("line", x, y, w, h)
+        --
+        self.font:print(text, x, y, self.color)
     end
 end
 

@@ -29,7 +29,7 @@ P._path     = "assets/font/pixel.png"
 P._glyphs   = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 P._w        = 16   --  Character width
 P._h        = 20   --  Character height
-P._k        = 2    --  Kerning
+P._k        = 1    --  Kerning
 
 
 
@@ -61,21 +61,23 @@ P.getWidth = function (self, text)
     --
     --  Return the width of text in pixels
     --
-    return (self.w + self.k) * #text
+    return self.w * #text
 end
 
 
 
-P.print = function (self, text, x, y, color, center)
+P.print = function (self, text, x, y, color, centerX, centerY)
     --
-    --  Print text and center vertically (and optionally, horizontally)
+    --  Print text, centered if specified
     --
     local text   = tostring(text)
     local x      = x
-    local y      = y - math.floor(self.h / 2)
+    local y      = y
     local color  = color  or {1, 1, 1}
-    --  Center text horizontally if specified
-    if center then x = x - math.floor(((self.w + self.k) * #text) / 2) end
+    --  Center text if specified
+    if centerH then x = x - math.floor(self:getWidth(text) / 2) end
+    if centerV then y = y - math.floor(self.h / 2) end
+    --  Print text
     love.graphics.setColor(color)
     love.graphics.print(text, x, y)
 end
