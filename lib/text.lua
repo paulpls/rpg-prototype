@@ -166,7 +166,7 @@ P.draw = function (self)
     --
     --  Draw the text (or ticker value)
     --
-
+    self.font:set()
     --  Get body or ticker text
     local body = self.body
     local gap  = 8
@@ -177,15 +177,15 @@ P.draw = function (self)
     --love.graphics.setColor({0,1,1})
     --love.graphics.rectangle("line", ox, oy, ow, oh)
     --  Print each line in the buffer
-    self.font:set()
-    love.graphics.setColor(self.color)
     if self.scroll then
         for line,text in pairs(self.buffer) do
             local x,y = self.x, self.y + ((line - 1) * ((self:getHeight() + gap)))
+            love.graphics.setColor(self.color)
             love.graphics.print(text:upper(), x, y)
         end
     else
-    love.graphics.print(body:upper(), self.x, self.y)
+        love.graphics.setColor(self.color)
+        love.graphics.print(body:upper(), self.x, self.y)
     end
 end
 
