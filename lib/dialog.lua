@@ -87,15 +87,13 @@ P.init = function (self, body, header, options, color)
         )
     end
     --  Body
-    local bodyOptions = {}
-    bodyOptions.maxW  = self.width  - (2 * self.padding) - (2 * self.margin)
-    bodyOptions.maxH  = self.height - (2 * self.padding) - (2 * self.margin)
-    bodyOptions.color = self.color
-    if self.header then
-        bodyOptions.tick   = true
-        bodyOptions.scroll = true
-    end
-    self.texts.body   = Text:new(
+    local bodyOptions  = {}
+    bodyOptions.maxW   = self.width  - (2 * self.padding) - self.margin
+    bodyOptions.maxH   = self.height - (2 * self.padding) - self.margin
+    bodyOptions.color  = self.color
+    bodyOptions.tick   = true
+    bodyOptions.scroll = true
+    self.texts.body = Text:new(
         self.body,
         bodyOptions
     )
