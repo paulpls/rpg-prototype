@@ -65,6 +65,19 @@ P.map.overLayers  = {
 
 
 --
+--  Add doors to the map
+--
+P.doors = {
+    {
+        ["x"]      = 448,
+        ["y"]      = 448,
+        ["locked"] = true
+    },
+}
+
+
+
+--
 --  Add chests to the map
 --
 P.chests = {

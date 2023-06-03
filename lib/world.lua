@@ -38,6 +38,7 @@ local NPC       = require("lib/npc")
 local HUD       = require("lib/hud")
 local Dialog    = require("lib/dialog")
 local Chest     = require("lib/chest")
+local Door      = require("lib/door")
 
 
 
@@ -75,7 +76,7 @@ P.init = function (self, path)
     for _,class in pairs(classes) do self.physics:addCollisionClass(class) end
 
     --  DEBUG Uncomment to draw queries
-    --self.physics:setQueryDebugDrawing(true)
+    self.physics:setQueryDebugDrawing(true)
 
     --  Map, layers, and walls
     self.map         = Map(data.map.path)
@@ -110,6 +111,15 @@ P.init = function (self, path)
         local npc = NPC:new("data/npc/"..name, self.physics)
         npc.collider:setCollisionClass("NPC")
         table.insert(self.characters, npc)
+    end
+
+    --  Doors
+    self.doors = {}
+    if data.doors then
+        for _,d in pairs(data.doors) do
+            local door = Door:new(self.physics, d.x, d.y, d.locked)
+            table.insert(self.doors, door)
+        end
     end
 
     --  Chests
@@ -184,6 +194,20 @@ P.update = function (self, dt)
             c:update(dt)
         end
 
+        --  Update doors
+        self.closedDoors = {}
+        self.openDoors   = {}
+        if self.doors then
+            for _,d in pairs(self.doors) do
+                d:update(dt)
+                if d.locked or not d.open then
+                    table.insert(self.closedDoors, d)
+                elseif d.open then
+                    table.insert(self.openDoors, d)
+                end
+            end
+        end
+
         --  Update chests
         if self.chests then
             for _,ch in pairs(self.chests) do ch:update(dt) end
@@ -234,11 +258,17 @@ P.draw = function (self)
         end
     end
 
+    --  Draw closed/locked doors under characters
+    for _,d in pairs(self.closedDoors) do d:draw() end
+
     --  Draw chests
     for _,ch in pairs(self.chests) do ch:draw() end
 
     --  Draw characters
     for _,c in pairs(self.characters) do c:draw() end
+
+    --  Draw open doors over characters
+    for _,d in pairs(self.openDoors) do d:draw() end
 
     --  Draw map layers over characters
     if self.overLayers then
@@ -249,7 +279,7 @@ P.draw = function (self)
     end
 
     --  DEBUG Draw collision hitboxes
-    --self.physics:draw()
+    self.physics:draw()
 
     --
     --  Unset the camera

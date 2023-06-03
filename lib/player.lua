@@ -33,6 +33,7 @@ P.inspect = function (self, reach, radius)
     --  Inspect the area in front of the character
     --
     local classes = {
+        "Door",
         "Chest",
         "NPC",
     }
