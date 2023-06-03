@@ -129,6 +129,18 @@ end
 
 
 
+P.skip = function (self)
+    --
+    --  If scrolling, complete the current line and reset the timer to 0
+    --
+    if self.scroll then
+        self.buffer[self.line] = self.lines[self.line]
+        self.timer = 0
+    end
+end
+
+
+
 P.getWidth = function (self, word)
     --
     --  Get the current width of the text to be displayed

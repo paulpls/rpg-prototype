@@ -85,7 +85,7 @@ love.keypressed = function (key)
             player:inspect(world.physics)
         else
             if currentDialog then
-                if currentDialog.options then
+                if currentDialog.options and currentDialog.texts.body:done() then
                     --  Select option and advance conversation
                     if currentConvo then
                         local npc    = currentConvo.npc
@@ -98,7 +98,11 @@ love.keypressed = function (key)
                         --  TODO Perform actions based on option selection
                     end
                 else
-                    currentDialog.kill()
+                    if not currentDialog.texts.body:done() then
+                        currentDialog.texts.body:skip()
+                    else
+                        currentDialog.kill()
+                    end
                 end
             end
         end
