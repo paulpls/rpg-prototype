@@ -71,9 +71,10 @@ P.interact = function (self, char)
         self.open  = true
         local name = self.contents.name
         local qty  = self.contents.qty
-        local msg  = "You found "..qty.." "..name.."!"
         --  Create a new dialog and push it to the global stack
+        local msg  = "You found "..qty.." "..name.."!"
         Dialog.push(Dialog:new(msg))
+        --  Give item to player
         char:getItem(self.contents)
     end
 end
@@ -97,10 +98,6 @@ P.draw = function (self)
     --
     --  Draw the chest
     --
-    local quad = P.quads.closed
-    if self.open then
-        local quad = P.quads.open
-    end
     love.graphics.draw(
         P.img,
         self.quad,
