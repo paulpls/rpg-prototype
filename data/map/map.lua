@@ -746,9 +746,9 @@ return {
           type = "",
           shape = "rectangle",
           x = 192,
-          y = 160,
+          y = 192,
           width = 256,
-          height = 128,
+          height = 96,
           rotation = 0,
           visible = true,
           properties = {}
@@ -759,9 +759,9 @@ return {
           type = "",
           shape = "rectangle",
           x = 480,
-          y = 160,
+          y = 192,
           width = 288,
-          height = 128,
+          height = 96,
           rotation = 0,
           visible = true,
           properties = {}
