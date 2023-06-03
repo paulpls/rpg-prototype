@@ -233,8 +233,6 @@ P.draw = function (self)
             self.map:drawLayer(layer)
         end
     end
-    self.map:drawLayer(self.map.layers["bg"])
-    self.map:drawLayer(self.map.layers["trees_bottom"])
 
     --  Draw chests
     for _,ch in pairs(self.chests) do ch:draw() end
