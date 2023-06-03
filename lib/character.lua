@@ -164,7 +164,7 @@ P.query = function (self, classes, reach, radius)
     --
     local reach = 0
     if self.reach then reach = self.reach else reach = reach end
-    local qr    = radius or 12
+    local qr    = radius or 8
     local qx,qy = self.collider:getPosition()
     local classes = classes
     --  Offset the query area
@@ -189,6 +189,7 @@ P.inspect = function (self)
     --
     local classes = {
         "Wall",
+        "Door",
         "Chest",
         "Player",
         "NPC",

@@ -61,7 +61,7 @@ P.colliderInfo.cutoff = cCutoff
 --
 --  Collider-dependent properties
 --
-P.reach = math.floor((cWidth + cHeight) / 2)
+P.reach = math.floor((cWidth + cHeight) / 3)
 
 
 --

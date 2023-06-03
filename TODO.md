@@ -7,7 +7,7 @@ _NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/to
 * [main.lua](main.lua#L98): Perform actions based on option selection
 * [lib/npc.lua](lib/npc.lua#L43): Buy an item for 50c; add actions to convo behavior
 * [lib/text.lua](lib/text.lua#L167): Wait for user input before scrolling
-* [lib/world.lua](lib/world.lua#L136): Better pause functionality
+* [lib/world.lua](lib/world.lua#L146): Better pause functionality
 
 
 
