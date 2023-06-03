@@ -24,7 +24,6 @@
 
 local Class = require("lib/30log/30log")
 local P     = Class("Character")
-characters  = {}
 
 
 

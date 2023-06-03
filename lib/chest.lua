@@ -24,7 +24,6 @@
 
 local Class = require("lib/30log/30log")
 local P     = Class("Chest")
-chests      = {}
 
 P.img       = love.graphics.newImage("assets/img/sprite/chest.png")
 P.quads     = {
