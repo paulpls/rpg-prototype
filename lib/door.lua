@@ -75,7 +75,10 @@ P.interact = function (self, char)
     --  Unlock or open the door
     --
     if not self.locked then
-        self.open  = true
+        if not self.open then
+            self.open  = true
+            self.collider:destroy()
+        end
     else
         --  Create a new dialog and push it to the global stack
         local msg  = "This door is locked but there might be a key somewhere"

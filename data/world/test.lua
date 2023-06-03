@@ -71,7 +71,7 @@ P.doors = {
     {
         ["x"]      = 448,
         ["y"]      = 448,
-        ["locked"] = true
+        ["locked"] = false
     },
 }
 
