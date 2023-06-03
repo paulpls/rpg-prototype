@@ -52,10 +52,14 @@ P.map             = {}
 P.map.path        = "data/map/map.lua"
 P.map.underLayers = {
     "bg",
+    "house_bottom",
     "trees_bottom",
 }
 P.map.overLayers  = {
+    "shadows",
     "trees_top",
+    "house_top",
+    "house_roof",
 }
 
 
