@@ -65,6 +65,7 @@ P.init = function (self, body, options)
         self.h      = options.h
         self.maxW   = options.maxW
         self.maxH   = options.maxH
+        self.maxL   = options.maxL
         self.color  = options.color
         self.tick   = options.tick
         self.scroll = options.scroll
@@ -78,17 +79,29 @@ P.init = function (self, body, options)
     self.h      = self.h      or self:getHeight()
     self.maxW   = self.maxW   or self.w
     self.maxH   = self.maxH   or self.h
+    self.maxL   = self.maxL   or 3
     self.color  = self.color  or {1, 1, 1}
     self.tick   = self.tick   or false
     self.scroll = self.scroll or false
-    self.delay  = self.delay  or 0.025
+    self.delay  = self.delay  or 0.04
+    --  Refresh everything
+    self:reload()
+end
+
+
+
+P.reload = function (self, line)
+    --
+    --  Reset timer, output buffer, etc
+    --
     self.timer  = 0
+    self.line   = line or 1
     --  Set up line buffer for scrolling
     self.lines  = {}
     local line  = self.line
     local words = split(self.body)
     local x     = self:getWidth(words[1])
-    for i,word in ipairs(words) do
+    for i, word in ipairs(words) do
         local len = self:getWidth(word)
         --  Add 1 char worth of space after the first word
         if i > 1 then len = len + self.font.w end
@@ -99,13 +112,13 @@ P.init = function (self, body, options)
             x = x + len
         end
         if not self.lines[line] then
-            self.lines[line] = word
+            self.lines[line]  = word
+            self.buffer[line] = ""
         else
             self.lines[line] = self.lines[line].." "..word
         end
     end
 end
-
 
 
 P.done = function (self)
@@ -139,25 +152,23 @@ P.update = function (self, dt)
     --
     --  Update and animate the text
     --  FIXME Only display lines that fit and scroll appropriately so as to not overflow the box
+    --  TODO Wait for user input before scrolling
     --
-    local body = self.body
+    local body  = self.body
     if self.scroll then body = self.lines[self.line] end
     if not self:done() then
         --  Decrement timer
         self.timer = self.timer - dt
         if self.timer <= 0 then
-            --  Increase buffer length by 1
+            --  Increase buffer length by 1 char
             local len              = #self.buffer[self.line] + 1
             self.buffer[self.line] = self.buffer[self.line] .. body:sub(len, len)
             --  Offset the timer
             self.timer = self.timer + self.delay
         end
     else
-        --  Increase line number and reload buffer
-        if self.line < #self.lines then
-            self.line              = self.line + 1
-            self.buffer[self.line] = ""
-        end
+        --  Increase buffer line number
+        if self.line < #self.lines then self.line = self.line + 1 end
         --  Reset timer
         self.timer = 0
     end
@@ -174,32 +185,26 @@ P.draw = function (self)
     local body = self.body
     local gap  = 8
     if self.tick then body = self.ticker end
-    --  DEBUG Draw bounding boxes
-    --local ox,oy = self.x, self.y
-    --local ow,oh = self.maxW, self.maxH
-    --love.graphics.setColor({0,1,1})
-    --love.graphics.rectangle("line", ox, oy, ow, oh)
-    --
     --  Print each line in the buffer
     if self.scroll then
-        for line,text in pairs(self.buffer) do
-            local text = text:upper()
-            local x,y = self.x, self.y + ((line - 1) * ((self:getHeight() + gap)))
-            --  DEBUG Draw bounding boxes for text
-            --local w,h = self:getWidth(text), self:getHeight()
-            --love.graphics.setColor({1,0,0})
-            --love.graphics.rectangle("line", x, y, w, h)
-            --
+        --  Line height
+        local h = self:getHeight() + gap
+        --  Scroll the output
+        local start = math.max(1, (self.line + 1) - self.maxL)
+        local stop  = math.min(start + self.maxL, #self.buffer)
+        for line = start, stop do
+            --  Current (local) line number
+            local ln = line - start
+            --  Get current line
+            local text = self.buffer[line]:upper()
+            --  Calculate line height, y offset and text coordinates
+            local oy  = h * ln
+            local x,y = self.x, self.y + oy
             self.font:print(text, x, y, self.color)
         end
     else
         local text = body:upper()
         local x,y  = self.x, self.y
-         --  DEBUG Draw bounding boxes for text
-        --local w,h = self:getWidth(text), self:getHeight()
-        --love.graphics.setColor({1,0,0})
-        --love.graphics.rectangle("line", x, y, w, h)
-        --
         self.font:print(text, x, y, self.color)
     end
 end

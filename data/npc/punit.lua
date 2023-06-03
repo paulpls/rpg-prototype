@@ -123,13 +123,13 @@ C.hello.msgs = {}
 table.insert(
     C.hello.msgs,
     {
-        "Hello",
-        "Hi",
-        "Hey",
-        "Sup",
-        "Hey there",
-        "How goes it",
-        "I was told to speak to you at length and with much verbosity to test font rendering and all that stuff"
+        --"Hello",
+        --"Hi",
+        --"Hey",
+        --"Sup",
+        --"Hey there",
+        --"How goes it",
+        "I have been instructed to speak with you at length and with much verbosity to test font rendering and all that stuff so that is what we are going to do today and I really hope that it looks good on your monitor as well as mine"
     }
 )
 C.hello.stop = true
