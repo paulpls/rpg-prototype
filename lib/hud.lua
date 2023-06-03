@@ -59,6 +59,29 @@ P.init = function (self, parent)
         parent.maxHealth
     )
 
+    --  Money
+    local money = nil
+    if self.parent.inventory.money then
+        money = Text:new(
+            tostring(self.parent.inventory.money)
+        )
+    end
+
+    --  Player coordinates
+    self.coords = {
+        ["x"] = math.floor(self.parent.collider:getX() / 32),
+        ["y"] = math.floor(self.parent.collider:getY() / 32)
+    }
+    local coords = Text:new(
+        "X "..tostring(self.coords.x).."   ".."Y "..tostring(self.coords.y)
+    )
+
+    --  Texts to display in the HUD (other than healthbar and other meters)
+    self.texts = {
+        ["money"]  = money,
+        ["coords"] = coords,
+    }
+
 end
 
 
@@ -77,27 +100,23 @@ P.update = function (self, dt)
         self.parent.maxHealth
     )
     self.healthbar:update(dt)
-    
-    --  DEBUG Player coordinates
-    self.coords = {
-        ["x"] = math.floor(self.parent.collider:getX() / 32),
-        ["y"] = math.floor(self.parent.collider:getY() / 32)
-    }
 
-    --  Create text wrappers
-    local money = nil
-    if self.parent.inventory.money then
-        money = Text:new(
-            tostring(self.parent.inventory.money)
-        )
+    --  Update money
+    if self.texts.money and self.parent.inventory.money then
+        local new = tostring(self.parent.inventory.money)
+        local old = self.texts.money.body
+        if old ~= new then self.texts.money.body = new end
     end
-    local coords = Text:new(
-        "X "..tostring(self.coords.x).."   ".."Y "..tostring(self.coords.y)
-    )
-    self.texts = {
-        ["money"]  = money,
-        ["coords"] = coords,
-    }
+    --  Update coords
+    if self.texts.coords then
+        local coords = {}
+        coords.x     = math.floor(self.parent.collider:getX() / 32)
+        coords.y     = math.floor(self.parent.collider:getY() / 32)
+        local new    = "X "..tostring(coords.x).."   ".."Y "..tostring(coords.y)
+        local old    = self.texts.coords.body
+        if old ~= new then self.texts.coords.body = new end
+    end
+
 end
 
 
