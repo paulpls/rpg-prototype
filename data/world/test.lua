@@ -56,8 +56,8 @@ P.map.underLayers = {
     "trees_bottom",
 }
 P.map.overLayers  = {
-    "shadows",
     "trees_top",
+    "shadows",
     "house_top",
     "house_roof",
 }
