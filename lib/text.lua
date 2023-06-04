@@ -129,13 +129,21 @@ end
 
 
 
+P.ready = function (self)
+    --
+    --  Returns true if original lines match buffer exactly
+    --
+    return self.line == #self.lines and self:done() and self.timer <= 0
+end
+
+
+
 P.skip = function (self)
     --
-    --  If scrolling, complete the current line and reset the timer to 0
+    --  If scrolling, complete the current line
     --
     if self.scroll then
         self.buffer[self.line] = self.lines[self.line]
-        self.timer = 0
     end
 end
 
@@ -163,8 +171,6 @@ end
 P.update = function (self, dt)
     --
     --  Update and animate the text
-    --  FIXME Only display lines that fit and scroll appropriately so as to not overflow the box
-    --  TODO Wait for user input before scrolling
     --
     local body  = self.body
     if self.scroll then body = self.lines[self.line] end
