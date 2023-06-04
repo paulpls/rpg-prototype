@@ -4,7 +4,6 @@ _NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/to
 
 
 ### TODO
-* [main.lua](main.lua#L98): Perform actions based on option selection
 * [lib/world.lua](lib/world.lua#L155): Better pause functionality
 
 

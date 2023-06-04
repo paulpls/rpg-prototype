@@ -56,7 +56,7 @@ P.load = function (self, id)
         "Invalid conversation id "..self.npc.name.." > "..tostring(self.id)
     )
     --  Get data
-    data         = self.npc.conversation[self.id]
+    local data   = self.npc.conversation[self.id]
     self.msgs    = data.msgs
     self.nextid  = data.nextid
     self.previd  = data.previd or self.id

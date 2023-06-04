@@ -221,14 +221,7 @@ table.insert(
     }
 )
 C.buyThanks.actions = {}
-table.insert(
-    C.buyThanks.actions,
-    {
-        ["action"] = "buy",
-        ["item"]   = "key",
-        ["cost"]   = 50,
-    }
-)
+table.insert(C.buyThanks.actions, "buy_key_50c")
 C.buyThanks.stop   = true
 
 

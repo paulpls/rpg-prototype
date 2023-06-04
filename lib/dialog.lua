@@ -51,7 +51,7 @@ dialogActive  = false
 
 
 
-P.init = function (self, body, header, options, color)
+P.init = function (self, body, header, options, actions, npc, color)
     --
     --  Initialize the dialog
     --
@@ -62,6 +62,8 @@ P.init = function (self, body, header, options, color)
     self.header     = header
     self.body       = body
     self.options    = options
+    self.actions    = actions
+    self.npc        = npc
     self.color      = color or {1, 1, 1}
     self.bgcolor    = {0, 0, 0, 0.75}
     self.outline    = {1, 1, 1, 0.75}

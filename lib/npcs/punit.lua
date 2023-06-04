@@ -22,16 +22,16 @@
 
 
 
-local Class  = require("lib/30log/30log")
-local NPC    = require("lib/npc")
-local P      = NPC:extend("CustomNPC")
+local Class = require("lib/30log/30log")
+local NPC   = require("lib/npc")
+local P     = NPC:extend("CustomNPC")
 
 
 
 --
 --  Dependencies
 --
-local C10n   = require("lib/c10n")
+local C10n = require("lib/c10n")
 
 
 
@@ -40,9 +40,24 @@ P.interact = function (self, player)
     --  Interact with the NPC
     --
     local id = "hello"
-    if player.inventory.money >= 50 then id = "buy" end
+    if player.inventory.money >= 50 and self.inventory.key then 
+        if self.inventory.key > 0 then
+            id = "buy"
+        end
+    end
     local convo = C10n:new(id, self, player)
     self:talk(convo, player)
+end
+
+
+
+P.doAction = function (self, player, id)
+    --
+    --  Perform an action based on its id
+    --
+    if id == "buy_key_50c" then
+        self:giveItem(player, "key")
+    end
 end
 
 

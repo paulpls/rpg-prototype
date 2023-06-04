@@ -70,19 +70,37 @@ end
 
 
 
+P.unlock = function (self)
+    --
+    --  Unlock the door
+    --
+    if self.locked then self.locked = false end
+end
+
+
+
 P.interact = function (self, char)
     --
     --  Unlock or open the door
     --
     if not self.locked then
-        if not self.open then
-            self.open  = true
-            self.collider:destroy()
-        end
+        --  Open the door
+        self:open()
     else
-        --  Create a new dialog and push it to the global stack
-        local msg  = "This door is locked but there might be a key somewhere"
-        Dialog.push(Dialog:new(msg))
+        --  Door is locked; check for keys
+        if char.inventory then
+            if char.inventory.key then
+                if char.inventory.key > 0 then
+                    --  Unlock the door
+                    char.inventory.key = char.inventory.key - 1
+                    self:unlock()
+                else
+                    --  Print a message to the player that the door can be unlocked
+                    local msg = "This door is locked but there might be a key somewhere"
+                    Dialog.push(Dialog:new(msg))
+                end
+            end
+        end
     end
 end
 
@@ -90,7 +108,7 @@ end
 
 P.update = function (self, dt)
     --
-    --  Update the chest
+    --  Update the door
     --
     if self.locked then
         self.quad = P.quads.locked
@@ -107,7 +125,7 @@ end
 
 P.draw = function (self)
     --
-    --  Draw the chest
+    --  Draw the door
     --
     love.graphics.draw(
         P.img,

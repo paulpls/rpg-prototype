@@ -46,7 +46,7 @@ love.load = function ()
 
     --  Graphics defaults
     love.graphics.setDefaultFilter("nearest", "nearest")
-    love.window.setFullscreen(true)
+    --love.window.setFullscreen(true)
 
     --  Load world from file
     world = World("data/world/test")
@@ -88,14 +88,17 @@ love.keypressed = function (key)
                 if currentDialog.options and currentDialog.texts.body:done() then
                     --  Select option and advance conversation
                     if currentConvo then
-                        local npc    = currentConvo.npc
-                        local player = currentConvo.player
+                        local npc    = currentDialog.npc
                         local nextid = currentDialog.options[currentDialog.selection].nextid
                         currentConvo:load(nextid)
                         npc:talk(currentConvo, player)
                         currentDialog.kill()
-                    else
-                        --  TODO Perform actions based on option selection
+                    end
+                elseif currentDialog.actions then
+                    for _,id in ipairs(currentDialog.actions) do
+                        local npc = currentDialog.npc
+                        npc:doAction(player, id)
+                        currentDialog.kill()
                     end
                 else
                     if not currentDialog.texts.body:done() then
@@ -106,6 +109,7 @@ love.keypressed = function (key)
                 end
             end
         end
+
     --  Select option
     elseif key == "left" or key == "right" then
         if currentDialog then

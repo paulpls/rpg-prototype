@@ -67,11 +67,14 @@ P.talk = function (self, convo, player)
 
     --  Load options
     local options = convo.options
+    local actions = convo.actions
     for _,body in ipairs(msgs) do
         local d = Dialog:new(
             body,
             header,
-            options
+            options,
+            actions,
+            self
         )
         Dialog.push(d)
     end

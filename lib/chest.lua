@@ -63,7 +63,7 @@ end
 
 
 
-P.interact = function (self, char)
+P.interact = function (self, player)
     --
     --  Open the chest and return contents
     --
@@ -75,7 +75,9 @@ P.interact = function (self, char)
         local msg  = "You found "..qty.." "..name.."!"
         Dialog.push(Dialog:new(msg))
         --  Give item to player
-        char:getItem(self.contents)
+        local item = self.contents.item
+        local qty  = self.contents.qty
+        player:getItem(item, qty)
     end
 end
 
