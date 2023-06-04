@@ -344,11 +344,15 @@ P.getItem = function (self, item, qty)
     --  Add items to inventory
     --
     local qty = qty or 1
+    local success = false
     if self.inventory[item] then
         self.inventory[item] = self.inventory[item] + qty
+        success = true
     else
         self.inventory[item] = qty
+        success = true
     end
+    return success
 end
 
 
@@ -370,14 +374,17 @@ end
 
 
 
-P.giveItem = function (self, player, item, qty)
+P.giveItem = function (self, player, item, qty, price)
     --
-    --  Give the player items from the inventory
+    --  Give the player items from the inventory and remove money from inventory
     --
-    local qty = qty or 1
+    local qty   = qty   or 1
+    local price = price or 0
     if self.inventory then
         if self:delItem(item, qty) then
-            player:getItem(item, qty)
+            if player:getItem(item, qty) then
+                player:delItem("money", price)
+            end
         end
     end
 end

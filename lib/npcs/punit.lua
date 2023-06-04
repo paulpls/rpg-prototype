@@ -56,7 +56,7 @@ P.doAction = function (self, player, id)
     --  Perform an action based on its id
     --
     if id == "buy_key_50c" then
-        self:giveItem(player, "key")
+        self:giveItem(player, "key", 1, 50)
     end
 end
 
