@@ -79,29 +79,36 @@ end
 
 
 
+P.openDoor = function (self)
+    --
+    --  Open the door and destroy the collider
+    --
+    self.open = true
+    self.collider:destroy()
+end
+
+
+
 P.interact = function (self, char)
     --
     --  Unlock or open the door
     --
+    local msg = nil
     if not self.locked then
         --  Open the door
-        self:open()
+        self:openDoor()
     else
         --  Door is locked; check for keys
-        if char.inventory then
-            if char.inventory.key then
-                if char.inventory.key > 0 then
-                    --  Unlock the door
-                    char.inventory.key = char.inventory.key - 1
-                    self:unlock()
-                else
-                    --  Print a message to the player that the door can be unlocked
-                    local msg = "This door is locked but there might be a key somewhere"
-                    Dialog.push(Dialog:new(msg))
-                end
-            end
+        if char:delItem("key") then
+            --  Unlock the door and alert the player
+            self:unlock()
+            msg = "The door is now unlocked"
+        else
+            --  Alert the player that the door can be unlocked
+            msg = "This door is locked but there might be a key somewhere"
         end
     end
+    if msg then Dialog.push(Dialog:new(msg)) end
 end
 
 
