@@ -106,6 +106,20 @@ love.keypressed = function (key)
                 end
             end
         end
+    --  Select option
+    elseif key == "left" or key == "right" then
+        if currentDialog then
+            if currentDialog.options and currentDialog.texts.body:ready() then
+                local num   = #currentDialog.options
+                local delta = 0
+                if key == "left" then
+                    delta = -1
+                elseif key == "right" then
+                    delta = 1
+                end
+                currentDialog.selection = num - ((currentDialog.selection + delta) % num)
+            end
+        end
 
     --  DEBUG Heal/damage the player
     elseif key == "k" then

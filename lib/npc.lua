@@ -40,10 +40,8 @@ local C10n   = require("lib/c10n")
 P.interact = function (self, player)
     --
     --  Interact with the NPC
-    --  TODO Buy an item for 50c; add actions to convo behavior
     --
     local id = "hello"
-    if player.inventory.money >= 50 then id = "buy" end
     local convo = C10n:new(id, self, player)
     self:talk(convo, player)
 end

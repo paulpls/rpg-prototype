@@ -45,12 +45,20 @@ P.vy        = 33
 
 
 --
+-- Inventory
+--
+P.inventory = {}
+P.inventory.key = 1
+
+
+
+--
 --  Collider info
 --
-local cWidth   = 24
-local cHeight  = 24
-local cCutoff  = 10
-P.colliderInfo = {}
+local cWidth  = 24
+local cHeight = 24
+local cCutoff = 10
+P.colliderInfo        = {}
 P.colliderInfo.x      = P.x
 P.colliderInfo.y      = P.y
 P.colliderInfo.width  = cWidth
@@ -123,13 +131,12 @@ C.hello.msgs = {}
 table.insert(
     C.hello.msgs,
     {
-        --"Hello",
-        --"Hi",
-        --"Hey",
-        --"Sup",
-        --"Hey there",
-        --"How goes it",
-        "I have been instructed to speak with you at length and with much verbosity to test font rendering and all that stuff so that is what we are going to do today and I really hope that it looks good on your monitor as well as mine"
+        "Hello",
+        "Hi",
+        "Hey",
+        "Sup",
+        "Hey there",
+        "How goes it",
     }
 )
 C.hello.stop = true
@@ -168,7 +175,6 @@ table.insert(
     {
         "Check this out",
         "Today I will give you a special deal",
-        "I promise it is worth your while",
     }
 )
 C.buy.nextid = "buyYN"
@@ -179,9 +185,7 @@ C.buyYN.msgs        = {}
 table.insert(
     C.buyYN.msgs,
     {
-        "I will sell you this mysterious key for 50 coins",
-        "I will sell you this key I found for 50c",
-        "I found this mysterious key and I am willing to part with it for 50c",
+        "I found this key and I will give it to you for 50c",
     }
 )
 C.buyYN.options     = {}
@@ -221,7 +225,7 @@ table.insert(
     C.buyThanks.actions,
     {
         ["action"] = "buy",
-        ["item"]   = "mysterious_key",
+        ["item"]   = "key",
         ["cost"]   = 50,
     }
 )
