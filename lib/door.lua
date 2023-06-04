@@ -70,21 +70,22 @@ end
 
 
 
-P.unlock = function (self)
-    --
-    --  Unlock the door
-    --
-    if self.locked then self.locked = false end
-end
-
-
-
 P.openDoor = function (self)
     --
     --  Open the door and destroy the collider
     --
     self.open = true
     self.collider:destroy()
+end
+
+
+
+P.unlock = function (self)
+    --
+    --  Unlock the door
+    --
+    if self.locked then self.locked = false end
+    self:openDoor()
 end
 
 
@@ -102,7 +103,6 @@ P.interact = function (self, char)
         if char:delItem("key") then
             --  Unlock the door and alert the player
             self:unlock()
-            msg = "The door is now unlocked"
         else
             --  Alert the player that the door can be unlocked
             msg = "This door is locked but there might be a key somewhere"
