@@ -46,7 +46,7 @@ love.load = function ()
 
     --  Graphics defaults
     love.graphics.setDefaultFilter("nearest", "nearest")
-    --love.window.setFullscreen(true)
+    love.window.setFullscreen(true)
 
     --  Load world from file
     world = World("data/world/test")
