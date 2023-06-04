@@ -49,7 +49,8 @@ P.init = function (self, parent)
     self.icons   = love.graphics.newImage("assets/img/sprite/icons.png")
     self.quads   = {
         --  Money
-        ["money"] = love.graphics.newQuad(0, 0, 16, 16, self.icons),
+        ["money"] = love.graphics.newQuad(0,  0, 16, 16, self.icons),
+        ["key"]   = love.graphics.newQuad(0, 32, 16, 16, self.icons),
     }
 
     --  Healthbar
@@ -67,6 +68,14 @@ P.init = function (self, parent)
         )
     end
 
+    --  Keys
+    local keys = nil
+    if self.parent.inventory.key then
+        keys = Text:new(
+            tostring(self.parent.inventory.key)
+        )
+    end
+
     --  Player coordinates
     self.coords = {
         ["x"] = math.floor(self.parent.collider:getX() / 32),
@@ -79,6 +88,7 @@ P.init = function (self, parent)
     --  Texts to display in the HUD (other than healthbar and other meters)
     self.texts = {
         ["money"]  = money,
+        ["keys"]   = keys,
         ["coords"] = coords,
     }
 
@@ -107,6 +117,22 @@ P.update = function (self, dt)
         local old = self.texts.money.body
         if old ~= new then self.texts.money.body = new end
     end
+
+    --  Update keys
+    if self.parent.inventory.key then
+        if self.texts.key then
+            local new = tostring(self.parent.inventory.key)
+            local old = self.texts.keys.body
+            if old ~= new then self.texts.keys.body = new end
+        else
+            self.texts.keys = Text(
+                tostring(self.parent.inventory.key)
+            )
+        end
+    else
+        self.texts.keys = nil
+    end
+
     --  Update coords
     if self.texts.coords then
         local coords = {}
@@ -159,6 +185,21 @@ P.draw = function (self)
         love.graphics.draw(self.icons, self.quads.money, x, y)
         --  Draw text label
         if self.parent.inventory.money <= 0 then text.color = {1, 0, 0} end
+        text:draw()
+    end
+
+    --  Keys
+    if self.texts.keys then
+        local text = self.texts.keys
+        local x    = self.x + 96
+        local y    = self.y + math.floor(self.height / 2) - 8
+        text.x     = x + 24
+        text.y     = self.y + math.floor(self.height / 2) - math.floor(text.h / 2)
+        text.color = {1, 1, 1}
+        --  Draw icon
+        love.graphics.setColor({1, 1, 1})
+        love.graphics.draw(self.icons, self.quads.key, x, y)
+        --  Draw text label
         text:draw()
     end
 

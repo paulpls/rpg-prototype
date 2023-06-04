@@ -366,6 +366,10 @@ P.delItem = function (self, item, qty)
     if self.inventory[item] then
         if self.inventory[item] >= qty then
             self.inventory[item] = self.inventory[item] - qty
+            --  Nullify all inventory items except money
+            if item ~= "money" and self.inventory[item] <= 0 then
+                self.inventory[item] = nil
+            end
             success = true
         end
     end
