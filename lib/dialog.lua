@@ -68,9 +68,6 @@ P.init = function (self, body, header, options, color)
     self.margin     = 6
     self.padding    = 16
     self.imgScale   = 4
-    --  Delay for option selection
-    self.delay      = 0
-    self.resetDelay = function (self, t) self.delay = t or 0.33 end
     
     --  Keep track of selection, default to first option
     if self.options then self.selection = 1 end
@@ -114,25 +111,9 @@ end
 
 P.update = function (self, dt)
     --
-    --  Update the dialog
-    --
-
     --  Update text wrappers
+    --
     for _,t in pairs(self.texts) do t:update(dt) end
-
-    --  Get input after a short delay
-    self.delay = self.delay - dt
-    if self.delay <= 0 then
-        if self.options then
-            local delta    = 0
-            if love.keyboard.isDown("left")  then delta = -1 end
-            if love.keyboard.isDown("right") then delta =  1 end
-            local new      = self.selection + delta
-            local max      = #self.options
-            self.selection = max - (new % max)
-            self:resetDelay()
-        end
-    end
 end
 
 
@@ -227,12 +208,13 @@ P.draw = function (self)
     text:draw()
 
     --  Options
-    if self.options then
+    local finished = text:ready()
+    if finished and self.options then
         for i,o in ipairs(self.options) do
             --  Label parameters
-            local pad         = 8
-            local labelText   = o.text or "Okay"
-            local labelColor  = {1, 1, 1, 0.5}
+            local pad        = 8
+            local labelText  = o.text or "Okay"
+            local labelColor = {1, 1, 1, 0.5}
             --  Create label
             local options = {}
             options.color = labelColor

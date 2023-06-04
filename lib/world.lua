@@ -108,7 +108,16 @@ P.init = function (self, path)
     --  NPCs
     local names = data.npcs
     for _,name in pairs(names) do
-        local npc = NPC:new("data/npc/"..name, self.physics)
+        --  Create new NPCs
+        local npc = nil
+        --  Load custom NPCType if exists
+        local Type = assert(
+            require("lib/npcs/"..name)
+        )
+        --  Use default NPC type if no custom definition
+        if not Type then Type = NPC end
+        --  Set physics and add to table
+        npc = Type:new("data/npc/"..name, self.physics)
         npc.collider:setCollisionClass("NPC")
         table.insert(self.characters, npc)
     end
