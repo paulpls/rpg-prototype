@@ -53,11 +53,13 @@ P.init = function (self, path)
         "Unable to load world data: "..tostring(path)
     )
 
-    --  Camera
+
+    --  Zoom and camera
+    self.zoom   = data.zoom or 2
     self.camera = Camera(
         math.floor(love.graphics.getWidth()  / 2),
         math.floor(love.graphics.getHeight() / 2),
-        2
+        self.zoom
     )
 
     -- World physics and collision classes
@@ -223,6 +225,7 @@ P.update = function (self, dt)
         end
 
         --  Update camera
+        self.camera:zoomTo(self.zoom)
         self.camera:lookAt(
                  self.player.collider:getX(),
                  self.player.collider:getY()

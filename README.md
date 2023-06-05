@@ -40,6 +40,7 @@ Use the arrow keys to explore the world around you. Interact with NPCs and the s
 | Spacebar   | Interact     |
 | q, ESC     | Quit         |
 | j, k       | Health -/+   |
+| z          | Toggle zoom  |
 
 
 

@@ -125,6 +125,10 @@ love.keypressed = function (key)
             end
         end
 
+    --  Cycle zoom
+    elseif key == "z" then
+        world.zoom = ((world.zoom + 1) % 3) + 1
+
     --  DEBUG Heal/damage the player
     elseif key == "k" then
         player:heal(0.5)
