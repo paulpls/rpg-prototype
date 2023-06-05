@@ -4,7 +4,7 @@ _NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/to
 
 
 ### TODO
-* [lib/world.lua](lib/world.lua#L155): Better pause functionality
+* [lib/world.lua](lib/world.lua#L157): Better pause functionality
 
 
 
