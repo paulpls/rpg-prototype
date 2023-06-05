@@ -94,7 +94,7 @@ P.interact = function (self, player)
     --  Open the chest and return contents
     --
     local msg  = nil
-    if self.locked == nil then
+    if self.locked == nil and not self.opened then
         msg = self:open()
         player:getItem(
             self.contents.item,
