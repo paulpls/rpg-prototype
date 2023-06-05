@@ -85,9 +85,9 @@ P.chests = {
         ["x"]        = 128,
         ["y"]        = 128,
         ["contents"] = {
-            ["item"] = "key",
-            ["name"] = "key",
-            ["qty"]  = 1,
+            ["item"] = "money",
+            ["name"] = "coins",
+            ["qty"]  = 100,
         },
         ["locked"]   = true,
     },
@@ -113,9 +113,9 @@ P.chests = {
         ["x"]        = 704,
         ["y"]        = 160,
         ["contents"] = {
-            ["item"] = "money",
-            ["name"] = "coins",
-            ["qty"]  = 30,
+            ["item"] = "key",
+            ["name"] = "key",
+            ["qty"]  = 1,
         },
     },
 }

@@ -76,7 +76,7 @@ P.init = function (self, parent)
         )
     end
 
-    --  Player coordinates
+    --  DEBUG Player coordinates
     self.coords = {
         ["x"] = math.floor(self.parent.collider:getX() / 32),
         ["y"] = math.floor(self.parent.collider:getY() / 32)
@@ -89,7 +89,7 @@ P.init = function (self, parent)
     self.texts = {
         ["money"]  = money,
         ["keys"]   = keys,
-        ["coords"] = coords,
+        --["coords"] = coords,
     }
 
 end
@@ -151,6 +151,8 @@ P.draw = function (self)
     --
     --  Draw the HUD
     --
+    local x      = 0
+    local margin = 24
 
     --  Outline
     love.graphics.setColor(self.outline)
@@ -175,9 +177,9 @@ P.draw = function (self)
     --  Money
     if self.texts.money then
         local text = self.texts.money
-        local x    = self.x + 24
+        x          = self.x + margin
         local y    = self.y + math.floor(self.height / 2) - 8
-        text.x     = x + 24
+        text.x     = x + margin
         text.y     = self.y + math.floor(self.height / 2) - math.floor(text.h / 2)
         text.color = {1, 1, 1}
         --  Draw icon
@@ -186,14 +188,14 @@ P.draw = function (self)
         --  Draw text label
         if self.parent.inventory.money <= 0 then text.color = {1, 0, 0} end
         text:draw()
+        x = x + text:getWidth() + 16 + (2 * margin)
     end
 
     --  Keys
     if self.texts.keys then
         local text = self.texts.keys
-        local x    = self.x + 96
         local y    = self.y + math.floor(self.height / 2) - 8
-        text.x     = x + 24
+        text.x     = x + margin
         text.y     = self.y + math.floor(self.height / 2) - math.floor(text.h / 2)
         text.color = {1, 1, 1}
         --  Draw icon
