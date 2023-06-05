@@ -209,9 +209,9 @@ P.update = function (self, dt)
         if self.doors then
             for _,d in pairs(self.doors) do
                 d:update(dt)
-                if d.locked or not d.open then
+                if d.locked or not d.opened then
                     table.insert(self.closedDoors, d)
-                elseif d.open then
+                else
                     table.insert(self.openDoors, d)
                 end
             end
