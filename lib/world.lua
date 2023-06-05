@@ -42,6 +42,20 @@ local Door      = require("lib/door")
 
 
 
+local exists = function (name)
+    --
+    --  Check if file name exists
+    --
+    local file = io.open(name, "r")
+    if file then 
+        io.close(file)
+        return true
+    end
+    return false
+end
+
+
+
 P.init = function (self, path)
     --
     --  Initialize the World
@@ -111,13 +125,13 @@ P.init = function (self, path)
     local names = data.npcs
     for _,name in pairs(names) do
         --  Create new NPCs
-        local npc = nil
-        --  Load custom NPCType if exists
-        local Type = assert(
-            require("lib/npcs/"..name)
-        )
-        --  Use default NPC type if no custom definition
-        if not Type then Type = NPC end
+        local npc  = nil
+        local Type = NPC
+        --  Load custom NPC type if it exists
+        local file = "lib/npcs/"..name
+        if exists(file..".lua") then
+            Type = require(file)
+        end
         --  Set physics and add to table
         npc = Type:new("data/npc/"..name, self.physics)
         npc.collider:setCollisionClass("NPC")
