@@ -32,8 +32,8 @@ local P = {}
 P.name      = "Paul"
 P.class     = "Player"
 P.img       = "assets/img/character/paul.png"
-P.x         = 448
-P.y         = 800
+P.x         = 1120
+P.y         = 704
 P.width     = 48
 P.height    = 48
 P.ox        = -24
@@ -49,16 +49,16 @@ P.maxHealth = 3
 -- Inventory
 --
 P.inventory = {}
-P.inventory.money = 40
+P.inventory.money = 0
 
 
 
 --
 --  Collider info
 --
-local cWidth   = 24
-local cHeight  = 24
-local cCutoff  = 10
+local cWidth  = 24
+local cHeight = 24
+local cCutoff = 10
 P.colliderInfo        = {}
 P.colliderInfo.x      = P.x
 P.colliderInfo.y      = P.y

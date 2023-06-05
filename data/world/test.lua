@@ -27,6 +27,16 @@ local P = {}
 
 
 --
+--  Coordinates
+--
+local tw = 32
+local th = 32
+local X  = function (n) return n * tw end
+local Y  = function (n) return n * th end
+
+
+
+--
 --  Physics
 --
 P.physics = {}
@@ -69,9 +79,14 @@ P.map.overLayers  = {
 --
 P.doors = {
     {
-        ["x"]      = 448,
-        ["y"]      = 448,
+        ["x"]      = 1472,
+        ["y"]      = 768,
         ["locked"] = true
+    },
+    {
+        ["x"]      = 512,
+        ["y"]      = 736,
+        ["locked"] = false
     },
 }
 
@@ -82,8 +97,54 @@ P.doors = {
 --
 P.chests = {
     {
-        ["x"]        = 128,
-        ["y"]        = 128,
+        ["x"]        = 416,
+        ["y"]        = 864,
+        ["contents"] = {
+            ["item"] = "money",
+            ["name"] = "coins",
+            ["qty"]  = 50,
+        },
+    },
+    {
+        ["x"]        = 448,
+        ["y"]        = 864,
+        ["contents"] = {
+            ["item"] = "money",
+            ["name"] = "coins",
+            ["qty"]  = 250,
+        },
+        ["locked"]   = true,
+    },
+    {
+        ["x"]        = 480,
+        ["y"]        = 864,
+        ["contents"] = {
+            ["item"] = "money",
+            ["name"] = "coins",
+            ["qty"]  = 25,
+        },
+    },
+    {
+        ["x"]        = 480,
+        ["y"]        = 864,
+        ["contents"] = {
+            ["item"] = "money",
+            ["name"] = "coins",
+            ["qty"]  = 25,
+        },
+    },
+    {
+        ["x"]        = 1280,
+        ["y"]        = 736,
+        ["contents"] = {
+            ["item"] = "money",
+            ["name"] = "coins",
+            ["qty"]  = 50,
+        },
+    },
+    {
+        ["x"]        = 1536,
+        ["y"]        = 1120,
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
@@ -92,26 +153,8 @@ P.chests = {
         ["locked"]   = true,
     },
     {
-        ["x"]        = 448,
-        ["y"]        = 736,
-        ["contents"] = {
-            ["item"] = "money",
-            ["name"] = "coins",
-            ["qty"]  = 10,
-        },
-    },
-    {
-        ["x"]        = 256,
-        ["y"]        = 448,
-        ["contents"] = {
-            ["item"] = "money",
-            ["name"] = "coins",
-            ["qty"]  = 5,
-        },
-    },
-    {
-        ["x"]        = 704,
-        ["y"]        = 160,
+        ["x"]        = 1920,
+        ["y"]        = 288,
         ["contents"] = {
             ["item"] = "key",
             ["name"] = "key",
