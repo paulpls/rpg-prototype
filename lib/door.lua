@@ -46,11 +46,11 @@ P.init = function (self, physics, x, y, locked)
     --
     --  Initialize a new door
     --
-    local w,h     = 32, 64
-    self.x        = x or 0 
-    self.y        = y or 0
-    self.locked   = locked or false
-    self.open     = false
+    local w,h   = 32, 64
+    self.x      = x or 0 
+    self.y      = y or 0
+    self.locked = locked or false
+    self.opened = false
     if self.locked then
         self.quad = P.quads.closed
     else
@@ -70,11 +70,11 @@ end
 
 
 
-P.openDoor = function (self)
+P.open = function (self)
     --
     --  Open the door and destroy the collider
     --
-    self.open = true
+    self.opened = true
     self.collider:destroy()
 end
 
@@ -85,7 +85,7 @@ P.unlock = function (self)
     --  Unlock the door
     --
     if self.locked then self.locked = false end
-    self:openDoor()
+    self:open()
 end
 
 
@@ -97,7 +97,7 @@ P.interact = function (self, char)
     local msg = nil
     if not self.locked then
         --  Open the door
-        self:openDoor()
+        self:open()
     else
         --  Door is locked; check for keys
         if char:delItem("key") then
@@ -120,7 +120,7 @@ P.update = function (self, dt)
     if self.locked then
         self.quad = P.quads.locked
     else
-        if self.open then
+        if self.opened then
             self.quad = P.quads.open
         else
             self.quad = P.quads.closed

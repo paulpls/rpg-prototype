@@ -135,7 +135,7 @@ P.init = function (self, path)
     self.chests = {}
     if data.chests then
         for _,ch in pairs(data.chests) do
-            local chest = Chest:new(self.physics, ch.x, ch.y, ch.contents)
+            local chest = Chest:new(self.physics, ch.x, ch.y, ch.contents, ch.locked)
             table.insert(self.chests, chest)
         end
     end

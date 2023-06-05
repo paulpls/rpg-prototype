@@ -85,10 +85,11 @@ P.chests = {
         ["x"]        = 128,
         ["y"]        = 128,
         ["contents"] = {
-            ["item"] = "money",
-            ["name"] = "coins",
-            ["qty"]  = 5
-        }
+            ["item"] = "key",
+            ["name"] = "key",
+            ["qty"]  = 1,
+        },
+        ["locked"]   = true,
     },
     {
         ["x"]        = 448,
@@ -96,8 +97,8 @@ P.chests = {
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
-            ["qty"]  = 10
-        }
+            ["qty"]  = 10,
+        },
     },
     {
         ["x"]        = 256,
@@ -105,8 +106,8 @@ P.chests = {
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
-            ["qty"]  = 5
-        }
+            ["qty"]  = 5,
+        },
     },
     {
         ["x"]        = 704,
@@ -114,8 +115,8 @@ P.chests = {
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
-            ["qty"]  = 30
-        }
+            ["qty"]  = 30,
+        },
     },
 }
 

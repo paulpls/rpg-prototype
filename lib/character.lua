@@ -341,9 +341,9 @@ end
 
 P.getItem = function (self, item, qty)
     --
-    --  Add items to inventory
+    --  Add items to inventory; returns true if successful
     --
-    local qty = qty or 1
+    local qty     = qty or 1
     local success = false
     if self.inventory[item] then
         self.inventory[item] = self.inventory[item] + qty
@@ -361,7 +361,7 @@ P.delItem = function (self, item, qty)
     --
     --  Delete items from inventory; returns true if successful
     --
-    local qty = qty or 1
+    local qty     = qty or 1
     local success = false
     if self.inventory[item] then
         if self.inventory[item] >= qty then
