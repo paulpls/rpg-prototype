@@ -105,11 +105,12 @@ P.init = function (self, path, physics, x, y, class)
     end
 
     --  Define collider
-    self.physics = physics
-    local c    = data.colliderInfo
+    self.physics  = physics
+    local c       = data.colliderInfo
+    local cx,cy   = self.x - math.floor(c.width / 2), self.y - math.floor(c.height / 2)
     self.collider = self.physics:newBSGRectangleCollider(
-        c.x,
-        c.y,
+        cx,
+        cy,
         c.width,
         c.height,
         c.cutoff

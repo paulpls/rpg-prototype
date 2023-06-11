@@ -31,8 +31,8 @@ local P = {}
 --
 local tw = 32
 local th = 32
-local X  = function (n) return n * tw end
-local Y  = function (n) return n * th end
+local X  = function (n) return n * tw + math.floor(tw / 2) end
+local Y  = function (n) return n * th + math.floor(th / 2) end
 
 
 
@@ -48,9 +48,15 @@ P.physics.gy = 0
 --
 --  Characters
 --
-P.player = "paul"
-P.npcs   = {
-    "punit",
+P.player  = "paul"
+P.playerx = X(35)
+P.playery = Y(22)
+P.npcs    = {
+    {
+        "punit",
+        X(37),
+        Y(23),
+    },
 }
 
 

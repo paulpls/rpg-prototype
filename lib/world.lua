@@ -92,7 +92,7 @@ P.init = function (self, path)
     for _,class in pairs(classes) do self.physics:addCollisionClass(class) end
 
     --  DEBUG Uncomment to draw queries
-    --self.physics:setQueryDebugDrawing(true)
+    self.physics:setQueryDebugDrawing(true)
 
     --  Map, layers, and walls
     self.map         = Map(data.map.path)
@@ -118,12 +118,14 @@ P.init = function (self, path)
     self.characters = {}
     --  Player
     local name  = data.player
-    self.player = Player:new("data/character/"..name, self.physics)
+    local px,py = data.playerx, data.playery
+    self.player = Player:new("data/character/"..name, self.physics, px, py)
     self.player.collider:setCollisionClass("Player")
     table.insert(self.characters, self.player)
     --  NPCs
-    local names = data.npcs
-    for _,name in pairs(names) do
+    local npcs = data.npcs
+    for _,npcData in pairs(npcs) do
+        local name,npcx,npcy = unpack(npcData)
         --  Create new NPCs
         local npc  = nil
         local Type = NPC
@@ -133,7 +135,7 @@ P.init = function (self, path)
             Type = require(file)
         end
         --  Set physics and add to table
-        npc = Type:new("data/npc/"..name, self.physics)
+        npc = Type:new("data/npc/"..name, self.physics, npcx, npcy)
         npc.collider:setCollisionClass("NPC")
         table.insert(self.characters, npc)
     end
@@ -305,7 +307,7 @@ P.draw = function (self)
     end
 
     --  DEBUG Draw collision hitboxes
-    --self.physics:draw()
+    self.physics:draw()
 
     --
     --  Unset the camera
