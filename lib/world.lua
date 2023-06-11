@@ -39,6 +39,7 @@ local HUD       = require("lib/hud")
 local Dialog    = require("lib/dialog")
 local Chest     = require("lib/chest")
 local Door      = require("lib/door")
+local Exit      = require("lib/exit")
 
 
 
@@ -93,6 +94,7 @@ P.load = function (self, path, currentPlayer, x, y)
         "Enemy",
         "Item",
         "Door",
+        "Exit",
         "Chest",
         "Entity",
     }
@@ -162,6 +164,14 @@ P.load = function (self, path, currentPlayer, x, y)
         for _,d in pairs(data.doors) do
             local door = Door:new(self.physics, d.x, d.y, d.locked, d.dest)
             table.insert(self.doors, door)
+        end
+    end
+
+    -- Exits
+    if data.exits then
+        for _,e in pairs(data.exits) do
+            local exit = Exit:new(self.physics, e.x, e.y, e.dest)
+            table.insert(self.doors, exit)
         end
     end
 

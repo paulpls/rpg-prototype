@@ -31,8 +31,16 @@ local P = {}
 --
 local tw = 32
 local th = 32
-local X  = function (n) return n * tw + math.floor(tw / 2) end
-local Y  = function (n) return n * th + math.floor(th / 2) end
+local X  = function (n, o)
+    local offset = 0
+    if o then offset = math.floor(tw / 2) end
+    return n * tw + offset
+end
+local Y  = function (n, o)
+    local offset = 0
+    if o then offset = math.floor(th / 2) end
+    return n * th + offset
+end
 
 
 
@@ -49,13 +57,13 @@ P.physics.gy = 0
 --  Characters
 --
 P.player  = "paul"
-P.playerx = X(46)
-P.playery = Y(28)
+P.playerx = X(46, true)
+P.playery = Y(28, true)
 P.npcs    = {
     {
         "punit",
-        X(37),
-        Y(23),
+        X(37, true),
+        Y(23, true),
     },
 }
 
@@ -85,16 +93,16 @@ P.map.overLayers  = {
 --
 P.doors = {
     {
-        ["x"]      = 1472,
-        ["y"]      = 768,
+        ["x"]      = X(46),
+        ["y"]      = Y(24),
         ["locked"] = true,
         ["dest"]   = {
             ["world"] = "test2"
         },
     },
     {
-        ["x"]      = 512,
-        ["y"]      = 736,
+        ["x"]      = X(16),
+        ["y"]      = Y(23),
         ["locked"] = false,
     },
 }
@@ -106,8 +114,8 @@ P.doors = {
 --
 P.chests = {
     {
-        ["x"]        = 416,
-        ["y"]        = 864,
+        ["x"]        = X(13),
+        ["y"]        = Y(27),
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
@@ -115,8 +123,8 @@ P.chests = {
         },
     },
     {
-        ["x"]        = 448,
-        ["y"]        = 864,
+        ["x"]        = X(14),
+        ["y"]        = Y(27),
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
@@ -125,8 +133,8 @@ P.chests = {
         ["locked"]   = true,
     },
     {
-        ["x"]        = 480,
-        ["y"]        = 864,
+        ["x"]        = X(15),
+        ["y"]        = Y(27),
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
@@ -134,17 +142,8 @@ P.chests = {
         },
     },
     {
-        ["x"]        = 480,
-        ["y"]        = 864,
-        ["contents"] = {
-            ["item"] = "money",
-            ["name"] = "coins",
-            ["qty"]  = 25,
-        },
-    },
-    {
-        ["x"]        = 1280,
-        ["y"]        = 736,
+        ["x"]        = X(40),
+        ["y"]        = Y(23),
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
@@ -152,8 +151,8 @@ P.chests = {
         },
     },
     {
-        ["x"]        = 1536,
-        ["y"]        = 1120,
+        ["x"]        = X(48),
+        ["y"]        = Y(35),
         ["contents"] = {
             ["item"] = "money",
             ["name"] = "coins",
@@ -162,8 +161,8 @@ P.chests = {
         ["locked"]   = true,
     },
     {
-        ["x"]        = 1920,
-        ["y"]        = 288,
+        ["x"]        = X(60),
+        ["y"]        = Y(9),
         ["contents"] = {
             ["item"] = "key",
             ["name"] = "key",
