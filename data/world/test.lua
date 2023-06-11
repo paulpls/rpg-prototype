@@ -49,8 +49,8 @@ P.physics.gy = 0
 --  Characters
 --
 P.player  = "paul"
-P.playerx = X(35)
-P.playery = Y(22)
+P.playerx = X(46)
+P.playery = Y(28)
 P.npcs    = {
     {
         "punit",
@@ -87,12 +87,15 @@ P.doors = {
     {
         ["x"]      = 1472,
         ["y"]      = 768,
-        ["locked"] = true
+        ["locked"] = true,
+        ["dest"]   = {
+            ["world"] = "test2"
+        },
     },
     {
         ["x"]      = 512,
         ["y"]      = 736,
-        ["locked"] = false
+        ["locked"] = false,
     },
 }
 

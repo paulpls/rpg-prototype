@@ -89,7 +89,7 @@ P.init = function (self, parent)
     self.texts = {
         ["money"]  = money,
         ["keys"]   = keys,
-        --["coords"] = coords,
+        ["coords"] = coords,
     }
 
 end

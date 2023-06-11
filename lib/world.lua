@@ -56,17 +56,24 @@ end
 
 
 
-P.init = function (self, path)
+P.init = function (self, path, currentPlayer, x, y)
     --
     --  Initialize the World
     --
+    self:load(path, currentPlayer, x, y)
+end
 
+
+
+P.load = function (self, path, currentPlayer, x, y)
+    --
     --  Load data from file
+    --
+
     local data = assert(
         require(path),
         "Unable to load world data: "..tostring(path)
     )
-
 
     --  Zoom and camera
     self.zoom   = data.zoom or 2
@@ -92,7 +99,7 @@ P.init = function (self, path)
     for _,class in pairs(classes) do self.physics:addCollisionClass(class) end
 
     --  DEBUG Uncomment to draw queries
-    self.physics:setQueryDebugDrawing(true)
+    --self.physics:setQueryDebugDrawing(true)
 
     --  Map, layers, and walls
     self.map         = Map(data.map.path)
@@ -117,10 +124,19 @@ P.init = function (self, path)
     --  Characters
     self.characters = {}
     --  Player
-    local name  = data.player
+    local name  = ""
     local px,py = data.playerx, data.playery
-    self.player = Player:new("data/character/"..name, self.physics, px, py)
-    self.player.collider:setCollisionClass("Player")
+    if currentPlayer then
+        --  Load in the current player and create a new collider for the current world
+        self.player = currentPlayer
+        self.player:newCollider(self.physics)
+        self.player.collider:setPosition(px, py)
+    else
+        --  Create a new player as specified in the data file
+        name  = data.player
+        self.player = Player:new("data/character/"..name, self.physics, px, py)
+        self.player.collider:setCollisionClass("Player")
+    end
     table.insert(self.characters, self.player)
     --  NPCs
     local npcs = data.npcs
@@ -144,7 +160,7 @@ P.init = function (self, path)
     self.doors = {}
     if data.doors then
         for _,d in pairs(data.doors) do
-            local door = Door:new(self.physics, d.x, d.y, d.locked)
+            local door = Door:new(self.physics, d.x, d.y, d.locked, d.dest)
             table.insert(self.doors, door)
         end
     end
@@ -158,10 +174,8 @@ P.init = function (self, path)
         end
     end
 
-
     --  HUD
     if data.hud then self.hud = HUD:new(self.player) end
-
 
 end
 
@@ -307,7 +321,7 @@ P.draw = function (self)
     end
 
     --  DEBUG Draw collision hitboxes
-    self.physics:draw()
+    --self.physics:draw()
 
     --
     --  Unset the camera

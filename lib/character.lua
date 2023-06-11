@@ -105,18 +105,8 @@ P.init = function (self, path, physics, x, y, class)
     end
 
     --  Define collider
-    self.physics  = physics
-    local c       = data.colliderInfo
-    local cx,cy   = self.x - math.floor(c.width / 2), self.y - math.floor(c.height / 2)
-    self.collider = self.physics:newBSGRectangleCollider(
-        cx,
-        cy,
-        c.width,
-        c.height,
-        c.cutoff
-    )
-    self.collider:setFixedRotation(true)
-    self.collider.parent = self
+    self.colliderInfo = data.colliderInfo
+    self:newCollider(physics, self.colliderInfo)
 
     --  Health
     self.health    = data.health    or 3
@@ -131,6 +121,27 @@ P.init = function (self, path, physics, x, y, class)
     --  Conversation
     if data.conversation then self.conversation = data.conversation end
 
+end
+
+
+
+P.newCollider = function (self, physics)
+    --
+    --  Create a new collider for the current world
+    --
+    self. physics = physics
+    local c       = self.colliderInfo
+    local cx,cy   = self.x - math.floor(c.width / 2), self.y - math.floor(c.height / 2)
+    local collider = self.physics:newBSGRectangleCollider(
+        cx,
+        cy,
+        c.width,
+        c.height,
+        c.cutoff
+    )
+    collider:setFixedRotation(true)
+    collider.parent = self
+    self.collider = collider
 end
 
 

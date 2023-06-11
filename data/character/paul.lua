@@ -48,6 +48,7 @@ P.maxHealth = 3
 --
 P.inventory = {}
 P.inventory.money = 0
+P.inventory.key   = 1
 
 
 

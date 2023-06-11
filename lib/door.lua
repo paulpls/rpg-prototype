@@ -42,7 +42,7 @@ local Dialog = require("lib/dialog")
 
 
 
-P.init = function (self, physics, x, y, locked)
+P.init = function (self, physics, x, y, locked, dest)
     --
     --  Initialize a new door
     --
@@ -50,6 +50,7 @@ P.init = function (self, physics, x, y, locked)
     self.x      = x or 0 
     self.y      = y or 0
     self.locked = locked or false
+    self.dest   = dest
     self.opened = false
     if self.locked then
         self.quad = P.quads.closed
@@ -101,14 +102,30 @@ P.interact = function (self, char)
     else
         --  Door is locked; check for keys
         if char:delItem("key") then
-            --  Unlock the door and alert the player
+            --  Unlock the door
             self:unlock()
+            self:send()
         else
             --  Alert the player that the door can be unlocked
             msg = "This door is locked but there might be a key somewhere"
         end
     end
     if msg then Dialog.push(Dialog:new(msg)) end
+end
+
+
+
+P.send = function (self)
+    --
+    --  Send the player to the door's destination
+    --
+    if self.dest then
+        local data  = {}
+        data.name = string.lower(world.player.name)
+        if self.dest.x then data.px = self.dest.x end
+        if self.dest.y then data.py = self.dest.y end
+        world:load("data/world/"..self.dest.world, world.player)
+    end
 end
 
 
