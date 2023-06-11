@@ -134,6 +134,12 @@ love.keypressed = function (key)
         player:heal(0.5)
     elseif key == "j" then
         player:damage(0.5)
+
+    --  DEBUG Load next level
+    elseif key == "n" then
+        path = "data/world/test2"
+        world = World(path)
+
     end
 
 end
