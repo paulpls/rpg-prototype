@@ -61,7 +61,7 @@ P.init = function (self, physics, x, y, contents, locked)
     )
     self.collider:setCollisionClass("Chest")
     self.collider:setType("static")
-    self.collider.parent = self
+    self.collider:setObject(self)
 end
 
 

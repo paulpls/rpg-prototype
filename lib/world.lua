@@ -87,6 +87,7 @@ P.load = function (self, path, currentPlayer, x, y)
     -- World physics and collision classes
     local physics = data.physics
     self.physics  = Windfield.newWorld(physics.gx, physics.gy)
+    --  Simple classes
     local classes = {
         "Wall",
         "Player",
@@ -94,11 +95,19 @@ P.load = function (self, path, currentPlayer, x, y)
         "Enemy",
         "Item",
         "Door",
-        "Exit",
         "Chest",
         "Entity",
     }
     for _,class in pairs(classes) do self.physics:addCollisionClass(class) end
+    --  More complex classes
+    self.physics:addCollisionClass(
+        "OpenDoor",
+        {
+            ignores = {
+                "Player",
+            },
+        }
+    )
 
     --  DEBUG Uncomment to draw queries
     --self.physics:setQueryDebugDrawing(true)

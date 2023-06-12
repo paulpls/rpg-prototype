@@ -66,7 +66,7 @@ P.init = function (self, physics, x, y, locked, dest)
     )
     self.collider:setCollisionClass("Door")
     self.collider:setType("static")
-    self.collider.parent = self
+    self.collider:setObject(self)
 end
 
 
@@ -76,7 +76,7 @@ P.open = function (self)
     --  Open the door and destroy the collider
     --
     self.opened = true
-    self.collider:destroy()
+    self.collider:setCollisionClass("OpenDoor")
 end
 
 
@@ -104,7 +104,6 @@ P.interact = function (self, char)
         if char:delItem("key") then
             --  Unlock the door
             self:unlock()
-            self:send()
         else
             --  Alert the player that the door can be unlocked
             msg = "This door is locked but there might be a key somewhere"
@@ -142,6 +141,13 @@ P.update = function (self, dt)
         else
             self.quad = P.quads.closed
         end
+    end
+    --  Detect entry
+    if self.opened and self.collider:enter("Player") then
+        --  FIXME Send player to level when collision is detected with door
+        --self:send()
+        local msg = "SEND " .. string.lower(world.player.name) .. " -> " .. self.dest.world
+        print(msg)
     end
 end
 

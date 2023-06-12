@@ -40,8 +40,8 @@ P.inspect = function (self, reach, radius)
     local objs  = self:query(classes, reach, radius)
     if #objs > 0 then
         for i,obj in ipairs(objs) do
-            if obj.parent then
-                obj.parent:interact(self)
+            if obj:getObject() then
+                obj:getObject():interact(self)
             end
         end
     end

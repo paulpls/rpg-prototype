@@ -46,9 +46,9 @@ P.init = function (self, physics, x, y, dest)
         w,
         1
     )
-    self.collider:setCollisionClass("Door")
+    self.collider:setCollisionClass("OpenDoor")
     self.collider:setType("static")
-    self.collider.parent = self
+    self.collider:setObject(self)
 end
 
 
@@ -73,24 +73,9 @@ end
 
 P.interact = function (self, char)
     --
-    --  Send player to the exit's destination
+    --  Override
     --
-    self:send()
-end
-
-
-
-P.send = function (self)
-    --
-    --  Send the player to the exit's destination
-    --
-    if self.dest then
-        local data  = {}
-        data.name = string.lower(world.player.name)
-        if self.dest.x then data.px = self.dest.x end
-        if self.dest.y then data.py = self.dest.y end
-        world:load("data/world/"..self.dest.world, world.player)
-    end
+    return
 end
 
 

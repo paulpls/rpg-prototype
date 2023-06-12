@@ -140,7 +140,7 @@ P.newCollider = function (self, physics)
         c.cutoff
     )
     collider:setFixedRotation(true)
-    collider.parent = self
+    collider:setObject(self)
     self.collider = collider
 end
 
