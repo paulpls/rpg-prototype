@@ -62,7 +62,7 @@ from sys import stdout
 if __name__ == "__main__":
 
     subhead = "### {}\n"
-    outfmt = "* [{}]({}#L{}):{}\n"
+    outfmt = "* [{}:{}]({}#L{}):{}\n"
     note = "_NOTE: This file was auto-generated using [todo.py](http://github.com/paulpls/todo)_\n\n\n\n"
     cmd = "grep -n {} {}"
     out = [header, note]
@@ -95,7 +95,7 @@ if __name__ == "__main__":
                 l = s[1]
                 c = s[-1].split(pattern)[-1]
                 # Add to output using the provided format
-                out.append(outfmt.format(f, f, l, c))
+                out.append(outfmt.format(f, l, f, l, c))
                 success = True
             # Add some whitespace after matches
             out.append("\n\n\n")
