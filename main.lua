@@ -111,14 +111,14 @@ love.keypressed = function (key)
         end
 
     --  Select option
-    elseif key == "left" or key == "right" then
+    elseif key == "left" or key == "right" or key == "h" or key == "l" then
         if currentDialog then
             if currentDialog.options and currentDialog.texts.body:ready() then
                 local num   = #currentDialog.options
                 local delta = 0
-                if key == "left" then
+                if key == "left" or key == "h" then
                     delta = -1
-                elseif key == "right" then
+                elseif key == "right" or key == "l" then
                     delta = 1
                 end
                 currentDialog.selection = num - ((currentDialog.selection + delta) % num)

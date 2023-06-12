@@ -203,22 +203,22 @@ P.update = function (self, dt)
         local pvx,pvy = self.player.vx, self.player.vy
         local pAction = "default"
         local pFacing = self.player.dir
-        if love.keyboard.isDown("left") then
+        if love.keyboard.isDown("left") or love.keyboard.isDown("h") then
             pdx       = -1
             pAction   = "walk"
             pFacing   = "left"
-        elseif love.keyboard.isDown("right") then
-            pdx       = 1
-            pAction   = "walk"
-            pFacing   = "right"
-        elseif love.keyboard.isDown("up") then
-            pdy       = -1
-            pAction   = "walk"
-            pFacing   = "up"
-        elseif love.keyboard.isDown("down") then
+        elseif love.keyboard.isDown("down") or love.keyboard.isDown("j") then
             pdy       = 1
             pAction   = "walk"
             pFacing   = "down"
+        elseif love.keyboard.isDown("up") or love.keyboard.isDown("k") then
+            pdy       = -1
+            pAction   = "walk"
+            pFacing   = "up"
+        elseif love.keyboard.isDown("right") or love.keyboard.isDown("l") then
+            pdx       = 1
+            pAction   = "walk"
+            pFacing   = "right"
         end
 
         --  Move player hitbox
