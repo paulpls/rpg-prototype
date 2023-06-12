@@ -82,9 +82,11 @@ end
 
 P.update = function (self, dt)
     --
-    --  Override
+    --  Detect entry
     --
-    return
+    if self.collider:enter("Player") then
+        self:send()
+    end
 end
 
 

@@ -47,7 +47,7 @@ end
 --
 --  Physics
 --
-P.physics = {}
+P.physics    = {}
 P.physics.gx = 0
 P.physics.gy = 0
 
@@ -95,7 +95,7 @@ P.doors = {
     {
         ["x"]      = X(46),
         ["y"]      = Y(24),
-        ["locked"] = true,
+        ["locked"] = false,
         ["dest"]   = {
             ["world"] = "test2"
         },
@@ -103,7 +103,7 @@ P.doors = {
     {
         ["x"]      = X(16),
         ["y"]      = Y(23),
-        ["locked"] = false,
+        ["locked"] = true,
     },
 }
 

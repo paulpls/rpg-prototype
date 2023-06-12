@@ -47,7 +47,7 @@ end
 --
 --  Physics
 --
-P.physics = {}
+P.physics    = {}
 P.physics.gx = 0
 P.physics.gy = 0
 

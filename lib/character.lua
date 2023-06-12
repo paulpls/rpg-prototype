@@ -150,12 +150,13 @@ P.getState = function (self)
     --
     --  Get current animation state
     --
+    local name = "default_down"
     if self.state then
         return self.state
     else
-        local name = self.action..self.dir
-        return self.states[name]
+        name = self.action .. "_" .. self.dir
     end
+    return self.states[name]
 end
 
 
@@ -164,7 +165,7 @@ P.setState = function (self)
     --
     --  Update the current animation state
     --
-    local name  = self.action.."_"..self.dir
+    local name  = self.action .. "_" .. self.dir
     self.state  = self.states[name]
 end
 

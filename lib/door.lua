@@ -119,11 +119,7 @@ P.send = function (self)
     --  Send the player to the door's destination
     --
     if self.dest then
-        local data  = {}
-        data.name = string.lower(world.player.name)
-        if self.dest.x then data.px = self.dest.x end
-        if self.dest.y then data.py = self.dest.y end
-        world:load("data/world/"..self.dest.world, world.player)
+        world:load("data/world/"..self.dest.world, self.dest.x, self.dest.y)
     end
 end
 
@@ -143,11 +139,8 @@ P.update = function (self, dt)
         end
     end
     --  Detect entry
-    if self.opened and self.collider:enter("Player") then
-        --  FIXME Send player to level when collision is detected with door
-        --self:send()
-        local msg = "SEND " .. string.lower(world.player.name) .. " -> " .. self.dest.world
-        print(msg)
+    if self.collider.collision_class == "OpenDoor" and self.collider:exit("Player") then
+        self:send()
     end
 end
 

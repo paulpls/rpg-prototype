@@ -57,16 +57,16 @@ end
 
 
 
-P.init = function (self, path, currentPlayer, x, y)
+P.init = function (self, path, x, y)
     --
     --  Initialize the World
     --
-    self:load(path, currentPlayer, x, y)
+    self:load(path, x, y)
 end
 
 
 
-P.load = function (self, path, currentPlayer, x, y)
+P.load = function (self, path, x, y)
     --
     --  Load data from file
     --
@@ -98,7 +98,9 @@ P.load = function (self, path, currentPlayer, x, y)
         "Chest",
         "Entity",
     }
-    for _,class in pairs(classes) do self.physics:addCollisionClass(class) end
+    for _,class in pairs(classes) do
+        self.physics:addCollisionClass(class)
+    end
     --  More complex classes
     self.physics:addCollisionClass(
         "OpenDoor",
@@ -137,17 +139,10 @@ P.load = function (self, path, currentPlayer, x, y)
     --  Player
     local name  = ""
     local px,py = data.playerx, data.playery
-    if currentPlayer then
-        --  Load in the current player and create a new collider for the current world
-        self.player = currentPlayer
-        self.player:newCollider(self.physics)
-        self.player.collider:setPosition(px, py)
-    else
-        --  Create a new player as specified in the data file
-        name  = data.player
-        self.player = Player:new("data/character/"..name, self.physics, px, py)
-        self.player.collider:setCollisionClass("Player")
-    end
+    --  Create a player instance as specified in the data file
+    name = data.player
+    self.player = Player:new("data/character/"..name, self.physics, px, py)
+    self.player.collider:setCollisionClass("Player")
     table.insert(self.characters, self.player)
     --  NPCs
     local npcs = data.npcs
