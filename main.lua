@@ -129,17 +129,6 @@ love.keypressed = function (key)
     elseif key == "z" then
         world.zoom = ((world.zoom + 1) % 3) + 1
 
-    --  DEBUG Heal/damage the player
-    elseif key == "k" then
-        player:heal(0.5)
-    elseif key == "j" then
-        player:damage(0.5)
-
-    --  DEBUG Load next level
-    elseif key == "n" then
-        path = "data/world/test2"
-        world = World(path)
-
     end
 
 end
