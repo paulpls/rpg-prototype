@@ -92,7 +92,9 @@ P.exits = {
         ["x"]      = X(8),
         ["y"]      = Y(8),
         ["dest"]   = {
-            ["world"] = "test"
+            ["world"] = "test",
+            ["x"]     = X(46, true),
+            ["y"]     = Y(26, true),
         },
     },
 }

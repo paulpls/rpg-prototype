@@ -139,6 +139,9 @@ P.load = function (self, path, x, y)
     --  Player
     local name  = ""
     local px,py = data.playerx, data.playery
+    if x and y then
+        px,py = x , y
+    end
     --  Create a player instance as specified in the data file
     name = data.player
     self.player = Player:new("data/character/"..name, self.physics, px, py)

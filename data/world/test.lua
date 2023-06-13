@@ -97,7 +97,9 @@ P.doors = {
         ["y"]      = Y(24),
         ["locked"] = false,
         ["dest"]   = {
-            ["world"] = "test2"
+            ["world"] = "test2",
+            ["x"]      = X(8, true),
+            ["y"]      = Y(8, true),
         },
     },
     {
