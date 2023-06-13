@@ -149,20 +149,22 @@ P.load = function (self, path, x, y)
     table.insert(self.characters, self.player)
     --  NPCs
     local npcs = data.npcs
-    for _,npcData in pairs(npcs) do
-        local name,npcx,npcy = unpack(npcData)
-        --  Create new NPCs
-        local npc  = nil
-        local Type = NPC
-        --  Load custom NPC type if it exists
-        local file = "lib/npcs/"..name
-        if exists(file..".lua") then
-            Type = require(file)
+    if npcs then
+        for _,npcData in pairs(npcs) do
+            local name,npcx,npcy = unpack(npcData)
+            --  Create new NPCs
+            local npc  = nil
+            local Type = NPC
+            --  Load custom NPC type if it exists
+            local file = "lib/npcs/"..name
+            if exists(file..".lua") then
+                Type = require(file)
+            end
+            --  Set physics and add to table
+            npc = Type:new("data/npc/"..name, self.physics, npcx, npcy)
+            npc.collider:setCollisionClass("NPC")
+            table.insert(self.characters, npc)
         end
-        --  Set physics and add to table
-        npc = Type:new("data/npc/"..name, self.physics, npcx, npcy)
-        npc.collider:setCollisionClass("NPC")
-        table.insert(self.characters, npc)
     end
 
     --  Doors
